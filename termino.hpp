@@ -17,7 +17,7 @@ public:
 
      virtual const std::string getString() const = 0;
 
-     virtual bool operator==(const Termino * otro) const;
+     virtual bool operator==(const Termino * otro) const = 0;
 
      virtual ~Termino() { }
 

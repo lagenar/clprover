@@ -44,6 +44,14 @@ bool Literal::operator==(const Literal& otro) const
      return igual;
 }
 
+const std::string Literal::getString() const
+{
+     std::string s;
+     for (std::list<Termino*>::const_iterator it = args.begin(); it != args.end(); it++)
+	  s += (*it)->getString();
+     return (signo ? "" : "~") + id + "(" + s + ")";
+}
+
 Literal::~Literal()
 {
      for (std::list<Termino*>::iterator it = args.begin(); it != args.end(); it++)

@@ -15,18 +15,6 @@ Termino::t Termino::getTipo() const
 {
      return tipo;
 }
-
-bool Termino::operator==(const Termino * otro) const
-{
-     switch (tipo) {
-     case Func:
-	  return static_cast<const Funcion*>(this) == otro;
-	  break;
-     case Var:
-	  return static_cast<const Variable*>(this) == otro;
-	  break;
-     }
-}
 	
 /* Variable */
 Variable::Variable(const std::string& id)
@@ -59,15 +47,8 @@ const std::string Funcion::getString() const
 
      std::string s;
      for (std::list<Termino*>::const_iterator it = args.begin(); it != args.end(); it++)
-	  switch((*it)->getTipo()) {
-	  case Termino::Func:
-	       s += static_cast<Funcion*>(*it)->getString();
-	       break;
-	  case Termino::Var:
-	       s += static_cast<Variable*>(*it)->getString();
-	       break;
-	  }
-	  
+	  s += (*it)->getString();
+
      return id + "(" + s + ")";
 }
 
@@ -84,17 +65,6 @@ bool Funcion::operator==(const Termino * otro) const
 
      while (igual && it != args.end() && it_otro != args_otro.end()) {
 	  igual = (**it == *it_otro);
-	  // if ((*it)->getTipo() != (*it_otro)->getTipo())
-	  //      igual = false;
-	  // else
-	  //      switch ((*it)->getTipo()) {
-	  //      case Termino::Func:
-	  // 	    igual = *(static_cast<const Funcion*>(*it)) == *it;
-	  // 	    break;
-	  //      case Termino::Var:
-	  // 	    igual = *(static_cast<const Variable*>(*it)) == *it;
-	  // 	    break;
-	  //      }
 	  it++;
 	  it_otro++;
      }

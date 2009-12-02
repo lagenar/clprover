@@ -7,6 +7,8 @@
 
 class Literal {
 public:
+     typedef std::list<Termino*>::const_iterator const_iterator;
+
      Literal(const std::string& id, const std::list<Termino*>& args, bool signo);
 
      bool getSigno() const;
@@ -17,9 +19,11 @@ public:
      
      int aridad() const;
      
-     const std::list<Termino*> getArgumentos() const;
-     
      bool operator==(const Literal& otro) const;
+
+     const_iterator begin() const;
+
+     const_iterator end() const;
 
      ~Literal();
 private:

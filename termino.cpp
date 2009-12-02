@@ -59,22 +59,17 @@ bool Funcion::operator==(const Termino * otro) const
 	  return false;
      
      bool igual = true;
-     const std::list<Termino*> args_otro = static_cast<const Funcion*>(otro)->getArgumentos();
-     std::list<Termino*>::const_iterator it = args.begin();
-     std::list<Termino*>::const_iterator it_otro = args_otro.begin();
+     const Funcion * f_otro = static_cast<const Funcion*>(otro);
+     Funcion::const_iterator it = args.begin();
+     Funcion::const_iterator it_otro = f_otro->begin();
 
-     while (igual && it != args.end() && it_otro != args_otro.end()) {
+     while (igual && it != args.end() && it_otro != f_otro->end()) {
 	  igual = (**it == *it_otro);
 	  it++;
 	  it_otro++;
      }
 
      return igual;
-}
-
-const std::list<Termino*>& Funcion::getArgumentos() const
-{
-     return args;
 }
 
 int Funcion::aridad() const
@@ -85,6 +80,16 @@ int Funcion::aridad() const
 bool Funcion::esConstante() const
 {
      return aridad() == 0;
+}
+
+Funcion::const_iterator Funcion::begin() const
+{
+     return args.begin();
+}
+
+Funcion::const_iterator Funcion::end() const
+{
+     return args.end();
 }
 
 Funcion::~Funcion()

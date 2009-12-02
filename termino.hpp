@@ -39,6 +39,8 @@ public:
 
 class Funcion : public Termino {
 public:
+     typedef std::list<Termino*>::const_iterator const_iterator;
+
      Funcion(const std::string& id, const std::list<Termino*>& args);
 
      const std::string getString() const;
@@ -49,7 +51,9 @@ public:
      
      bool esConstante() const;
 
-     const std::list<Termino*>& getArgumentos() const;
+     const_iterator begin() const;
+
+     const_iterator end() const;
 
      ~Funcion();
 

@@ -4,12 +4,13 @@
 #include <list>
 #include <iostream>
 #include "termino.hpp"
+#include "argumentos.hpp"
 
 class Literal {
 public:
-     typedef std::list<Termino*>::const_iterator const_iterator;
+     Literal(const std::string& id, bool signo);
 
-     Literal(const std::string& id, const std::list<Termino*>& args, bool signo);
+     Literal(const std::string& id, const Argumentos& args, bool signo);
 
      bool getSigno() const;
 
@@ -21,13 +22,9 @@ public:
      
      bool operator==(const Literal& otro) const;
 
-     const_iterator begin() const;
-
-     const_iterator end() const;
-
-     ~Literal();
+     void agregarArgumento(const Termino& t);
 private:
-     std::list<Termino*> args;
+     Argumentos args;
      bool signo;
      std::string id;
 };

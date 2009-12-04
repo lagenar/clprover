@@ -1,6 +1,11 @@
 #include "literal.hpp"
 
-Literal::Literal(const std::string& id, const std::list<Termino*>& args, bool signo)
+Literal::Literal(const std::string& id, bool signo)
+     : id(id), signo(signo)
+{
+}
+
+Literal::Literal(const std::string& id, const Argumentos& args, bool signo)
      : id(id), args(args), signo(signo)
 {
 }
@@ -17,40 +22,22 @@ const std::string& Literal::getId() const
 
 int Literal::aridad() const
 {
-     return args.size();
+     return args.aridad();
 }
 
 bool Literal::operator==(const Literal& otro) const
 {
-     if (otro.getId() != id || otro.aridad() != args.size())
+     if (otro.id != id || otro.signo != signo)
 	  return false;
-
-     Literal::const_iterator it = args.begin();
-     Literal::const_iterator it_otro = otro.begin();
-
-     return find_if
+     return otro.args == args;
 }
 
 const std::string Literal::getString() const
 {
-     std::string s;
-     for (std::list<Termino*>::const_iterator it = args.begin(); it != args.end(); it++)
-	  s += (*it)->getString();
-     return (signo ? "" : "~") + id + "(" + s + ")";
+     return (signo ? "" : "~") + id + args.getString();
 }
 
-Literal::const_iterator Literal::begin() const
+void Literal::agregarArgumento(const Termino& t)
 {
-     return args.begin();
-}
-
-Literal::const_iterator Literal::end() const
-{
-     return args.end();
-}
-
-Literal::~Literal()
-{
-     for (std::list<Termino*>::iterator it = args.begin(); it != args.end(); it++)
-	  delete *it;
+     args.agregarArgumento(t);
 }

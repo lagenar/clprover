@@ -28,72 +28,55 @@ const std::string Variable::getString() const
      return id;
 }
 
-bool Variable::operator==(const Termino * otro) const
+bool Variable::operator==(const Termino& otro) const
 {
-     return otro->getTipo() == Termino::Var && otro->getId() == id;
+     return otro.getTipo() == Termino::Var && otro.getId() == id;
 }
 
 /* Funcion */
-Funcion::Funcion(const std::string& id, const std::list<Termino*>& args)
-  : args(args), Termino(id, Termino::Func)
+Funcion::Funcion(const std::string& id)
+     : Termino(id, Termino::Func)
 {
+     args = new Argumentos();
+}
 
+Funcion::Funcion(const Funcion& f) : Termino(f)
+{
+     args = new Argumentos(*f.args);
 }
 
 const std::string Funcion::getString() const
 {
-     if (aridad() == 0)
+     if (args->aridad() == 0)
 	  return id;
-
-     std::string s;
-     for (std::list<Termino*>::const_iterator it = args.begin(); it != args.end(); it++)
-	  s += (*it)->getString();
-
-     return id + "(" + s + ")";
+     
+     return id + args->getString();
 }
 
-bool Funcion::operator==(const Termino * otro) const
+bool Funcion::operator==(const Termino& otro) const
 {
-     if (otro->getTipo() != Termino::Func || otro->getId() != id
-	 || static_cast<const Funcion*>(otro)->aridad() != args.size())
-	  return false;
+     if (otro.getTipo() != Termino::Func || otro.getId() != id)
+     	  return false;
      
-     bool igual = true;
-     const Funcion * f_otro = static_cast<const Funcion*>(otro);
-     Funcion::const_iterator it = args.begin();
-     Funcion::const_iterator it_otro = f_otro->begin();
-
-     while (igual && it != args.end() && it_otro != f_otro->end()) {
-	  igual = (**it == *it_otro);
-	  it++;
-	  it_otro++;
-     }
-
-     return igual;
+     return static_cast<const Funcion*>(&otro)->args == args;
 }
 
 int Funcion::aridad() const
 {
-     return args.size();
+     return args->aridad();
 }
 
 bool Funcion::esConstante() const
 {
-     return aridad() == 0;
+     return args->aridad() == 0;
 }
 
-Funcion::const_iterator Funcion::begin() const
+void Funcion::agregarArgumento(const Termino& t)
 {
-     return args.begin();
-}
-
-Funcion::const_iterator Funcion::end() const
-{
-     return args.end();
+     args->agregarArgumento(t);
 }
 
 Funcion::~Funcion()
 {
-     for (std::list<Termino*>::iterator it = args.begin(); it != args.end(); it++)
-	  delete *it;
+     delete args;
 }

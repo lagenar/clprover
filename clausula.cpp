@@ -26,12 +26,17 @@ bool Clausula::esDeHorn() const
 
 const std::string Clausula::getString() const
 {
-     std::string s;
-     std::set<Literal, LitComp>::const_iterator it;
-     
-     for (it = literales.begin(); it != literales.end(); ++it)
-	  s += it->getString();
+     if (cantLiterales() == 0)
+	  return "_|_";
 
+     std::string s;
+     std::set<Literal, LitComp>::const_iterator it = literales.begin();
+     s += it->getString();
+     ++it;
+     while (it != literales.end()) {
+	  s += "," + it->getString();
+	  ++it;
+     }
      return s;
 }
 

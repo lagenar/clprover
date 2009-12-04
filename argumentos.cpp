@@ -1,4 +1,5 @@
 #include "argumentos.hpp"
+#include <cassert>
 
 Argumentos::Argumentos(const Argumentos& Args)
 {
@@ -22,9 +23,16 @@ int Argumentos::aridad() const
 
 const std::string Argumentos::getString() const
 {
-     std::string s;
-     for (const_iterator it = args.begin(); it != args.end(); ++it)
-	  s += (*it)->getString();
+     //sólo debe invocarse cuando hay 1 o más argumentos
+     assert(aridad() > 0);
+
+     const_iterator it = args.begin();
+     std::string s((*it)->getString());
+     ++it;
+     while (it != args.end()) {
+	  s += ", " + (*it)->getString();
+	  ++it;
+     }
 
      return "(" + s + ")";
 }

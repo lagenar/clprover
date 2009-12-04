@@ -34,7 +34,7 @@ const std::string Clausula::getString() const
      s += it->getString();
      ++it;
      while (it != literales.end()) {
-	  s += "," + it->getString();
+	  s += " | " + it->getString();
 	  ++it;
      }
      return s;

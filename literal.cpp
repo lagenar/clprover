@@ -25,18 +25,10 @@ bool Literal::operator==(const Literal& otro) const
      if (otro.getId() != id || otro.aridad() != args.size())
 	  return false;
 
-     bool igual = true;
-     
      Literal::const_iterator it = args.begin();
      Literal::const_iterator it_otro = otro.begin();
 
-     while (igual && it != args.end() && it_otro != otro.end()) {
-	  igual = (**it == *it_otro);
-	  it++;
-	  it_otro++;
-     }
-     
-     return igual;
+     return find_if
 }
 
 const std::string Literal::getString() const

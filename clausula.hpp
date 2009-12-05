@@ -23,7 +23,11 @@ private:
      class LitComp {
      public:
 	  bool operator()(const Literal& l1, const Literal& l2) {
-	       return l1.getId() < l2.getId();
+	       int r = l1.getId().compare(l2.getId());
+	       if (r == 0)
+		    return !l1.getSigno() && l2.getSigno();
+	       else
+		    return r == -1;
 	  }
      };
 

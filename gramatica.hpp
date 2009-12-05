@@ -144,23 +144,23 @@ namespace client
      };
 }
 	       
-int main(int argc, char **argv)
-{
-     std::string s(argv[1]);
-     std::vector<client::literal> t;
-     typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
-     gramatica_termino g;
-     using boost::spirit::ascii::space;
-     std::string::const_iterator iter = s.begin();
-     std::string::const_iterator end = s.end();
-     bool r = phrase_parse(iter, end, g, space, t);
-     if (r && iter == end) {
-	  Clausula C;
-	  construir_clausula(t, C);
-	  std::cout << C.getString() << std::endl;
-     }
-     else
-     	  std::cout << "Fallo de parseo" << std::endl;
+// int main(int argc, char **argv)
+// {
+//      std::string s(argv[1]);
+//      std::vector<client::literal> t;
+//      typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
+//      gramatica_termino g;
+//      using boost::spirit::ascii::space;
+//      std::string::const_iterator iter = s.begin();
+//      std::string::const_iterator end = s.end();
+//      bool r = phrase_parse(iter, end, g, space, t);
+//      if (r && iter == end) {
+// 	  Clausula C;
+// 	  construir_clausula(t, C);
+// 	  std::cout << C.getString() << std::endl;
+//      }
+//      else
+//      	  std::cout << "Fallo de parseo" << std::endl;
      
-     return 0;
-}
+//      return 0;
+// }

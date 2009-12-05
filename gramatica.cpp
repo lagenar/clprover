@@ -1,0 +1,170 @@
+#include <boost/config/warning_disable.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix_core.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
+#include <boost/spirit/include/phoenix_fusion.hpp>
+#include <boost/spirit/include/phoenix_stl.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/variant/recursive_variant.hpp>
+#include <boost/foreach.hpp>
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+namespace client
+{
+     namespace fusion = boost::fusion;
+     namespace phoenix = boost::phoenix;
+     namespace qi = boost::spirit::qi;
+     namespace ascii = boost::spirit::ascii;
+
+     struct funcion;
+
+     typedef boost::variant<
+	  std::string,
+	  boost::recursive_wrapper<funcion> > termino;
+
+     struct funcion {
+	  std::string nombre;
+	  std::vector<termino> args;
+     };
+
+     struct literal {
+	  std::string nombre;
+	  std::vector<termino> args;
+	  bool signo;
+     };
+}
+
+BOOST_FUSION_ADAPT_STRUCT(
+     client::funcion,
+     (std::string, nombre)
+     (std::vector<client::termino>, args)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+     client::literal,
+     (std::string, nombre)
+     (std::vector<client::termino>, args)
+     (bool, signo)
+)
+
+namespace client
+{
+
+     struct termino_printer : boost::static_visitor<>
+     {
+	  void operator()(const std::string& var) const
+	  {
+	       std::cout << var;
+	  }
+	  
+	  void operator()(const funcion& f) const
+	   {
+		std::cout << f.nombre;
+		if (f.args.size() == 0) {		  
+		     return;
+		}
+		std::vector<termino>::const_iterator it = f.args.begin();
+		std::cout << "(";
+		boost::apply_visitor(termino_printer(), *it);
+		++it;
+		while (it != f.args.end()) {
+		     std::cout << ", ";
+		     boost::apply_visitor(termino_printer(), *it);
+		     ++it;
+		}
+		std::cout << ")";
+	   }
+     };
+     
+     void imprimir_literal(const literal& lit)
+     {
+	  std::cout << (lit.signo ? "" : "~") << lit.nombre;
+	  std::vector<termino>::const_iterator it = lit.args.begin();
+	  std::cout << "(";
+	  boost::apply_visitor(termino_printer(), *it);
+	  ++it;
+	  while (it != lit.args.end()) {
+	       std::cout << ", ";
+	       boost::apply_visitor(termino_printer(), *it);
+	       ++it;
+	  }
+	  std::cout << ")";
+     }
+
+     void imprimir_clausula(const std::vector<literal>& claus)
+     {
+	  if (claus.empty()) {
+	       std::cout << "_|_" << std::endl;
+	       return;
+	  }
+	  std::vector<literal>::const_iterator it = claus.begin();
+	  imprimir_literal(*it);
+	  ++it;
+	  while (it != claus.end()) {
+	       std::cout << " | ";
+	       imprimir_literal(*it);
+	       ++it;
+	  }
+	  std::cout << std::endl;
+     }
+	  
+     template <typename Iterator>
+     struct gramatica_termino : qi::grammar<Iterator, std::vector<literal>(), ascii::space_type>
+     {
+	  gramatica_termino() : gramatica_termino::base_type(claus)
+	  {
+	       using ascii::char_;
+	       using namespace qi::labels;
+	       using qi::eps;
+	       using phoenix::at_c;
+	       using phoenix::push_back;
+
+	       var %= char_("A-Z") >> *char_("a-z")
+		    ;
+
+	       funId %= char_("a-z") >> *char_("a-z")
+		    ;
+
+	       fun  = funId [at_c<0>(_val) = _1]
+		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
+	       
+	       term %= (var | fun);
+
+	       lit = eps [at_c<2>(_val) = true]
+		    >> -char_('~') [at_c<2>(_val) = false]
+		    >> funId [at_c<0>(_val) = _1]
+		    >> '(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')';
+		    
+
+	       claus %= lit % '|';
+	       
+	  }
+	  qi::rule<Iterator, std::vector<literal>(), ascii::space_type> claus;
+	  qi::rule<Iterator, literal(), ascii::space_type> lit;
+	  qi::rule<Iterator, termino(), ascii::space_type> term;
+	  qi::rule<Iterator, funcion(), ascii::space_type> fun;
+	  qi::rule<Iterator, std::string(), ascii::space_type> funId;
+	  qi::rule<Iterator, std::string(), ascii::space_type> var;
+     };
+}
+	       
+int main(int argc, char **argv)
+{
+     std::string s(argv[1]);
+     std::vector<client::literal> t;
+     typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
+     gramatica_termino g;
+     using boost::spirit::ascii::space;
+     std::string::const_iterator iter = s.begin();
+     std::string::const_iterator end = s.end();
+     bool r = phrase_parse(iter, end, g, space, t);
+     if (r && iter == end)
+     	  client::imprimir_clausula(t);
+     else
+     	  std::cout << "Fallo de parseo" << std::endl;
+     
+     return 0;
+}

@@ -12,6 +12,10 @@
 #include <string>
 #include <vector>
 
+#include "termino.hpp"
+#include "literal.hpp"
+#include "clausula.hpp"
+
 namespace client
 {
      namespace fusion = boost::fusion;
@@ -53,62 +57,51 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace client
 {
 
-     struct termino_printer : boost::static_visitor<>
-     {
-	  void operator()(const std::string& var) const
+     struct constructor_termino : boost::static_visitor<Termino*>
+     {					       
+	  Termino* operator()(const std::string& var) const
 	  {
-	       std::cout << var;
+	       return new Variable(var);
 	  }
 	  
-	  void operator()(const funcion& f) const
-	   {
-		std::cout << f.nombre;
-		if (f.args.size() == 0) {		  
-		     return;
-		}
-		std::vector<termino>::const_iterator it = f.args.begin();
-		std::cout << "(";
-		boost::apply_visitor(termino_printer(), *it);
-		++it;
-		while (it != f.args.end()) {
-		     std::cout << ", ";
-		     boost::apply_visitor(termino_printer(), *it);
-		     ++it;
-		}
-		std::cout << ")";
-	   }
-     };
-     
-     void imprimir_literal(const literal& lit)
-     {
-	  std::cout << (lit.signo ? "" : "~") << lit.nombre;
-	  std::vector<termino>::const_iterator it = lit.args.begin();
-	  std::cout << "(";
-	  boost::apply_visitor(termino_printer(), *it);
-	  ++it;
-	  while (it != lit.args.end()) {
-	       std::cout << ", ";
-	       boost::apply_visitor(termino_printer(), *it);
-	       ++it;
+	  Termino* operator()(const funcion& f) const
+	  {    
+	       Funcion* func = new Funcion(f.nombre);
+
+	       BOOST_FOREACH(termino const& t, f.args)
+	       {
+		    Termino* arg;
+		    arg = boost::apply_visitor(constructor_termino(), t);
+		    func->agregarArgumento(*arg);
+		    delete arg;
+	       }
+
+	       return func;
 	  }
-	  std::cout << ")";
+     };
+
+
+     Literal* construir_literal(const literal& lit)
+     {
+	  Literal* res = new Literal(lit.nombre, lit.signo);
+	  
+	  BOOST_FOREACH(termino const& t, lit.args)
+	  {
+	       Termino* arg = boost::apply_visitor(constructor_termino(), t);
+	       res->agregarArgumento(*arg);
+	       delete arg;
+	  }
+	  return res;
      }
 
-     void imprimir_clausula(const std::vector<literal>& claus)
+     void construir_clausula(const std::vector<literal>& lits, Clausula& claus)
      {
-	  if (claus.empty()) {
-	       std::cout << "_|_" << std::endl;
-	       return;
+	  BOOST_FOREACH(literal const& lit, lits)
+	  {
+	       Literal* l = construir_literal(lit);
+	       claus.agregarLiteral(*l);
+	       delete l;
 	  }
-	  std::vector<literal>::const_iterator it = claus.begin();
-	  imprimir_literal(*it);
-	  ++it;
-	  while (it != claus.end()) {
-	       std::cout << " | ";
-	       imprimir_literal(*it);
-	       ++it;
-	  }
-	  std::cout << std::endl;
      }
 	  
      template <typename Iterator>
@@ -161,8 +154,11 @@ int main(int argc, char **argv)
      std::string::const_iterator iter = s.begin();
      std::string::const_iterator end = s.end();
      bool r = phrase_parse(iter, end, g, space, t);
-     if (r && iter == end)
-     	  client::imprimir_clausula(t);
+     if (r && iter == end) {
+	  Clausula C;
+	  construir_clausula(t, C);
+	  std::cout << C.getString() << std::endl;
+     }
      else
      	  std::cout << "Fallo de parseo" << std::endl;
      

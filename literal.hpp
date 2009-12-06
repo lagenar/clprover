@@ -21,8 +21,12 @@ public:
      int aridad() const;
      
      bool operator==(const Literal& otro) const;
+     
+     bool operator!=(const Literal& otro) const;
 
      void agregarArgumento(const Termino& t);
+
+     void setSigno(bool s);
 private:
      Argumentos args;
      bool signo;

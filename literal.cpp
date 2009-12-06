@@ -32,6 +32,11 @@ bool Literal::operator==(const Literal& otro) const
      return otro.args == args;
 }
 
+bool Literal::operator!=(const Literal& otro) const
+{
+     return !(*this == otro);
+}
+
 const std::string Literal::getString() const
 {
      return (signo ? "" : "~") + id + args.getString();
@@ -40,4 +45,9 @@ const std::string Literal::getString() const
 void Literal::agregarArgumento(const Termino& t)
 {
      args.agregarArgumento(t);
+}
+
+void Literal::setSigno(bool s)
+{
+     signo = s;
 }

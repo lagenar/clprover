@@ -24,9 +24,21 @@ bool Clausula::esDeHorn() const
      return num_pos < 2;
 }
 
+bool Clausula::esVacia() const
+{
+     return cantLiterales() == 0;
+}
+
+bool Clausula::esTautologica() const
+{
+     return tautologica;
+}
+
 const std::string Clausula::getString() const
 {
-     if (cantLiterales() == 0)
+     if (tautologica)
+	  return "T";
+     else if (cantLiterales() == 0)
 	  return "_|_";
 
      std::string s;
@@ -42,5 +54,14 @@ const std::string Clausula::getString() const
 
 void Clausula::agregarLiteral(const Literal& lit)
 {
-     literales.insert(lit);
+     if (!tautologica) {
+	  Literal l = lit;
+	  l.setSigno(!l.getSigno());
+	  std::set<Literal, LitComp>::const_iterator it = literales.find(l);
+
+	  if (it == literales.end())
+	       literales.insert(lit);
+	  else
+	       tautologica = true;
+     }
 }

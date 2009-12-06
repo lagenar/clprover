@@ -7,13 +7,17 @@
 
 class Clausula {
 public:
-     Clausula() { }
+     Clausula() : tautologica(false) { }
      
      int cantLiterales() const;
 
      bool esUnitaria() const;
 
      bool esDeHorn() const;
+
+     bool esVacia() const;
+
+     bool esTautologica() const;
      
      const std::string getString() const;
 
@@ -25,13 +29,15 @@ private:
 	  bool operator()(const Literal& l1, const Literal& l2) {
 	       int r = l1.getId().compare(l2.getId());
 	       if (r == 0)
-		    return !l1.getSigno() && l2.getSigno();
+		    return !l1.getSigno() && l2.getSigno()
+			 || l1 != l2;			 
 	       else
 		    return r == -1;
 	  }
      };
 
      std::set<Literal, LitComp> literales;
+     bool tautologica;
 };
 
 #endif

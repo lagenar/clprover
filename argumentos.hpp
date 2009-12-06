@@ -4,8 +4,10 @@
 #include <list>
 #include <iostream>
 #include "termino.hpp"
+#include "sustitucion.hpp"
 
 class Termino;
+class Sustitucion;
 
 class Argumentos {
 
@@ -28,6 +30,8 @@ public:
      bool operator==(const Argumentos& otro) const;
 
      void agregarArgumento(const Termino& t);
+
+     void aplicarSustitucion(const Sustitucion& s);
 
      ~Argumentos();
 

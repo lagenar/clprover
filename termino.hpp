@@ -4,6 +4,10 @@
 #include <list>
 #include <iostream>
 #include "argumentos.hpp"
+#include "sustitucion.hpp"
+#include <cassert>
+
+class Sustitucion;
 
 class Termino {
 public:
@@ -14,13 +18,15 @@ public:
 
      const std::string& getId() const;
      
-     t getTipo() const;
+     t getTipo() const;     
 
      virtual const std::string getString() const = 0;
 
      virtual bool operator==(const Termino& otro) const = 0;
 
      virtual Termino* clonar() const = 0;
+
+     virtual void aplicarSustitucion(const Sustitucion& s);
 
      virtual ~Termino() { }
 
@@ -56,6 +62,8 @@ public:
      bool operator==(const Termino& otro) const;
 
      Termino* clonar() const;
+     
+     void aplicarSustitucion(const Sustitucion& s);
 
      int aridad() const;
      

@@ -16,8 +16,8 @@ int Argumentos::aridad() const
 
 const std::string Argumentos::getString() const
 {
-     //sólo debe invocarse cuando hay 1 o más argumentos
-     assert(aridad() > 0);
+     if (aridad() == 0)
+	  return "";
 
      const_iterator it = args.begin();
      std::string s((*it)->getString());
@@ -59,6 +59,12 @@ bool Argumentos::operator==(const Argumentos& otro) const
 void Argumentos::agregarArgumento(const Termino& t)
 {
      args.push_back(t.clonar());
+}
+
+void Argumentos::aplicarSustitucion(const Sustitucion& s)
+{
+     for (iterator it = args.begin(); it != args.end(); ++it)
+	  (*it)->aplicarSustitucion(s);
 }
 
 Argumentos::~Argumentos()

@@ -5,6 +5,8 @@
 #include <iostream>
 #include "termino.hpp"
 
+class Termino;
+
 class Sustitucion {
 public:     
      const std::string getString() const;

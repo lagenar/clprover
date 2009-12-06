@@ -33,6 +33,11 @@ bool Variable::operator==(const Termino& otro) const
      return otro.getTipo() == Termino::Var && otro.getId() == id;
 }
 
+Termino* Variable::clonar() const
+{
+     return new Variable(*this);
+}
+
 /* Funcion */
 Funcion::Funcion(const std::string& id)
      : Termino(id, Termino::Func)
@@ -59,6 +64,11 @@ bool Funcion::operator==(const Termino& otro) const
      	  return false;
      
      return static_cast<const Funcion*>(&otro)->args == args;
+}
+
+Termino* Funcion::clonar() const
+{
+     return new Funcion(*this);
 }
 
 int Funcion::aridad() const

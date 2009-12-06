@@ -5,14 +5,7 @@ Argumentos::Argumentos(const Argumentos& Args)
 {
      const_iterator it;
      for (it = Args.begin(); it != Args.end(); ++it)
-	  switch ((*it)->getTipo()) {
-	  case Termino::Var:
-	       args.push_back(new Variable(*static_cast<const Variable*>(*it)));
-	       break;
-	  case Termino::Func:
-	       args.push_back(new Funcion(*static_cast<const Funcion*>(*it)));
-	       break;
-	  }
+	  args.push_back((*it)->clonar());
 }
 
 
@@ -65,14 +58,7 @@ bool Argumentos::operator==(const Argumentos& otro) const
 
 void Argumentos::agregarArgumento(const Termino& t)
 {
-     switch (t.getTipo()) {
-     case Termino::Var:
-	  args.push_back(new Variable(*static_cast<const Variable*>(&t)));
-	  break;
-     case Termino::Func:
-	  args.push_back(new Funcion(*static_cast<const Funcion*>(&t)));
-	  break;
-     }
+     args.push_back(t.clonar());
 }
 
 Argumentos::~Argumentos()

@@ -5,13 +5,32 @@
 #include <set>
 #include "literal.hpp"
 
+class LitComp 
+{
+public:
+     bool operator()(const Literal& l1, const Literal& l2) 
+     {
+	  int r = l1.getId().compare(l2.getId());
+	  if (r == 0)
+	       return !l1.getSigno() && l2.getSigno()
+		    || l1.getString() < l2.getString();
+	  else
+	       return r == -1;
+     }
+};
+
 class Clausula {
 public:
+     typedef std::set<Literal, LitComp>::const_iterator const_iterator;
+     typedef enum { REGLA, HECHO, OBJ } t_horn;
+
      Clausula() : tautologica(false) { }
      
      int cantLiterales() const;
 
      bool esUnitaria() const;
+
+     bool esDeHorn(t_horn& t) const;
 
      bool esDeHorn() const;
 
@@ -21,21 +40,15 @@ public:
      
      const std::string getString() const;
 
+     bool contieneLiteral(const std::string& id, bool signo) const;
+     
+     const_iterator begin() const;
+
+     const_iterator end() const;
+
      void agregarLiteral(const Literal& lit);
 
-private:
-     class LitComp {
-     public:
-	  bool operator()(const Literal& l1, const Literal& l2) {
-	       int r = l1.getId().compare(l2.getId());
-	       if (r == 0)
-		    return !l1.getSigno() && l2.getSigno()
-			 || l1 != l2;			 
-	       else
-		    return r == -1;
-	  }
-     };
-
+private:     
      std::set<Literal, LitComp> literales;
      bool tautologica;
 };

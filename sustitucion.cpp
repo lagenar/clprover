@@ -2,13 +2,19 @@
 
 const std::string Sustitucion::getString() const
 {
+     if (susts.empty())
+	  return "{ }";
+
      std::string s("{");
      t_sust::const_iterator it = susts.begin();
 
-     s += " { " + it->first + " / " + it->second->getString(); + " }";
-     for (++it; it != susts.end(); ++it)
+     s += " { " + it->first + " / " + it->second->getString() + " }";
+     ++it;
+     while (it != susts.end()) {
 	  s += ", { " + it->first + " / " + it->second->getString() + " }";
-     
+	  ++it;
+     }
+
      return s + " }";
 }
 

@@ -23,8 +23,12 @@ public:
      virtual const std::string getString() const = 0;
 
      virtual bool operator==(const Termino& otro) const = 0;
+     
+     virtual bool contieneVariable(const std::string& id) const = 0;
 
      virtual Termino* aplicarSustitucion(const Sustitucion& s) const = 0;
+
+     virtual bool unificar(Sustitucion& s, const Termino& otro) const = 0;
 
      virtual Termino* clonar() const = 0;
 
@@ -44,7 +48,11 @@ public:
 
      bool operator==(const Termino& otro) const;
 
+     bool contieneVariable(const std::string& id) const;
+
      Termino* aplicarSustitucion(const Sustitucion& s) const;
+
+     bool unificar(Sustitucion& s, const Termino& otro) const;
 
      Termino* clonar() const;     
 };
@@ -63,7 +71,11 @@ public:
 
      bool operator==(const Termino& otro) const;
 
+     bool contieneVariable(const std::string& id) const;
+
      Termino* aplicarSustitucion(const Sustitucion& s) const;
+
+     bool unificar(Sustitucion& s, const Termino& otro) const;
 
      Termino* clonar() const;
 

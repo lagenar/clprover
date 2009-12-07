@@ -56,6 +56,30 @@ bool Argumentos::operator==(const Argumentos& otro) const
      return igual;
 }
 
+bool Argumentos::contieneVariable(const std::string& id) const
+{
+     for (const_iterator it = args.begin(); it != args.end(); ++it)
+	  if ((*it)->contieneVariable(id))
+	       return true;
+     return false;
+}
+
+bool Argumentos::unificar(Sustitucion& s, const Argumentos& otro) const
+{
+     if (args.size() != otro.args.size())
+	  return false;
+
+     const_iterator it = args.begin();
+     const_iterator it_otro = otro.args.begin();
+     bool unif = true;
+     while (it != args.end() && unif) {
+	  unif = (*it)->unificar(s, **it_otro);	  
+	  ++it;
+	  ++it_otro;
+     }
+     return unif;
+}
+
 void Argumentos::agregarArgumento(const Termino& t)
 {
      args.push_back(t.clonar());

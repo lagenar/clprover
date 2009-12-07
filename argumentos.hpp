@@ -29,6 +29,10 @@ public:
 
      bool operator==(const Argumentos& otro) const;
 
+     bool contieneVariable(const std::string& id) const;
+
+     bool unificar(Sustitucion& s, const Argumentos& otro) const;
+
      void agregarArgumento(const Termino& t);
 
      void aplicarSustitucion(const Sustitucion& s);

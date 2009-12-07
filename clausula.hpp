@@ -45,6 +45,8 @@ public:
 
      const_iterator end() const;
 
+     bool contieneComplementario(const Literal& lit) const;
+
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
 
      Clausula renombrarVariables(int& comienzo) const;

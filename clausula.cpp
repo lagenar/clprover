@@ -78,6 +78,17 @@ Clausula::const_iterator Clausula::end() const
      return literales.end();
 }
 
+bool Clausula::contieneComplementario(const Literal& lit) const
+{
+     const_iterator it = literales.begin();
+     while (it != literales.end() && it->getId() >= lit.getId()) {
+	  Sustitucion s;
+	  if (lit.unificarComplementario(*it, s))
+	       return true;
+     }
+     return false;
+}
+
 void Clausula::agregarLiteral(const Literal& lit)
 {
      if (!tautologica) {

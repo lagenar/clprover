@@ -7,9 +7,9 @@
 template <typename Compare>
 class ConjuntoClausulas {
 public:
-     typedef std::set<Clausula, Compare>::const_iterator const_iterator;
-     typedef std::set<Clausula, Compare>::iterator iterator;
-     typedef std::set<Clausula, Compare>::size_type size_type;
+     typedef typename std::set<Clausula, Compare>::const_iterator const_iterator;
+     typedef typename std::set<Clausula, Compare>::iterator iterator;
+     typedef typename std::set<Clausula, Compare>::size_type size_type;
      
      ConjuntoClausulas() { }
      
@@ -43,16 +43,29 @@ public:
      
      bool simplificarLiteralesPuros()
      {
-	  // typedef std::set<std::pair<std::string, bool> > t_simp;
-	  // mapa_simp lit_simplificado;
-	  // bool simp = false;
+	  bool simp = false;
+	  iterator claus = clausulas.begin();
 	  
-	  // for (const_iterator claus = clausulas.begin(); claus != clausulas.end(); ++claus) {
-	  //      bool claus_eliminada = false;
-	  //      const_iterator t_claus = claus;
-	  //      ++t_claus;
-	  //      while (
-	       
+	  while (claus != clausulas.end()) {
+	       bool claus_eliminada = false;
+	       Clausula::const_iterator lit = claus->begin();
+	       while (!claus_eliminada && lit != claus->end()) {		    
+		    bool contieneComp = false;
+		    const_iterator claus2 = claus;
+		    ++claus2;
+		    while (!contieneComp && claus2 != clausulas.end()) {
+			 contieneComp = claus2->contieneComplementario(*lit);
+			 ++claus2;
+		    }
+		    if (!contieneComp) {
+			 simp = true;
+			 clausulas.erase(claus++);
+			 claus_eliminada = true;
+		    } else
+			 ++claus;
+	       }
+	  }
+	  return simp;
      }
 
 private:

@@ -20,7 +20,7 @@ public:
      ~Sustitucion();
 private:
      typedef std::map<std::string, Termino*> t_sust;
-     t_sust sustituciones;
+     t_sust susts;
 };
 
 #endif

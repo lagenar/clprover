@@ -16,19 +16,6 @@ Termino::t Termino::getTipo() const
      return tipo;
 }
 
-void Termino::aplicarSustitucion(const Sustitucion& s)
-{
-     assert(tipo == Var);
-     const Termino* t;
-
-     if ((t = s.getSustitucion(id)) != NULL) {
-	  if (t->getTipo() == Var)
-	       id = t->getId();
-	  else
-	       *this = Funcion(*static_cast<const Funcion*>(t));
-     }
-}
-
 /* Variable */
 Variable::Variable(const std::string& id)
   : Termino(id, Termino::Var)
@@ -44,6 +31,14 @@ const std::string Variable::getString() const
 bool Variable::operator==(const Termino& otro) const
 {
      return otro.getTipo() == Termino::Var && otro.getId() == id;
+}
+
+Termino* Variable::aplicarSustitucion(const Sustitucion& s) const
+{
+     const Termino* t;
+     if ((t = s.getSustitucion(id)) != NULL)
+	  return t->clonar();
+     return clonar();
 }
 
 Termino* Variable::clonar() const
@@ -76,14 +71,16 @@ bool Funcion::operator==(const Termino& otro) const
      return static_cast<const Funcion*>(&otro)->args == args;
 }
 
+Termino* Funcion::aplicarSustitucion(const Sustitucion& s) const
+{
+     Funcion* f = new Funcion(*this);
+     f->args->aplicarSustitucion(s);
+     return f;
+}
+
 Termino* Funcion::clonar() const
 {
      return new Funcion(*this);
-}
-
-void Funcion::aplicarSustitucion(const Sustitucion& s)
-{
-     args->aplicarSustitucion(s);
 }
 
 int Funcion::aridad() const

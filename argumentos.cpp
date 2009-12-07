@@ -63,8 +63,11 @@ void Argumentos::agregarArgumento(const Termino& t)
 
 void Argumentos::aplicarSustitucion(const Sustitucion& s)
 {
-     for (iterator it = args.begin(); it != args.end(); ++it)
-	  (*it)->aplicarSustitucion(s);
+     for (iterator it = args.begin(); it != args.end(); ++it) {
+	  Termino* t = (*it)->aplicarSustitucion(s);
+	  delete *it;
+	  *it = t;
+     }
 }
 
 Argumentos::~Argumentos()

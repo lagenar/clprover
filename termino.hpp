@@ -24,9 +24,9 @@ public:
 
      virtual bool operator==(const Termino& otro) const = 0;
 
-     virtual Termino* clonar() const = 0;
+     virtual Termino* aplicarSustitucion(const Sustitucion& s) const = 0;
 
-     virtual void aplicarSustitucion(const Sustitucion& s);
+     virtual Termino* clonar() const = 0;
 
      virtual ~Termino() { }
 
@@ -43,6 +43,8 @@ public:
      const std::string getString() const;
 
      bool operator==(const Termino& otro) const;
+
+     Termino* aplicarSustitucion(const Sustitucion& s) const;
 
      Termino* clonar() const;     
 };
@@ -61,9 +63,9 @@ public:
 
      bool operator==(const Termino& otro) const;
 
+     Termino* aplicarSustitucion(const Sustitucion& s) const;
+
      Termino* clonar() const;
-     
-     void aplicarSustitucion(const Sustitucion& s);
 
      int aridad() const;
      

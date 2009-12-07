@@ -14,15 +14,17 @@ const std::string Sustitucion::getString() const
 
 void Sustitucion::componer(const Sustitucion& s)
 {
-     for (t_sust::iterator it = susts.begin(); it != susts.end(); ++it) {
+     t_sust::iterator it = susts.begin();
+     while (it != susts.end()) {
 	  Termino* r = it->second->aplicarSustitucion(s);
 	  delete it->second;
 	  it->second = r;
 	  if (r->getTipo() == Termino::Var &&
 	      r->getId() == it->first) {
 	       delete r;
-	       susts.erase(it);
-	  }
+	       susts.erase(it++);
+	  } else 
+	       ++it;
      }
 
      for (t_sust::const_iterator it = s.susts.begin(); it != s.susts.end(); ++it)

@@ -43,11 +43,15 @@ public:
      
      bool simplificarLiteralesPuros()
      {
-	  // typedef std::set<std::pair<std::string, bool> t_simp;
+	  // typedef std::set<std::pair<std::string, bool> > t_simp;
 	  // mapa_simp lit_simplificado;
 	  // bool simp = false;
 	  
 	  // for (const_iterator claus = clausulas.begin(); claus != clausulas.end(); ++claus) {
+	  //      bool claus_eliminada = false;
+	  //      const_iterator t_claus = claus;
+	  //      ++t_claus;
+	  //      while (
 	       
      }
 

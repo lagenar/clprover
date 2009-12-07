@@ -5,6 +5,7 @@
 #include <iostream>
 #include "termino.hpp"
 #include "argumentos.hpp"
+#include "sustitucion.hpp"
 
 class Literal {
 public:
@@ -23,6 +24,10 @@ public:
      bool operator==(const Literal& otro) const;
      
      bool operator!=(const Literal& otro) const;
+
+     bool unificar(const Literal& otro, Sustitucion& s) const;
+     
+     bool unificable(const Literal& otro) const;
 
      void agregarArgumento(const Termino& t);
 

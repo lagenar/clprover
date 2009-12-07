@@ -42,6 +42,19 @@ const std::string Literal::getString() const
      return (signo ? "" : "~") + id + args.getString();
 }
 
+bool Literal::unificar(const Literal& otro, Sustitucion& s) const
+{
+     if (otro.aridad() != aridad() || otro.signo != signo || otro.id != id)
+	  return false;
+     return args.unificar(s, otro.args);
+}
+
+bool Literal::unificable(const Literal& otro) const
+{
+     Sustitucion s;
+     return unificar(otro, s);
+}
+
 void Literal::agregarArgumento(const Termino& t)
 {
      args.agregarArgumento(t);

@@ -29,6 +29,10 @@ public:
      
      bool unificable(const Literal& otro) const;
 
+     bool unificarComplementario(const Literal& otro, Sustitucion& s) const;
+     
+     void aplicarSustitucion(const Sustitucion& s);
+
      void agregarArgumento(const Termino& t);
 
      void setSigno(bool s);

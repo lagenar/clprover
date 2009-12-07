@@ -55,6 +55,18 @@ bool Literal::unificable(const Literal& otro) const
      return unificar(otro, s);
 }
 
+bool Literal::unificarComplementario(const Literal& otro, Sustitucion& s) const
+{
+     if (otro.aridad() != aridad() || otro.signo == signo || otro.id != id)
+	  return false;
+     return args.unificar(s, otro.args);
+}
+
+void Literal::aplicarSustitucion(const Sustitucion& s)
+{
+     args.aplicarSustitucion(s);
+}
+
 void Literal::agregarArgumento(const Termino& t)
 {
      args.agregarArgumento(t);

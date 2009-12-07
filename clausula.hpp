@@ -15,7 +15,7 @@ public:
 	       return !l1.getSigno() && l2.getSigno()
 		    || l1.getString() < l2.getString();
 	  else
-	       return r == -1;
+	       return r < 0;
      }
 };
 
@@ -39,18 +39,18 @@ public:
      bool esTautologica() const;
      
      const std::string getString() const;
-
-     bool contieneLiteral(const std::string& id, bool signo) const;
      
      const_iterator begin() const;
 
      const_iterator end() const;
 
+     void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
+
      void agregarLiteral(const Literal& lit);
 
 private:     
      std::set<Literal, LitComp> literales;
-     bool tautologica;
+     bool tautologica;     
 };
 
 #endif

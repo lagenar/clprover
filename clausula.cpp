@@ -68,32 +68,12 @@ const std::string Clausula::getString() const
      return s;
 }
 
-bool Clausula::contieneLiteral(const std::string& id, bool signo) const
-{
-     bool cont = false;
-     bool paso = false;
-     const_iterator it = literales.begin();
-
-     while (it != literales.end() && !cont && !paso) {
-	  int cmp = id.compare(it->getId());
-	  if (cmp > 0)
-	       paso = true;
-	  else if (cmp == 0) {
-	       paso = !signo && it->getSigno();
-	       cont = signo == it->getSigno();
-	  }
-	  ++it;
-     }
-
-     return cont;	  
-}
-
-const_iterator begin() const
+Clausula::const_iterator Clausula::begin() const
 {
      return literales.begin();
 }
 
-const_iterator end() const
+Clausula::const_iterator Clausula::end() const
 {
      return literales.end();
 }
@@ -110,4 +90,32 @@ void Clausula::agregarLiteral(const Literal& lit)
 	  else
 	       tautologica = true;
      }
+}
+
+
+void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) const
+{
+     for (const_iterator lit = literales.begin(); lit != literales.end(); ++lit) {
+	  const_iterator lit2 = claus.begin();
+	  while (lit2 != claus.end() && lit->getId() >= lit2->getId()) {
+	       Sustitucion s;
+	       if (lit->unificarComplementario(*lit2, s)) {
+		    Clausula nueva_res;
+		    for (const_iterator it = literales.begin(); it != literales.end(); ++it)
+			 if (it != lit) {
+			      Literal l = *it;
+			      l.aplicarSustitucion(s);
+			      nueva_res.agregarLiteral(l);
+			 }
+		    for (const_iterator it = claus.begin(); it != claus.end(); ++it)
+			 if (it != lit2) {			     
+			      Literal l = *it;
+			      l.aplicarSustitucion(s);
+			      nueva_res.agregarLiteral(l);
+			 }
+		    res.push_back(nueva_res);
+	       }
+	       ++lit2;
+	  }
+     }	  
 }

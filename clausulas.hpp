@@ -63,6 +63,7 @@ public:
 			 claus_eliminada = true;
 		    } else
 			 ++claus;
+		    ++lit;
 	       }
 	  }
 	  return simp;

@@ -2,7 +2,9 @@
 #define TERMINO_HPP
 
 #include <list>
+#include <map>
 #include <iostream>
+
 #include "argumentos.hpp"
 #include "sustitucion.hpp"
 #include <cassert>
@@ -32,6 +34,8 @@ public:
 
      virtual Termino* clonar() const = 0;
 
+     virtual void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo) = 0;
+
      virtual ~Termino() { }
 
 protected:
@@ -55,6 +59,8 @@ public:
      bool unificar(Sustitucion& s, const Termino& otro) const;
 
      Termino* clonar() const;     
+     
+     void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);	  
 };
 
 class Argumentos;
@@ -78,6 +84,8 @@ public:
      bool unificar(Sustitucion& s, const Termino& otro) const;
 
      Termino* clonar() const;
+
+     void renombrarVariables(std::map<std::string,std::string>&renombre, int& comienzo);
 
      int aridad() const;
      

@@ -92,30 +92,46 @@ void Clausula::agregarLiteral(const Literal& lit)
      }
 }
 
-
 void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) const
 {
-     for (const_iterator lit = literales.begin(); lit != literales.end(); ++lit) {
-	  const_iterator lit2 = claus.begin();
-	  while (lit2 != claus.end() && lit->getId() >= lit2->getId()) {
+     int com = 1;
+     Clausula C1 = renombrarVariables(com);
+     Clausula C2 = claus.renombrarVariables(com);
+
+     for (const_iterator lit = C1.begin(); lit != C1.end(); ++lit) {
+	  const_iterator lit2 = C2.begin();
+	  while (lit2 != C2.end() && lit->getId() >= lit2->getId()) {
 	       Sustitucion s;
 	       if (lit->unificarComplementario(*lit2, s)) {
 		    Clausula nueva_res;
-		    for (const_iterator it = literales.begin(); it != literales.end(); ++it)
-			 if (it != lit) {
-			      Literal l = *it;
-			      l.aplicarSustitucion(s);
-			      nueva_res.agregarLiteral(l);
-			 }
-		    for (const_iterator it = claus.begin(); it != claus.end(); ++it)
-			 if (it != lit2) {			     
-			      Literal l = *it;
-			      l.aplicarSustitucion(s);
-			      nueva_res.agregarLiteral(l);
-			 }
+		    nueva_res.agregarLitsResolvente(C1, lit, s);
+		    nueva_res.agregarLitsResolvente(C2, lit2, s);
 		    res.push_back(nueva_res);
 	       }
 	       ++lit2;
 	  }
      }	  
+}
+
+Clausula Clausula::renombrarVariables(int& comienzo) const
+{
+     Clausula C;
+     std::map<std::string, std::string> ren;
+     for (iterator it = literales.begin(); it != literales.end(); ++it) {
+	  Literal l = *it;
+	  l.renombrarVariables(ren, comienzo);
+	  C.agregarLiteral(l);
+     }
+     return C;
+}
+
+void Clausula::agregarLitsResolvente(const Clausula& c, const const_iterator& lit,
+				     const Sustitucion& s)
+{
+     for (const_iterator it = c.begin(); it != c.end(); ++it)
+	  if (it != lit) {
+	       Literal nuevo = *it;
+	       nuevo.aplicarSustitucion(s);
+	       agregarLiteral(nuevo);
+	  }
 }

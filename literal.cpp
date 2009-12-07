@@ -76,3 +76,8 @@ void Literal::setSigno(bool s)
 {
      signo = s;
 }
+
+void Literal::renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo)
+{
+     args.renombrarVariables(renombre, comienzo);
+}

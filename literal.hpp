@@ -3,6 +3,8 @@
 
 #include <list>
 #include <iostream>
+#include <map>
+
 #include "termino.hpp"
 #include "argumentos.hpp"
 #include "sustitucion.hpp"
@@ -36,6 +38,8 @@ public:
      void agregarArgumento(const Termino& t);
 
      void setSigno(bool s);
+     
+     void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);
 private:
      Argumentos args;
      bool signo;

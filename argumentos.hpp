@@ -2,7 +2,9 @@
 #define ARGUMENTOS_HPP
 
 #include <list>
+#include <map>
 #include <iostream>
+
 #include "termino.hpp"
 #include "sustitucion.hpp"
 
@@ -36,6 +38,8 @@ public:
      void agregarArgumento(const Termino& t);
 
      void aplicarSustitucion(const Sustitucion& s);
+
+     void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);
 
      ~Argumentos();
 

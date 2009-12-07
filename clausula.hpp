@@ -22,6 +22,7 @@ public:
 class Clausula {
 public:
      typedef std::set<Literal, LitComp>::const_iterator const_iterator;
+     typedef std::set<Literal, LitComp>::iterator iterator;
      typedef enum { REGLA, HECHO, OBJ } t_horn;
 
      Clausula() : tautologica(false) { }
@@ -46,11 +47,15 @@ public:
 
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
 
-     void agregarLiteral(const Literal& lit);
+     Clausula renombrarVariables(int& comienzo) const;
 
-private:     
+     void agregarLiteral(const Literal& lit);
+private:
      std::set<Literal, LitComp> literales;
-     bool tautologica;     
+     bool tautologica;
+     
+     void agregarLitsResolvente(const Clausula& c, const const_iterator& lit,
+				const Sustitucion& s);
 };
 
 #endif

@@ -94,6 +94,12 @@ void Argumentos::aplicarSustitucion(const Sustitucion& s)
      }
 }
 
+void Argumentos::renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo)
+{
+     for (iterator it = args.begin(); it != args.end(); ++it)
+	  (*it)->renombrarVariables(renombre, comienzo);
+}
+
 Argumentos::~Argumentos()
 {
      for (iterator it = args.begin(); it != args.end(); ++it)

@@ -1,4 +1,5 @@
 #include "termino.hpp"
+#include <sstream>
 
 /* Termino */
 Termino::Termino(const std::string& id, Termino::t tipo)
@@ -71,6 +72,18 @@ Termino* Variable::clonar() const
      return new Variable(*this);
 }
 
+void Variable::renombrarVariables(std::map<std::string,std::string>&renombre, int& comienzo)
+{
+     std::map<std::string,std::string>::const_iterator it = renombre.find(id);
+     if (it == renombre.end()) {
+	  std::stringstream s;
+	  s << comienzo;	  
+	  id = renombre[id] = "X" + s.str();
+	  comienzo++;
+     } else
+	  id = it->second;
+}
+
 /* Funcion */
 Funcion::Funcion(const std::string& id)
      : Termino(id, Termino::Func)
@@ -121,6 +134,11 @@ Termino* Funcion::aplicarSustitucion(const Sustitucion& s) const
 Termino* Funcion::clonar() const
 {
      return new Funcion(*this);
+}
+
+void Funcion::renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo)
+{
+     args->renombrarVariables(renombre, comienzo);
 }
 
 int Funcion::aridad() const

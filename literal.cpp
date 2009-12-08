@@ -91,3 +91,9 @@ void Literal::renombrarVariables(std::map<std::string,std::string>& renombre, in
 {
      args.renombrarVariables(renombre, comienzo);
 }
+
+void Literal::renombrarVariables(int& comienzo)
+{
+     std::map<std::string,std::string> ren;
+     args.renombrarVariables(ren, comienzo);
+}

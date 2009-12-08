@@ -1,4 +1,5 @@
 #include "parser.hpp"
+#include <algorithm>
 
 void Parser::verificarAtributos(bool& error, std::pair<t_error, std::string>& E,
 				const client::t_attrs& atr_clausula)
@@ -90,4 +91,11 @@ void Parser::parseClausula(int id, const std::string& clausula,
 	  error = true;
 	  E.first = Sintactico;
      }
+}
+
+void Parser::getClausulas(std::list<Clausula>& l) const
+{
+     std::map<int, Clausula>::const_iterator it;
+     for (it = clausulas.begin(); it != clausulas.end(); ++it)
+	  l.push_back(it->second);
 }

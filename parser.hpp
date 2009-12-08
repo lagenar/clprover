@@ -13,6 +13,8 @@ public:
 			bool& error, std::pair<t_error, std::string>& E);
 
      void eliminarClausula(int id);
+
+     void getClausulas(std::list<Clausula>& l) const;
 private:   
      std::map<int, Clausula> clausulas;
      

@@ -12,6 +12,12 @@ public:
      typedef typename std::set<Clausula, Compare>::size_type size_type;
      
      ConjuntoClausulas() { }
+
+     ConjuntoClausulas(const std::list<Clausula>& cls)
+     {
+	  for (std::list<Clausula>::const_iterator it = cls.begin(); it != cls.end(); ++it)	   
+	       agregarClausula(*it);
+     }
      
      size_type cantidadClausulas() const { return clausulas.size(); }
 
@@ -37,36 +43,44 @@ public:
 
      void agregarClausula(const Clausula& C)
      {
-	  if (!C.esTautologica())
-	       clausulas.insert(C);
+	  clausulas.insert(C);
      }
      
      bool simplificarLiteralesPuros()
      {
 	  bool simp = false;
-	  iterator claus = clausulas.begin();
-	  
+	  iterator claus = clausulas.begin();	  
 	  while (claus != clausulas.end()) {
 	       bool claus_eliminada = false;
-	       Clausula::const_iterator lit = claus->begin();
+	       Clausula::const_iterator lit = claus->begin();	       
 	       while (!claus_eliminada && lit != claus->end()) {		    
 		    bool contieneComp = false;
-		    const_iterator claus2 = claus;
-		    ++claus2;
+		    const_iterator claus2 = clausulas.begin();
 		    while (!contieneComp && claus2 != clausulas.end()) {
 			 contieneComp = claus2->contieneComplementario(*lit);
 			 ++claus2;
-		    }
+		    }		    
 		    if (!contieneComp) {
 			 simp = true;
 			 clausulas.erase(claus++);
 			 claus_eliminada = true;
-		    } else
-			 ++claus;
+		    }
 		    ++lit;
 	       }
+	       if (!claus_eliminada)
+		    ++claus;
 	  }
 	  return simp;
+     }
+
+     const_iterator begin() const
+     {
+	  return clausulas.begin();
+     }
+
+     const_iterator end() const
+     {
+	  return clausulas.end();
      }
 
 private:

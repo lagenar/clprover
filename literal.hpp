@@ -46,6 +46,8 @@ public:
      void setSigno(bool s);
      
      void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);
+
+     void renombrarVariables(int& comienzo);
 private:
      Argumentos args;
      bool signo;

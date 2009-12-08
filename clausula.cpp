@@ -52,9 +52,7 @@ bool Clausula::esTautologica() const
 
 const std::string Clausula::getString() const
 {
-     if (tautologica)
-	  return "T";
-     else if (cantLiterales() == 0)
+     if (cantLiterales() == 0)
 	  return "_|_";
 
      std::string s;
@@ -81,26 +79,30 @@ Clausula::const_iterator Clausula::end() const
 bool Clausula::contieneComplementario(const Literal& lit) const
 {
      const_iterator it = literales.begin();
+     Literal r_lit = lit;
+     int i = 0;
+     r_lit.renombrarVariables(i);
+
      while (it != literales.end() && it->getId() >= lit.getId()) {
+	  Literal lit2 = *it;
+	  int k = i;
+	  lit2.renombrarVariables(k);
 	  Sustitucion s;
-	  if (lit.unificarComplementario(*it, s))
+	  if (lit.unificarComplementario(lit2, s))
 	       return true;
+	  ++it;
      }
      return false;
 }
 
 void Clausula::agregarLiteral(const Literal& lit)
 {
-     if (!tautologica) {
-	  Literal l = lit;
-	  l.setSigno(!l.getSigno());
-	  const_iterator it = literales.find(l);
 
-	  if (it == literales.end())
-	       literales.insert(lit);
-	  else
-	       tautologica = true;
-     }
+     Literal l = lit;
+     l.setSigno(!l.getSigno());
+     const_iterator it = literales.find(l);
+     tautologica = it != literales.end();
+     literales.insert(lit);     
 }
 
 void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) const

@@ -11,6 +11,8 @@
 
 class Literal {
 public:
+     typedef Argumentos::const_iterator const_iterator;
+
      Literal(const std::string& id, bool signo);
 
      Literal(const std::string& id, const Argumentos& args, bool signo);
@@ -26,6 +28,10 @@ public:
      bool operator==(const Literal& otro) const;
      
      bool operator!=(const Literal& otro) const;
+
+     const_iterator begin() const;
+
+     const_iterator end() const;
 
      bool unificar(const Literal& otro, Sustitucion& s) const;
      

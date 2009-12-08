@@ -37,6 +37,16 @@ bool Literal::operator!=(const Literal& otro) const
      return !(*this == otro);
 }
 
+Literal::const_iterator Literal::begin() const
+{
+     return args.begin();
+}
+
+Literal::const_iterator Literal::end() const
+{
+     return args.end();
+}
+
 const std::string Literal::getString() const
 {
      return (signo ? "" : "~") + id + args.getString();

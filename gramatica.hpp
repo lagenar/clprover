@@ -1,3 +1,6 @@
+#ifndef GRAMATICA_HPP
+#define GRAMATICA_HPP
+
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
@@ -56,49 +59,83 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace client
 {
-
-     struct constructor_termino : boost::static_visitor<Termino*>
-     {					       
-	  Termino* operator()(const std::string& var) const
+     typedef enum { Func, Pred } t_id;
+     class Cmp {
+     public:
+	  bool operator()(const std::pair<int, t_id>& p1, const std::pair<int, t_id>& p2)
 	  {
-	       return new Variable(var);
-	  }
-	  
-	  Termino* operator()(const funcion& f) const
-	  {    
-	       Funcion* func = new Funcion(f.nombre);
-
-	       BOOST_FOREACH(termino const& t, f.args)
-	       {
-		    Termino* arg;
-		    arg = boost::apply_visitor(constructor_termino(), t);
-		    func->agregarArgumento(*arg);
-		    delete arg;
-	       }
-
-	       return func;
+		if (p1.first < p2.first)
+		     return true;
+		else if (p1.first == p2.first)
+		     return p1.second < p2.second;
+		else 
+		     return false;
 	  }
      };
 
-
-     Literal* construir_literal(const literal& lit)
+     typedef std::set<std::pair<int, t_id>, Cmp> t_attr;
+     typedef std::map<std::string, t_attr> t_attrs;
+     
+     Termino* construir_variable(const std::string& v)
      {
-	  Literal* res = new Literal(lit.nombre, lit.signo);
-	  
-	  BOOST_FOREACH(termino const& t, lit.args)
+	  return new Variable(v);
+     }
+     
+     Termino* construir_funcion(const funcion& f, t_attrs& atributos)
+     {
+	  Funcion* res = new Funcion(f.nombre);
+	  t_attrs::iterator it = atributos.find(f.nombre);
+	  if (it != atributos.end())
+	       it->second.insert(std::pair<int, t_id>(f.args.size(), Func));
+	  else {
+	       t_attr at;
+	       at.insert(std::pair<int, t_id>(f.args.size(), Func));
+	       atributos[f.nombre] = at;
+	  }
+
+	  BOOST_FOREACH(termino const& t, f.args)
 	  {
-	       Termino* arg = boost::apply_visitor(constructor_termino(), t);
+	       Termino* arg;
+	       if (const std::string* s = boost::get<std::string>(&t))
+		    arg = construir_variable(*s);
+	       else if (const funcion* f = boost::get<funcion>(&t))
+		    arg = construir_funcion(*f, atributos);
 	       res->agregarArgumento(*arg);
 	       delete arg;
 	  }
 	  return res;
      }
 
-     void construir_clausula(const std::vector<literal>& lits, Clausula& claus)
+     Literal* construir_literal(const literal& lit, t_attrs& atributos)
+     {
+	  Literal* res = new Literal(lit.nombre, lit.signo);
+	  t_attrs::iterator it = atributos.find(lit.nombre);
+	  if (it != atributos.end())
+	       it->second.insert(std::pair<int, t_id>(lit.args.size(), Pred));
+	  else {
+	       t_attr at;
+	       at.insert(std::pair<int, t_id>(lit.args.size(), Pred));
+	       atributos[lit.nombre] = at;
+	  }
+	  	  
+	  BOOST_FOREACH(termino const& t, lit.args)
+	  {
+	       Termino* arg;
+	       if (const std::string* s = boost::get<std::string>(&t))
+		    arg = construir_variable(*s);
+	       else if (const funcion* f = boost::get<funcion>(&t))
+		    arg = construir_funcion(*f, atributos);
+	       res->agregarArgumento(*arg);
+	       delete arg;
+	  }
+	  return res;
+     }
+
+     void construir_clausula(const std::vector<literal>& lits, Clausula& claus, t_attrs& atributos)
      {
 	  BOOST_FOREACH(literal const& lit, lits)
 	  {
-	       Literal* l = construir_literal(lit);
+	       Literal* l = construir_literal(lit, atributos);
 	       claus.agregarLiteral(*l);
 	       delete l;
 	  }
@@ -142,25 +179,5 @@ namespace client
 	  qi::rule<Iterator, std::string(), ascii::space_type> funId;
 	  qi::rule<Iterator, std::string(), ascii::space_type> var;
      };
-}
-	       
-// int main(int argc, char **argv)
-// {
-//      std::string s(argv[1]);
-//      std::vector<client::literal> t;
-//      typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
-//      gramatica_termino g;
-//      using boost::spirit::ascii::space;
-//      std::string::const_iterator iter = s.begin();
-//      std::string::const_iterator end = s.end();
-//      bool r = phrase_parse(iter, end, g, space, t);
-//      if (r && iter == end) {
-// 	  Clausula C;
-// 	  construir_clausula(t, C);
-// 	  std::cout << C.getString() << std::endl;
-//      }
-//      else
-//      	  std::cout << "Fallo de parseo" << std::endl;
-     
-//      return 0;
-// }
+}	       
+#endif

@@ -64,8 +64,8 @@ public:
 			 simp = true;
 			 clausulas.erase(claus++);
 			 claus_eliminada = true;
-		    }
-		    ++lit;
+		    } else
+			 ++lit;
 	       }
 	       if (!claus_eliminada)
 		    ++claus;

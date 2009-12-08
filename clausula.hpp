@@ -12,7 +12,7 @@ public:
      {
 	  int r = l1.getId().compare(l2.getId());
 	  if (r == 0)
-	       return !l1.getSigno() && l2.getSigno()
+	       return (!l1.getSigno() && l2.getSigno())
 		    || l1.getString() < l2.getString();
 	  else
 	       return r < 0;

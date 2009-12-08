@@ -52,9 +52,9 @@ void Parser::agregarAtributos(int id, const client::t_attrs& atr_clausula)
 
 void Parser::eliminarClausula(int id)
 {
-     std::map<int, Clausula>::iterator claus = clausulas.find(id);     
+     std::map<int, Clausula>::iterator claus = clausulas.find(id);
      if (claus != clausulas.end()) {
-	  clausulas.erase(claus);
+	  clausulas.erase(claus++);
 	  t_apar::iterator it_a;
 	  for (it_a = aparicionesId.begin(); it_a != aparicionesId.end(); ++it_a) {
 	       std::set<int> s = it_a->second;
@@ -65,7 +65,6 @@ void Parser::eliminarClausula(int id)
 		    it_a->second = s;
 	       }
 	  }
-	  ++claus;
      }
 }
 
@@ -73,7 +72,6 @@ void Parser::parseClausula(int id, const std::string& clausula,
 			   bool& error, std::pair<t_error, std::string>& E)
 {
      std::vector<client::literal> C;
-     typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
      gramatica_termino g;
      using boost::spirit::ascii::space;
      std::string::const_iterator iter = clausula.begin();
@@ -93,25 +91,3 @@ void Parser::parseClausula(int id, const std::string& clausula,
 	  E.first = Sintactico;
      }
 }
-
-// int main(int argc, char **argv)
-// {
-//      Parser p;
-//      std::string s;
-//      int id = 0;
-//      while (std::getline(std::cin, s)) {
-// 	  bool error = false;
-// 	  std::pair<Parser::t_error, std::string> E;
-// 	  p.parseClausula(id++, s, error, E);
-// 	  if (error) {
-// 	       if (E.first == Parser::Aridad)
-// 		    std::cout << "Error de aridad en " << E.second << std::endl;
-// 	       else if (E.first == Parser::TipoId)
-// 		    std::cout << "Error de tipo en " << E.second << std::endl;
-// 	       else if (E.first == Parser::Sintactico)
-// 		    std::cout << "Error sintactico" << std::endl;
-// 	  }
-// 	  p.eliminarClausula(id-1);
-//      }
-//      return 0;
-// }

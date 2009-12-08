@@ -76,12 +76,12 @@ namespace client
      typedef std::set<std::pair<int, t_id>, Cmp> t_attr;
      typedef std::map<std::string, t_attr> t_attrs;
      
-     Termino* construir_variable(const std::string& v)
+     inline Termino* construir_variable(const std::string& v)
      {
 	  return new Variable(v);
      }
      
-     Termino* construir_funcion(const funcion& f, t_attrs& atributos)
+     inline Termino* construir_funcion(const funcion& f, t_attrs& atributos)
      {
 	  Funcion* res = new Funcion(f.nombre);
 	  t_attrs::iterator it = atributos.find(f.nombre);
@@ -106,7 +106,7 @@ namespace client
 	  return res;
      }
 
-     Literal* construir_literal(const literal& lit, t_attrs& atributos)
+     inline Literal* construir_literal(const literal& lit, t_attrs& atributos)
      {
 	  Literal* res = new Literal(lit.nombre, lit.signo);
 	  t_attrs::iterator it = atributos.find(lit.nombre);
@@ -131,7 +131,7 @@ namespace client
 	  return res;
      }
 
-     void construir_clausula(const std::vector<literal>& lits, Clausula& claus, t_attrs& atributos)
+     inline void construir_clausula(const std::vector<literal>& lits, Clausula& claus, t_attrs& atributos)
      {
 	  BOOST_FOREACH(literal const& lit, lits)
 	  {

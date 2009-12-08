@@ -1,12 +1,12 @@
 #include "literal.hpp"
 
 Literal::Literal(const std::string& id, bool signo)
-     : id(id), signo(signo)
+     : signo(signo), id(id)
 {
 }
 
 Literal::Literal(const std::string& id, const Argumentos& args, bool signo)
-     : id(id), args(args), signo(signo)
+     : args(args), signo(signo), id(id)
 {
 }
 

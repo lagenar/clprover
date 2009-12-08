@@ -25,7 +25,7 @@ bool Clausula::esDeHorn(t_horn& t) const
 	  int c = cantLiterales();
 	  if (num_pos == 0)
 	       t = OBJ;
-	  else if (num_pos == c == 1)
+	  else if (num_pos == 1 && c == 1)
 	       t = HECHO;
 	  else
 	       t = REGLA;

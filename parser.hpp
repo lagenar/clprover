@@ -2,7 +2,6 @@
 #define PARSER_HPP
 
 #include <map>
-
 #include "gramatica.hpp"
 #include "clausula.hpp"
 
@@ -23,6 +22,8 @@ private:
      
      t_apar aparicionesId;
      t_attr atributosId;
+
+     typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
 
      void verificarAtributos(bool& error,
 			     std::pair<t_error, std::string>& E, const client::t_attrs& at);

@@ -11,10 +11,13 @@ public:
      bool operator()(const Literal& l1, const Literal& l2) 
      {
 	  int r = l1.getId().compare(l2.getId());
-	  if (r == 0)
-	       return (!l1.getSigno() && l2.getSigno())
-		    || l1.getString() < l2.getString();
-	  else
+	  if (r == 0) {
+	       if (l1.getSigno() == l2.getSigno())
+		    return l1.getString() < l2.getString();
+	       else
+		    return (!l1.getSigno() && l2.getSigno())
+			 || l1.getString() < l2.getString();
+	  } else
 	       return r < 0;
      }
 };
@@ -48,6 +51,8 @@ public:
      bool contieneComplementario(const Literal& lit) const;
 
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
+
+     bool equivalente(const Clausula& C) const;
 
      Clausula renombrarVariables(int& comienzo) const;
 

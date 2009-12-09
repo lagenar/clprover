@@ -83,12 +83,12 @@ bool Clausula::contieneComplementario(const Literal& lit) const
      int i = 0;
      r_lit.renombrarVariables(i);
 
-     while (it != literales.end() && it->getId() >= lit.getId()) {
+     while (it != literales.end() && it->getId() <= r_lit.getId()) {
 	  Literal lit2 = *it;
 	  int k = i;
 	  lit2.renombrarVariables(k);
 	  Sustitucion s;
-	  if (lit.unificarComplementario(lit2, s))
+	  if (r_lit.unificarComplementario(lit2, s))
 	       return true;
 	  ++it;
      }
@@ -97,12 +97,13 @@ bool Clausula::contieneComplementario(const Literal& lit) const
 
 void Clausula::agregarLiteral(const Literal& lit)
 {
-
-     Literal l = lit;
-     l.setSigno(!l.getSigno());
-     const_iterator it = literales.find(l);
-     tautologica = it != literales.end();
-     literales.insert(lit);     
+     if (!tautologica) {
+	  Literal l = lit;
+	  l.setSigno(!l.getSigno());
+	  const_iterator it = literales.find(l);
+	  tautologica = it != literales.end();
+     }
+     literales.insert(lit);
 }
 
 void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) const
@@ -124,6 +125,25 @@ void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) cons
 	       ++lit2;
 	  }
      }	  
+}
+
+bool Clausula::equivalente(const Clausula& C) const
+{
+     if (C.cantLiterales() != cantLiterales())
+	  return false;
+     int i = 0;
+     Clausula ren = this->renombrarVariables(i);
+     i = 0;
+     Clausula ren_C = C.renombrarVariables(i);
+     bool iguales = true;
+     const_iterator it = ren.begin();
+     const_iterator it2 = ren_C.begin();
+     while (iguales && it != ren.end() && it2 != ren_C.end()) {
+	  iguales = *it == *it2;
+	  ++it;
+	  ++it2;
+     }
+     return iguales;
 }
 
 Clausula Clausula::renombrarVariables(int& comienzo) const

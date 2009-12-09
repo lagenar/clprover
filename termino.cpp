@@ -53,6 +53,9 @@ bool Variable::unificar(Sustitucion& s, const Termino& otro) const
      if (t == NULL)
 	  t = this;
 
+     if (t->getTipo() == Func)
+	  return t->unificar(s, otro);
+
      const Termino* otro_sust = otro.aplicarSustitucion(s);
      bool res = false;
      if (otro_sust->contieneVariable(id))

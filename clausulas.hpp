@@ -53,10 +53,10 @@ public:
 	  while (claus != clausulas.end()) {
 	       bool claus_eliminada = false;
 	       Clausula::const_iterator lit = claus->begin();	       
-	       while (!claus_eliminada && lit != claus->end()) {		    
+	       while (!claus_eliminada && lit != claus->end()) {
 		    bool contieneComp = false;
 		    const_iterator claus2 = clausulas.begin();
-		    while (!contieneComp && claus2 != clausulas.end()) {
+		    while (!contieneComp && claus2 != clausulas.end()) {		      
 			 contieneComp = claus2->contieneComplementario(*lit);
 			 ++claus2;
 		    }		    
@@ -81,6 +81,12 @@ public:
      const_iterator end() const
      {
 	  return clausulas.end();
+     }
+
+     void getClausulas(std::list<Clausula>& l) const
+     {
+	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it)
+	       l.push_back(*it);
      }
 
 private:

@@ -52,6 +52,8 @@ public:
 
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
 
+     void factores(std::list<Clausula>& fact) const;
+
      bool equivalente(const Clausula& C) const;
 
      Clausula renombrarVariables(int& comienzo) const;

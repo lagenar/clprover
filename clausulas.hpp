@@ -46,6 +46,20 @@ public:
 	  clausulas.insert(C);
      }
      
+     bool simplificarPorTautologicas()
+     {
+	  bool simp = false;
+	  iterator claus = clausulas.begin();
+	  while (claus != clausulas.end()) {
+	       if (claus->esTautologica()) {
+		    simp = true;
+		    clausulas.erase(claus++);		   
+	       } else
+		    ++claus;
+	  }
+	  return simp;
+     }
+
      bool simplificarLiteralesPuros()
      {
 	  bool simp = false;

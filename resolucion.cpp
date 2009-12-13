@@ -5,26 +5,25 @@ bool ResolucionGeneral::esSatisfacible(std::list<boost::shared_ptr<Inferencia> >
 {
      using std::list;     
      bool satisfacible = true;
-     list<Clausula> combinables;
-     claus.getClausulas(combinables);
-     list<Clausula>::iterator itComb = combinables.begin();
-     list<Clausula> procesadas;
+     ConjClaus combinables = claus;
+     ConjClaus::iterator itComb = combinables.begin();
+     ConjClaus procesadas;
 
-     for (list<Clausula>::const_iterator it = combinables.begin(); it != combinables.end(); ++it) {
+     for (ConjClaus::const_iterator it = combinables.begin(); it != combinables.end(); ++it) {
 	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
 	  Prueba.push_back(p);
      }
      while (satisfacible && itComb != combinables.end()) {
-	  list<Clausula>::const_iterator itProc = procesadas.begin();
-	  if (!contieneClausula(*itComb, procesadas.begin(), procesadas.end())) {
+	  ConjClaus::const_iterator itProc = procesadas.begin();
+	  if (combinables.contieneClausula(*itComb)) {
 	       list<Clausula> factores;
 	       itComb->factores(factores);
 	       for (list<Clausula>::const_iterator it = factores.begin(); it != factores.end(); ++it)
-		    if (!contieneClausula(*it, combinables.begin(), combinables.end())) {
-			 combinables.push_back(*it);
+		    if (!combinables.contieneClausula(*it)) {
+			 combinables.agregarClausula(*it);
 			 boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(*itComb, *it));
 			 Prueba.push_back(p);
-		    }		    
+		    }    
 	       while (satisfacible && itProc != procesadas.end()) {
 		    list<Clausula> res;
 		    itComb->resolventes(*itProc, res);
@@ -36,9 +35,9 @@ bool ResolucionGeneral::esSatisfacible(std::list<boost::shared_ptr<Inferencia> >
 			      Prueba.push_back(p);
 			 }
 			 else if (!itRes->esTautologica() &&
-				  !contieneClausula(*itRes, procesadas.begin(), procesadas.end()) &&
-				  !contieneClausula(*itRes, combinables.begin(), combinables.end())) {
-			      combinables.push_back(*itRes);
+				  !procesadas.contieneClausula(*itRes) &&
+				  !combinables.contieneClausula(*itRes)) {
+			      combinables.agregarClausula(*itRes);
 			      Prueba.push_back(p);
 			 }
 			 ++itRes;
@@ -46,8 +45,8 @@ bool ResolucionGeneral::esSatisfacible(std::list<boost::shared_ptr<Inferencia> >
 		    ++itProc;
 	       }
 	  }
-	  procesadas.push_back(*itComb);
-	  combinables.erase(itComb);
+	  procesadas.agregarClausula(*itComb);
+	  combinables.eliminar(itComb);
 	  itComb = combinables.begin();
      }
      return satisfacible;

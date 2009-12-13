@@ -86,6 +86,18 @@ public:
 	  }
 	  return simp;
      }
+     
+     bool contieneClausula(const Clausula& c) const
+     {
+	  const_iterator it = clausulas.find(c);
+	  return it != clausulas.end();
+     }
+
+     void getClausulas(std::list<Clausula>& l) const
+     {
+	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it)
+	       l.push_back(*it);
+     }
 
      const_iterator begin() const
      {
@@ -96,13 +108,21 @@ public:
      {
 	  return clausulas.end();
      }
-
-     void getClausulas(std::list<Clausula>& l) const
+     
+     iterator begin()
      {
-	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it)
-	       l.push_back(*it);
+	  return clausulas.begin();
      }
 
+     iterator end()
+     {
+	  return clausulas.end();
+     }
+     
+     void eliminar(iterator c)
+     {
+	  clausulas.erase(c);
+     }
 private:
      std::set<Clausula, Compare> clausulas;
 };

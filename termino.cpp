@@ -109,7 +109,7 @@ bool Funcion::operator==(const Termino& otro) const
      if (otro.getTipo() != Termino::Func || otro.getId() != id)
      	  return false;
      
-     return static_cast<const Funcion*>(&otro)->args == args;
+     return *static_cast<const Funcion*>(&otro)->args == *args;
 }
 
 bool Funcion::contieneVariable(const std::string& id) const

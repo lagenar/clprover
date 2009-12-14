@@ -14,6 +14,8 @@ public:
 
      void eliminarClausula(int id);
 
+     Clausula getClausula(int id) const;
+
      void getClausulas(std::list<Clausula>& l) const;
 private:   
      std::map<int, Clausula> clausulas;

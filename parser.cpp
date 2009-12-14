@@ -93,6 +93,11 @@ void Parser::parseClausula(int id, const std::string& clausula,
      }
 }
 
+Clausula Parser::getClausula(int id) const
+{
+     return clausulas.find(id)->second;
+}
+
 void Parser::getClausulas(std::list<Clausula>& l) const
 {
      std::map<int, Clausula>::const_iterator it;

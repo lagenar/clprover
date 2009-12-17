@@ -10,7 +10,7 @@ public:
      typedef typename std::set<Clausula, Compare>::const_iterator const_iterator;
      typedef typename std::set<Clausula, Compare>::iterator iterator;
      typedef typename std::set<Clausula, Compare>::size_type size_type;
-     
+
      ConjuntoClausulas() { }
 
      ConjuntoClausulas(const std::list<Clausula>& cls)
@@ -97,6 +97,30 @@ public:
      {
 	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it)
 	       l.push_back(*it);
+     }
+     
+     std::set<std::string> predicadosEliminables() const
+     {
+	  std::map<std::string, bool> eliminable;
+	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it) {
+	       std::map<std::string, int> apar = it->aparicionesPredicados();
+	       std::map<std::string, int>::const_iterator it_apar;
+	       for (it_apar = apar.begin(); it_apar != apar.end(); ++it_apar)
+		    if (it_apar->second > 1)
+			 eliminable[it_apar->first] = false;
+		    else {
+			 std::map<std::string, bool>::const_iterator it_elim = eliminable.find(it_apar->first);
+			 if (it_elim == eliminable.end())
+			      eliminable[it_apar->first] = true;
+		    }
+	  }
+	  std::set<std::string> eliminables;
+	  for (std::map<std::string, bool>::const_iterator it_elim = eliminable.begin();
+	       it_elim != eliminable.end(); ++it_elim)
+	       if (it_elim->second)
+		    eliminables.insert(it_elim->first);
+
+	  return eliminables;
      }
 
      const_iterator begin() const

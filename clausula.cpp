@@ -106,6 +106,14 @@ void Clausula::agregarLiteral(const Literal& lit)
      literales.insert(lit);
 }
 
+bool Clausula::contienePredicado(const std::string& id_pred) const
+{
+     const_iterator it = literales.begin();
+     while (it != literales.end() && id_pred < it->getId())
+	  ++it;
+     return it != literales.end() && it->getId() == id_pred;
+}
+
 void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) const
 {
      int com = 1;
@@ -125,6 +133,37 @@ void Clausula::resolventes(const Clausula& claus, std::list<Clausula>& res) cons
 	       ++lit2;
 	  }
      }	  
+}
+
+bool Clausula::resolventeUsandoPred(const Clausula& claus,
+				    const std::string& id_pred, Clausula& res) const
+{
+     int i = 1;
+     Clausula C1 = renombrarVariables(i);
+     Clausula C2 = claus.renombrarVariables(i);
+     const_iterator lit1 = C1.begin();
+     while (lit1 != C1.end() && lit1->getId() != id_pred)
+	  ++lit1;
+     
+     if (lit1 == C1.end())
+	  return false;
+
+     bool signo = lit1->getSigno();
+     const_iterator lit2 = C2.begin();
+     while (lit2 != C2.end() &&
+	    (lit2->getId() != id_pred || lit2->getSigno() == signo))
+	  ++lit2;
+     
+     if (lit2 == C2.end())
+	  return false;
+	  
+     Sustitucion s;
+     if (!lit1->unificarComplementario(*lit2, s))
+	  return false;
+
+     res.agregarLitsResolvente(C1, lit1, s);
+     res.agregarLitsResolvente(C2, lit2, s);
+     return true;
 }
 
 void Clausula::factores(std::list<Clausula>& fact) const
@@ -178,6 +217,17 @@ Clausula Clausula::renombrarVariables(int& comienzo) const
 	  C.agregarLiteral(l);
      }
      return C;
+}
+
+std::map<std::string, int> Clausula::aparicionesPredicados() const
+{
+     std::map<std::string, int> res;
+     for (const_iterator it = literales.begin(); it != literales.end(); ++it)
+	  if (res.find(it->getId()) == res.end())
+	       res[it->getId()] = 1;
+	  else
+	       ++res[it->getId()];
+     return res;
 }
 
 void Clausula::agregarLitsResolvente(const Clausula& c, const const_iterator& lit,

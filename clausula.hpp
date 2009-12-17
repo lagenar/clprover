@@ -49,14 +49,21 @@ public:
      const_iterator end() const;
 
      bool contieneComplementario(const Literal& lit) const;
+     
+     bool contienePredicado(const std::string& id_pred) const;
 
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
+     
+     bool resolventeUsandoPred(const Clausula& claus,
+			       const std::string& id_pred, Clausula& res) const;
 
      void factores(std::list<Clausula>& fact) const;
 
      bool equivalente(const Clausula& C) const;
 
      Clausula renombrarVariables(int& comienzo) const;
+     
+     std::map<std::string, int> aparicionesPredicados() const;
 
      void agregarLiteral(const Literal& lit);
 private:

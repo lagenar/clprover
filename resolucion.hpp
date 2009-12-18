@@ -25,11 +25,13 @@ class Resolucion {
 public:
      typedef ConjuntoClausulas<ClausComp> ConjClaus;
      typedef std::list<boost::shared_ptr<Inferencia> > t_prueba;
+
      Resolucion(const ConjClaus& claus) :
 	  claus(claus) { }
  
-     virtual bool esSatisfacible(t_prueba& Prueba) = 0;
+     virtual bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda) = 0;
 
+     virtual bool esSatisfacible(t_prueba& Prueba);
 protected:
      ConjuntoClausulas<ClausComp> claus;
 
@@ -42,6 +44,8 @@ class ResolucionGeneral : public Resolucion {
 public:
      ResolucionGeneral(const ConjClaus& claus) :
 	  Resolucion(claus) { }
+
+     bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda);
 
      bool esSatisfacible(t_prueba& Prueba);
 };

@@ -33,7 +33,18 @@ void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred)
      claus = simp;
 }
 
+bool Resolucion::esSatisfacible(t_prueba& Prueba)
+{
+     bool seguir = true;
+     return esSatisfacible(Prueba, seguir);
+}
+
 bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba)
+{
+     return Resolucion::esSatisfacible(Prueba);
+}
+
+bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda)
 {
      using std::list;
     
@@ -41,14 +52,14 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba)
 	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
 	  Prueba.push_back(p);
      }    
-     resolverPredicadosEliminables(Prueba);
+     //resolverPredicadosEliminables(Prueba);
 
-     bool satisfacible = true;    
+     bool satisfacible = true;
      ConjClaus combinables = claus;
      ConjClaus::iterator itComb = combinables.begin();
-     ConjClaus procesadas;     
+     ConjClaus procesadas;
 
-     while (satisfacible && itComb != combinables.end()) {
+     while (satisfacible && itComb != combinables.end() && seguir_busqueda) {
 	  ConjClaus::const_iterator itProc = procesadas.begin();
 	  if (combinables.contieneClausula(*itComb)) {
 	       list<Clausula> factores;
@@ -59,7 +70,7 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba)
 			 boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(*itComb, *it));
 			 Prueba.push_back(p);
 		    }    
-	       while (satisfacible && itProc != procesadas.end()) {
+	       while (satisfacible && itProc != procesadas.end() && seguir_busqueda) {
 		    list<Clausula> res;
 		    itComb->resolventes(*itProc, res);
 		    list<Clausula>::const_iterator itRes = res.begin();

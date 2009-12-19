@@ -2,11 +2,22 @@
 #include "ui_qtclausula.h"
 #include <QListWidget>
 #include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QTextStream>
 
 QtClausula::QtClausula(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::QtClausula), id(QListWidgetItem::UserType), thread_res(0)
 {
     ui->setupUi(this);
+}
+
+void QtClausula::agregarClausula(const std::string& cl)
+{
+    QString cl_s(cl.c_str());
+    QListWidgetItem * claus = new QListWidgetItem(cl_s, ui->listaClausulas, id);
+    ui->listaClausulas->addItem(claus);
+    id++;
 }
 
 void QtClausula::agregarClausula()
@@ -27,11 +38,8 @@ void QtClausula::agregarClausula()
                 msg = "Error sintactico";
             QMessageBox::warning(this, "Error", msg);
         } else {
-            QString cl_s(parser.getClausula(id).getString().c_str());
-            QListWidgetItem * claus = new QListWidgetItem(cl_s, ui->listaClausulas, id);
-            ui->listaClausulas->addItem(claus);
+            agregarClausula(parser.getClausula(id).getString());
             ui->lineaClausula->clear();
-            ++id;
         }
     }
 }
@@ -124,6 +132,53 @@ void QtClausula::limpiarTexto()
 {
     ui->textoInfo->clear();
     ui->labelSatis->setText(QString("..."));
+}
+
+void QtClausula::cargarArchivo(const QString& nombre)
+{
+    QFile file(nombre);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Error al abrir el archivo", "No se pudo abrir el archivo");
+        return;
+    }
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString linea = in.readLine();
+        bool error;
+        std::pair<Parser::t_error, std::string> E;
+        parser.parseClausula(id, linea.toStdString(), error, E);
+        if (error) {
+            QMessageBox::warning(this, "Error", "Archivo corrupto");
+            parser = Parser();
+            eliminarClausulas();
+            return;
+        }
+        agregarClausula(parser.getClausula(id).getString());
+    }
+}
+
+void QtClausula::abrirArchivo()
+{
+    QString nombre = QFileDialog::getOpenFileName(this, "Abrir Archivo");
+    if (!nombre.isNull())
+        cargarArchivo(nombre);
+}
+
+void QtClausula::guardarClausulas()
+{
+    QString nombre = QFileDialog::getSaveFileName(this, "Guardar");
+    if (!nombre.isNull()) {
+        QFile file(nombre);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, "Error", "No se pudo crear el archivo para escritura");
+            return;
+        }
+        QTextStream out(&file);
+        std::list<Clausula> l;
+        parser.getClausulas(l);
+        for (std::list<Clausula>::const_iterator it = l.begin(); it != l.end(); ++it)
+            out << it->getString().c_str() << "\n";
+    }
 }
 
 QtClausula::~QtClausula()

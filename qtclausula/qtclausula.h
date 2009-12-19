@@ -22,6 +22,8 @@ public slots:
     void mostrarResultados();
     void detenerResolucion();
     void limpiarTexto();
+    void abrirArchivo();
+    void guardarClausulas();
 
 public:
     QtClausula(QWidget *parent = 0);
@@ -29,6 +31,8 @@ public:
 
 private:
     void mostrarInferencia(int i, const Inferencia& inf);
+    void cargarArchivo(const QString& nombre);
+    void agregarClausula(const std::string& cl);
 
 private:
     Ui::QtClausula *ui;

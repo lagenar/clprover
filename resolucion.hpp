@@ -35,9 +35,9 @@ public:
 protected:
      ConjuntoClausulas<ClausComp> claus;
 
-     void resolverPredicadosEliminables(t_prueba& prueba);
+     void resolverPredicadosEliminables(t_prueba& prueba, bool& resolvio_vacia);
 
-     void eliminarPredicado(t_prueba& prueba, const std::string& p);
+     void eliminarPredicado(t_prueba& prueba, const std::string& p, bool& resolvio_vacia);
 };
 
 class ResolucionGeneral : public Resolucion {

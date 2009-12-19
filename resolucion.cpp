@@ -1,17 +1,18 @@
 #include "resolucion.hpp"
 #include <list>
 
-void Resolucion::resolverPredicadosEliminables(t_prueba& prueba)
+void Resolucion::resolverPredicadosEliminables(t_prueba& prueba, bool& resolvio_vacia)
 {
+     resolvio_vacia = false;
      std::set<std::string> eliminables = claus.predicadosEliminables();
      while (!eliminables.empty()) {
 	  std::set<std::string>::const_iterator it_elim = eliminables.begin();
-	  eliminarPredicado(prueba, *it_elim);
+	  eliminarPredicado(prueba, *it_elim, resolvio_vacia);
 	  eliminables = claus.predicadosEliminables();
      }
 }
 
-void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred)
+void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred, bool& resolvio_vacia)
 {
      ConjuntoClausulas<ClausComp> simp;
      for (ConjuntoClausulas<ClausComp>::const_iterator it = claus.begin();
@@ -23,8 +24,11 @@ void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred)
 		    Clausula res;
 		    if (it->resolventeUsandoPred(*it2, id_pred, res)) {
 			 simp.agregarClausula(res);
-			 boost::shared_ptr<Inferencia> p(new InferenciaResolucion(*it, *it2, res));
-			 prueba.push_back(p);
+			 if (!resolvio_vacia) {
+			      boost::shared_ptr<Inferencia> p(new InferenciaResolucion(*it, *it2, res));
+			      prueba.push_back(p);
+			      resolvio_vacia = res.esVacia();
+			 }				   
 		    }
 	       }
 	  } else
@@ -51,8 +55,12 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
      for (ConjClaus::const_iterator it = claus.begin(); it != claus.end(); ++it) {
 	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
 	  Prueba.push_back(p);
-     }    
-     //resolverPredicadosEliminables(Prueba);
+     }
+     bool resolvio_vacia;
+     resolverPredicadosEliminables(Prueba, resolvio_vacia);
+     
+     if (resolvio_vacia)
+	  return false;
 
      bool satisfacible = true;
      ConjClaus combinables = claus;

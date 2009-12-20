@@ -2,6 +2,7 @@
 #define PARSER_HPP
 
 #include <map>
+#include <memory>
 #include "gramatica.hpp"
 #include "clausula.hpp"
 
@@ -17,6 +18,9 @@ public:
      Clausula getClausula(int id) const;
 
      void getClausulas(std::list<Clausula>& l) const;
+
+     static Literal* parseLiteral(const std::string& lit, bool& error,
+				  std::pair<t_error, std::string>& E);
 private:   
      std::map<int, Clausula> clausulas;
      
@@ -27,7 +31,8 @@ private:
      t_apar aparicionesId;
      t_attr atributosId;
 
-     typedef client::gramatica_termino<std::string::const_iterator> gramatica_termino;
+     typedef client::gramatica_clausula<std::string::const_iterator> gramatica_clausula;
+     typedef client::gramatica_literal<std::string::const_iterator> gramatica_literal;
 
      void verificarAtributos(bool& error,
 			     std::pair<t_error, std::string>& E, const client::t_attrs& at);

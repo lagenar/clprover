@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogUmg</class>
+ <widget class="QDialog" name="DialogUmg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>559</width>
+    <height>214</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Unificación de literales</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupClaus">
+     <property name="title">
+      <string>Literales a unificar </string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="_3">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Literal 2:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineaLit2"/>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="botonUnificar">
+        <property name="text">
+         <string>Unificar</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Literal 1:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineaLit1"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupUnif">
+     <property name="title">
+      <string>Información sobre la unificación</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QTextEdit" name="textoUnificacion">
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>lineaLit1</tabstop>
+  <tabstop>lineaLit2</tabstop>
+  <tabstop>botonUnificar</tabstop>
+  <tabstop>textoUnificacion</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>botonUnificar</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogUmg</receiver>
+   <slot>unificar()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>169</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>unificar()</slot>
+ </slots>
+</ui>

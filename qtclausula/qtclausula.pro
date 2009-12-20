@@ -12,7 +12,9 @@ SOURCES += main.cpp \
     ../literal.cpp \
     ../clausula.cpp \
     ../argumentos.cpp \
-    threadresolucion.cpp
+    threadresolucion.cpp \
+    mensajeserror.cpp \
+    dialogumg.cpp
 HEADERS += qtclausula.h \
     ../termino.hpp \
     ../sustitucion.hpp \
@@ -24,6 +26,9 @@ HEADERS += qtclausula.h \
     ../clausulas.hpp \
     ../clausula.hpp \
     ../argumentos.hpp \
-    threadresolucion.h
-FORMS += qtclausula.ui
+    threadresolucion.h \
+    mensajeserror.h \
+    dialogumg.h
+FORMS += qtclausula.ui \
+    dialogumg.ui
 INCLUDEPATH += ../

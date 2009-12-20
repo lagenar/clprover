@@ -1,5 +1,7 @@
 #include "qtclausula.h"
 #include "ui_qtclausula.h"
+#include "mensajeserror.h"
+#include "dialogumg.h"
 #include <QListWidget>
 #include <QMessageBox>
 #include <QFile>
@@ -28,15 +30,7 @@ void QtClausula::agregarClausula()
         std::pair<Parser::t_error, std::string> E;
         parser.parseClausula(id, cl, error, E);
         if (error) {
-            QString msg;
-            QString ident(E.second.c_str());
-            if (E.first == Parser::Aridad)
-                msg = QString("Error de aridad para el identificador %1").arg(ident);
-            else if (E.first == Parser::TipoId)
-                msg = QString("Error de tipo para el identificador %1").arg(ident);
-            else
-                msg = "Error sintactico";
-            QMessageBox::warning(this, "Error", msg);
+            QMessageBox::warning(this, "No se pudo agregar la clausula", getMensajeErrorParser(E));
         } else {
             agregarClausula(parser.getClausula(id).getString());
             ui->lineaClausula->clear();
@@ -182,6 +176,12 @@ void QtClausula::guardarClausulas()
         for (std::list<Clausula>::const_iterator it = l.begin(); it != l.end(); ++it)
             out << it->getString().c_str() << "\n";
     }
+}
+
+void QtClausula::unificarLiterales()
+{
+    DialogUmg diag;
+    diag.exec();
 }
 
 QtClausula::~QtClausula()

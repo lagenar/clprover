@@ -73,7 +73,7 @@ void Parser::parseClausula(int id, const std::string& clausula,
 			   bool& error, std::pair<t_error, std::string>& E)
 {
      std::vector<client::literal> C;
-     gramatica_termino g;
+     gramatica_clausula g;
      using boost::spirit::ascii::space;
      std::string::const_iterator iter = clausula.begin();
      std::string::const_iterator end = clausula.end();
@@ -103,4 +103,44 @@ void Parser::getClausulas(std::list<Clausula>& l) const
      std::map<int, Clausula>::const_iterator it;
      for (it = clausulas.begin(); it != clausulas.end(); ++it)
 	  l.push_back(it->second);
+}
+
+Literal* Parser::parseLiteral(const std::string& lit, bool& error,
+			      std::pair<t_error, std::string>& E)
+{
+     error = false;
+     client::literal c_l;
+     gramatica_literal g_lit;
+     using boost::spirit::ascii::space;
+     std::string::const_iterator iter = lit.begin();
+     std::string::const_iterator end = lit.end();
+     bool r = phrase_parse(iter, end, g_lit, space, c_l);
+     Literal* res = NULL;
+     if (r && iter == end) {
+	  client::t_attrs atr_lit;
+	  res = client::construir_literal(c_l, atr_lit);
+	  
+	  client::t_attrs::const_iterator it = atr_lit.begin();
+	  while (!error && it != atr_lit.end()) {
+	       if (it->second.size() > 1) {
+		    error = true;
+		    client::t_attr::const_iterator it_atr = it->second.begin();
+		    client::t_attr::const_iterator sig = it_atr;
+		    ++sig;
+		    if (it_atr->first != sig->first)
+			 E = std::pair<t_error, std::string>(Aridad, it->first);
+		    else
+			 E = std::pair<t_error, std::string>(TipoId, it->first);
+	       }
+	       ++it;
+	  }
+	  if (error) {
+	       delete res;
+	       res = NULL;
+	  }
+     } else {
+	  error = true;
+	  E.first = Sintactico;
+     }
+     return res;
 }

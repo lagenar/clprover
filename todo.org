@@ -1,5 +1,6 @@
 * Interfaz gráfica
-** TODO Crear un widget para unificación de literales.
+** DONE Crear un widget para unificación de literales.
+   CLOSED: [2009-12-20 dom 12:19]
    Para esto se necesita una función estática en la clase Parser,
    que permita analizar literales en forma separada. También extender la
    gramática.

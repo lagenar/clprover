@@ -142,11 +142,11 @@ namespace client
 	       delete l;
 	  }
      }
-	  
+     
      template <typename Iterator>
-     struct gramatica_termino : qi::grammar<Iterator, std::vector<literal>(), ascii::space_type>
+     struct gramatica_literal : qi::grammar<Iterator, literal(), ascii::space_type>
      {
-	  gramatica_termino() : gramatica_termino::base_type(claus)
+	  gramatica_literal() : gramatica_literal::base_type(lit)
 	  {
 	       using ascii::char_;
 	       using namespace qi::labels;
@@ -154,12 +154,43 @@ namespace client
 	       using phoenix::at_c;
 	       using phoenix::push_back;
 
-	       var %= char_("A-Z") >> *char_("a-z")
-		    ;
+	       var %= char_("A-Z") >> *char_("a-z");
+	       
+	       funId %= char_("a-z") >> *char_("a-z");
+	
+	       fun  = funId [at_c<0>(_val) = _1]
+		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
+	       
+	       term %= (var | fun);
 
-	       funId %= char_("a-z") >> *char_("a-z")
-		    ;
+	       lit = eps [at_c<2>(_val) = true]
+		    >> -char_('~') [at_c<2>(_val) = false]
+		    >> funId [at_c<0>(_val) = _1]
+		    >> '(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')';
+	
+	  }
+	  qi::rule<Iterator, literal(), ascii::space_type> lit;
+	  qi::rule<Iterator, termino(), ascii::space_type> term;
+	  qi::rule<Iterator, funcion(), ascii::space_type> fun;
+	  qi::rule<Iterator, std::string(), ascii::space_type> funId;
+	  qi::rule<Iterator, std::string(), ascii::space_type> var;
+     };
 
+     template <typename Iterator>
+     struct gramatica_clausula : qi::grammar<Iterator, std::vector<literal>(), ascii::space_type>
+     {
+	  gramatica_clausula() : gramatica_clausula::base_type(claus)
+	  {
+	       using ascii::char_;
+	       using namespace qi::labels;
+	       using qi::eps;
+	       using phoenix::at_c;
+	       using phoenix::push_back;
+
+	       var %= char_("A-Z") >> *char_("a-z");
+
+	       funId %= char_("a-z") >> *char_("a-z");
+	
 	       fun  = funId [at_c<0>(_val) = _1]
 		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
 	       

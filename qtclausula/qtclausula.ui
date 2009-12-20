@@ -365,6 +365,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionUnificar_literales</sender>
+   <signal>activated()</signal>
+   <receiver>QtClausula</receiver>
+   <slot>unificarLiterales()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>agregarClausula()</slot>
@@ -375,5 +391,6 @@
   <slot>limpiarTexto()</slot>
   <slot>abrirArchivo()</slot>
   <slot>guardarClausulas()</slot>
+  <slot>unificarLiterales()</slot>
  </slots>
 </ui>

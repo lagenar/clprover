@@ -2,8 +2,9 @@
 #define QTCLAUSULA_H
 
 #include <QtGui/QMainWindow>
-#include <parser.hpp>
+#include "parser.hpp"
 #include "threadresolucion.h"
+#include "dialogounificacion.h"
 
 namespace Ui
 {
@@ -24,6 +25,7 @@ public slots:
     void limpiarTexto();
     void abrirArchivo();
     void guardarClausulas();
+    void unificarLiterales();
 
 public:
     QtClausula(QWidget *parent = 0);

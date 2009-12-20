@@ -48,6 +48,7 @@ void DialogUmg::unificar()
         Sustitucion s;
         m_ui->textoUnificacion->clear();
         if (lit1->unificar(*lit2, s)) {
+            lit1->aplicarSustitucion(s);
             m_ui->textoUnificacion->insertHtml("<b>Resultado de la unificacion</b><br>");
             m_ui->textoUnificacion->insertHtml(lit1->getString().c_str());
             m_ui->textoUnificacion->insertHtml("<br><b>umg</b><br>");

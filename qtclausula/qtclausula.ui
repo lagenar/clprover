@@ -112,6 +112,11 @@
         </item>
         <item>
          <widget class="QLabel" name="labelSatis">
+          <property name="font">
+           <font>
+            <family>Arial Black</family>
+           </font>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -333,6 +338,22 @@
    <signal>activated()</signal>
    <receiver>QtClausula</receiver>
    <slot>guardarClausulas()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionVerificar_Satisfacibilidad</sender>
+   <signal>activated()</signal>
+   <receiver>QtClausula</receiver>
+   <slot>verificarSatisfacibilidad()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

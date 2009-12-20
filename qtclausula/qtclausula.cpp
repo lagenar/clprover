@@ -73,6 +73,7 @@ void QtClausula::verificarSatisfacibilidad()
     QObject::connect(thread_res, SIGNAL(finished()), this, SLOT(mostrarResultados()));
     ui->botonVerificarSatis->setEnabled(false);
     ui->botonDetener->setEnabled(true);
+    ui->actionVerificar_Satisfacibilidad->setEnabled(false);
     thread_res->start();
 }
 
@@ -114,6 +115,7 @@ void QtClausula::mostrarResultados()
     delete thread_res;
     thread_res = 0;
     ui->botonVerificarSatis->setEnabled(true);
+    ui->actionVerificar_Satisfacibilidad->setEnabled(true);
     ui->botonDetener->setEnabled(false);
 }
 
@@ -125,6 +127,7 @@ void QtClausula::detenerResolucion()
     delete thread_res;
     thread_res = 0;
     ui->botonVerificarSatis->setEnabled(true);
+    ui->actionVerificar_Satisfacibilidad->setEnabled(true);
     ui->botonDetener->setEnabled(false);
 }
 

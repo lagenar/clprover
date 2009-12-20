@@ -1,0 +1,18 @@
+* Interfaz gráfica
+** TODO Crear un widget para unificación de literales.
+   Para esto se necesita una función estática en la clase Parser,
+   que permita analizar literales en forma separada. También extender la
+   gramática.
+** TODO Crear un widget para simplificar el conjunto de clausulas.
+   Se tiene que poder simplificar por literales puros, cláusulas tautológicas,
+   y cláusulas equivalentes.
+** TODO En el texto de información poner las simplificaciones que se hacen.
+** TODO Pensar en como integrar fol.
+* Núcleo
+** TODO Ver como resolver los conjuntos que no tienen predicados eliminables(ver ladr).
+   Por ejemplo, el conjunto:
+   a(X) | a(Y)
+   ~a(X) | ~a(Z) | c(X) | c(Z) | d(Y) | d(U)
+   ~c(Y) | ~c(X) | ~d(Y) | ~d(X)
+   
+** TODO Ver como se puede implementar la simplificación por subsumción.

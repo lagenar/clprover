@@ -60,6 +60,23 @@ public:
 	  return simp;
      }
 
+     bool simplificarPorEquivalentes()
+     {
+	  bool simp = false;
+	  for (iterator it1 = clausulas.begin(); it1 != clausulas.end(); ++it1) {
+	       iterator it2 = it1;
+	       ++it2;
+	       while (it2 != clausulas.end()) {
+		    if (it1->equivalente(*it2)) {
+			 simp = true;
+			 clausulas.erase(it2++);
+		    } else
+			 ++it2;
+	       }
+	  }
+	  return simp;
+     }
+
      bool simplificarLiteralesPuros()
      {
 	  bool simp = false;

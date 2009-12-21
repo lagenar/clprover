@@ -4,7 +4,6 @@
 #include <QtGui/QMainWindow>
 #include "parser.hpp"
 #include "threadresolucion.h"
-#include "dialogounificacion.h"
 
 namespace Ui
 {

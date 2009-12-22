@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QtClausula</class>
- <widget class="QMainWindow" name="QtClausula">
+ <class>Qclprover</class>
+ <widget class="QMainWindow" name="Qclprover">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QtClausula</string>
+   <string>Qclprover</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -208,7 +208,7 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>agregarClausula()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -224,7 +224,7 @@
   <connection>
    <sender>lineaClausula</sender>
    <signal>returnPressed()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>agregarClausula()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -240,7 +240,7 @@
   <connection>
    <sender>botonBorrar</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>eliminarClausula()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -256,7 +256,7 @@
   <connection>
    <sender>botonLimpiarClaus</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>eliminarClausulas()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -272,7 +272,7 @@
   <connection>
    <sender>botonVerificarSatis</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>verificarSatisfacibilidad()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -288,7 +288,7 @@
   <connection>
    <sender>botonDetener</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>detenerResolucion()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -304,7 +304,7 @@
   <connection>
    <sender>botonLimpiarInfo</sender>
    <signal>clicked()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>limpiarTexto()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -320,7 +320,7 @@
   <connection>
    <sender>actionAbrir</sender>
    <signal>triggered()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>abrirArchivo()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -336,7 +336,7 @@
   <connection>
    <sender>actionGuardar</sender>
    <signal>triggered()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>guardarClausulas()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -352,7 +352,7 @@
   <connection>
    <sender>actionVerificar_Satisfacibilidad</sender>
    <signal>triggered()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>verificarSatisfacibilidad()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -368,7 +368,7 @@
   <connection>
    <sender>actionUnificar_literales</sender>
    <signal>triggered()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>unificarLiterales()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -384,7 +384,7 @@
   <connection>
    <sender>actionSimplificar_Conjunto</sender>
    <signal>triggered()</signal>
-   <receiver>QtClausula</receiver>
+   <receiver>Qclprover</receiver>
    <slot>simplificarConjunto()</slot>
    <hints>
     <hint type="sourcelabel">

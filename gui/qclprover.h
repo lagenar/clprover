@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QTCLAUSULA_H
-#define QTCLAUSULA_H
+#ifndef QCLPROVER_H
+#define QCLPROVER_H
 
 #include <QtGui/QMainWindow>
 #include "parser.hpp"
@@ -25,10 +25,10 @@
 
 namespace Ui
 {
-    class QtClausula;
+    class Qclprover;
 }
 
-class QtClausula : public QMainWindow
+class Qclprover : public QMainWindow
 {
     Q_OBJECT
 
@@ -46,8 +46,8 @@ public slots:
     void simplificarConjunto();
 
 public:
-    QtClausula(QWidget *parent = 0);
-    ~QtClausula();
+    Qclprover(QWidget *parent = 0);
+    ~Qclprover();
 
 private:
     void mostrarInferencia(int i, const Inferencia& inf);
@@ -56,11 +56,11 @@ private:
     void mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus);
 
 private:
-    Ui::QtClausula *ui;
+    Ui::Qclprover *ui;
 
     Parser parser;
     int id;
     ThreadResolucion *thread_res;
 };
 
-#endif // QTCLAUSULA_H
+#endif // QCLPROVER_H

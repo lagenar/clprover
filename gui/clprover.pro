@@ -1,10 +1,10 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-12-18T14:37:45
 # -------------------------------------------------
-TARGET = qtclausula
+TARGET = clprover
 TEMPLATE = app
 SOURCES += main.cpp \
-    qtclausula.cpp \
+    qclprover.cpp \
     ../src/termino.cpp \
     ../src/sustitucion.cpp \
     ../src/resolucion.cpp \
@@ -16,7 +16,7 @@ SOURCES += main.cpp \
     mensajeserror.cpp \
     dialogumg.cpp \
     dialogsimplificacion.cpp
-HEADERS += qtclausula.h \
+HEADERS += qclprover.h \
     ../src/termino.hpp \
     ../src/sustitucion.hpp \
     ../src/resolucion.hpp \
@@ -31,7 +31,7 @@ HEADERS += qtclausula.h \
     mensajeserror.h \
     dialogumg.h \
     dialogsimplificacion.h
-FORMS += qtclausula.ui \
+FORMS += qclprover.ui \
     dialogumg.ui \
     dialogsimplificacion.ui
 INCLUDEPATH += ../src

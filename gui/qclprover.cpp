@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "qtclausula.h"
-#include "ui_qtclausula.h"
+#include "qclprover.h"
+#include "ui_qclprover.h"
 #include "mensajeserror.h"
 #include "dialogumg.h"
 #include "dialogsimplificacion.h"
@@ -27,13 +27,13 @@
 #include <QFileDialog>
 #include <QTextStream>
 
-QtClausula::QtClausula(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::QtClausula), id(QListWidgetItem::UserType), thread_res(0)
+Qclprover::Qclprover(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::Qclprover), id(QListWidgetItem::UserType), thread_res(0)
 {
     ui->setupUi(this);
 }
 
-void QtClausula::agregarClausula(const std::string& cl)
+void Qclprover::agregarClausula(const std::string& cl)
 {
     QString cl_s(cl.c_str());
     QListWidgetItem * claus = new QListWidgetItem(cl_s, ui->listaClausulas, id);
@@ -41,7 +41,7 @@ void QtClausula::agregarClausula(const std::string& cl)
     id++;
 }
 
-void QtClausula::agregarClausula()
+void Qclprover::agregarClausula()
 {
     if (ui->lineaClausula->text().size() > 0) {
         std::string cl = ui->lineaClausula->text().toStdString();
@@ -57,7 +57,7 @@ void QtClausula::agregarClausula()
     }
 }
 
-void QtClausula::eliminarClausula()
+void Qclprover::eliminarClausula()
 {
     QListWidgetItem* item = ui->listaClausulas->currentItem();
     if (item) {
@@ -68,7 +68,7 @@ void QtClausula::eliminarClausula()
     }
 }
 
-void QtClausula::eliminarClausulas()
+void Qclprover::eliminarClausulas()
 {
     for (int i = 0; i < ui->listaClausulas->count(); ++i) {
         QListWidgetItem* item = ui->listaClausulas->item(i);
@@ -77,7 +77,7 @@ void QtClausula::eliminarClausulas()
     ui->listaClausulas->clear();
 }
 
-void QtClausula::verificarSatisfacibilidad()
+void Qclprover::verificarSatisfacibilidad()
 {
     limpiarTexto();
     ConjuntoClausulas<> conj;
@@ -99,7 +99,7 @@ void QtClausula::verificarSatisfacibilidad()
     thread_res->start();
 }
 
-void QtClausula::mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus)
+void Qclprover::mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus)
 {
     if (claus.esVacio())
         ui->textoInfo->insertHtml("&Oslash;<br>");
@@ -109,7 +109,7 @@ void QtClausula::mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus)
     }
 }
 
-void QtClausula::mostrarInferencia(int i, const Inferencia& inf)
+void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
 {
     QString inf_id(inf.getId().c_str());
     ui->textoInfo->insertHtml(QString("%1) %2").arg(QString::number(i), inf_id));
@@ -134,7 +134,7 @@ void QtClausula::mostrarInferencia(int i, const Inferencia& inf)
     ui->textoInfo->insertHtml(QString(" = %1<br>").arg(cl));
 }
 
-void QtClausula::mostrarResultados()
+void Qclprover::mostrarResultados()
 {
     if (thread_res->esSatisfacible())
         ui->labelSatis->setText(QString("Satisfacible"));
@@ -154,7 +154,7 @@ void QtClausula::mostrarResultados()
     ui->botonDetener->setEnabled(false);
 }
 
-void QtClausula::detenerResolucion()
+void Qclprover::detenerResolucion()
 {
     QObject::disconnect(thread_res, SIGNAL(finished()), this, SLOT(mostrarResultados()));
     thread_res->terminar();
@@ -166,13 +166,13 @@ void QtClausula::detenerResolucion()
     ui->botonDetener->setEnabled(false);
 }
 
-void QtClausula::limpiarTexto()
+void Qclprover::limpiarTexto()
 {
     ui->textoInfo->clear();
     ui->labelSatis->setText(QString("..."));
 }
 
-void QtClausula::cargarArchivo(const QString& nombre)
+void Qclprover::cargarArchivo(const QString& nombre)
 {
     QFile file(nombre);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -195,14 +195,14 @@ void QtClausula::cargarArchivo(const QString& nombre)
     }
 }
 
-void QtClausula::abrirArchivo()
+void Qclprover::abrirArchivo()
 {
     QString nombre = QFileDialog::getOpenFileName(this, "Abrir Archivo");
     if (!nombre.isNull())
         cargarArchivo(nombre);
 }
 
-void QtClausula::guardarClausulas()
+void Qclprover::guardarClausulas()
 {
     QString nombre = QFileDialog::getSaveFileName(this, "Guardar");
     if (!nombre.isNull()) {
@@ -219,13 +219,13 @@ void QtClausula::guardarClausulas()
     }
 }
 
-void QtClausula::unificarLiterales()
+void Qclprover::unificarLiterales()
 {
     DialogUmg diag;
     diag.exec();
 }
 
-void QtClausula::simplificarConjunto()
+void Qclprover::simplificarConjunto()
 {
     ConjuntoClausulas<> conj;
     parser.getClausulas(conj);
@@ -234,7 +234,7 @@ void QtClausula::simplificarConjunto()
 
 }
 
-QtClausula::~QtClausula()
+Qclprover::~Qclprover()
 {
     delete ui;
 }

@@ -17,12 +17,12 @@
 */
 
 #include <QtGui/QApplication>
-#include "qtclausula.h"
+#include "qclprover.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QtClausula w;
+    Qclprover w;
     w.show();
     return a.exec();
 }

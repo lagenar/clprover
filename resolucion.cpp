@@ -14,11 +14,11 @@ void Resolucion::resolverPredicadosEliminables(t_prueba& prueba, bool& resolvio_
 
 void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred, bool& resolvio_vacia)
 {
-     ConjuntoClausulas<ClausComp> simp;
-     for (ConjuntoClausulas<ClausComp>::const_iterator it = claus.begin();
+     ConjuntoClausulas<> simp;
+     for (ConjuntoClausulas<>::const_iterator it = claus.begin();
 	  it != claus.end(); ++it) {
 	  if (it->contienePredicado(id_pred)) {
-	       ConjuntoClausulas<ClausComp>::const_iterator it2 = it;
+	       ConjuntoClausulas<>::const_iterator it2 = it;
 	       ++it2;
 	       for ( ; it2 != claus.end(); ++it2) {
 		    Clausula res;

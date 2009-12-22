@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     ../argumentos.cpp \
     threadresolucion.cpp \
     mensajeserror.cpp \
-    dialogumg.cpp
+    dialogumg.cpp \
+    dialogsimplificacion.cpp
 HEADERS += qtclausula.h \
     ../termino.hpp \
     ../sustitucion.hpp \
@@ -28,7 +29,9 @@ HEADERS += qtclausula.h \
     ../argumentos.hpp \
     threadresolucion.h \
     mensajeserror.h \
-    dialogumg.h
+    dialogumg.h \
+    dialogsimplificacion.h
 FORMS += qtclausula.ui \
-    dialogumg.ui
+    dialogumg.ui \
+    dialogsimplificacion.ui
 INCLUDEPATH += ../

@@ -7,7 +7,7 @@
 class ThreadResolucion : public QThread
 {
 public:
-    ThreadResolucion(const ConjuntoClausulas<ClausComp>& claus, QObject* parent = 0);
+    ThreadResolucion(const ConjuntoClausulas<>& claus, QObject* parent = 0);
 
     void run();
 
@@ -19,7 +19,7 @@ public:
 
 private:
     bool satisfacible;
-    ConjuntoClausulas<ClausComp> claus;
+    ConjuntoClausulas<> claus;
     Resolucion::t_prueba prueba;
     bool seguir_busqueda;
 };

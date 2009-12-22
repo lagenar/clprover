@@ -105,6 +105,13 @@ void Parser::getClausulas(std::list<Clausula>& l) const
 	  l.push_back(it->second);
 }
 
+void Parser::getClausulas(ConjuntoClausulas<>& claus) const
+{
+     std::map<int, Clausula>::const_iterator it;
+     for (it = clausulas.begin(); it != clausulas.end(); ++it)
+	  claus.agregarClausula(it->second);
+}
+
 Literal* Parser::parseLiteral(const std::string& lit, bool& error,
 			      std::pair<t_error, std::string>& E)
 {

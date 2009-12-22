@@ -2,6 +2,7 @@
 #include "ui_qtclausula.h"
 #include "mensajeserror.h"
 #include "dialogumg.h"
+#include "dialogsimplificacion.h"
 #include <QListWidget>
 #include <QMessageBox>
 #include <QFile>
@@ -60,9 +61,18 @@ void QtClausula::eliminarClausulas()
 
 void QtClausula::verificarSatisfacibilidad()
 {
-    std::list<Clausula> l;
-    parser.getClausulas(l);
-    ConjuntoClausulas<ClausComp> conj(l);
+    limpiarTexto();
+    ConjuntoClausulas<> conj;
+    parser.getClausulas(conj);
+    bool simp;
+    simp = conj.simplificarPorTautologicas();
+    simp = conj.simplificarPorEquivalentes() ? true : simp;
+    simp = conj.simplificarLiteralesPuros() ? true : simp;
+    if (simp) {
+        ui->textoInfo->insertHtml("<b>Conjunto de clausulas simplificado</b><br>");
+        mostrarConjunto(conj);
+    }
+
     thread_res = new ThreadResolucion(conj);
     QObject::connect(thread_res, SIGNAL(finished()), this, SLOT(mostrarResultados()));
     ui->botonVerificarSatis->setEnabled(false);
@@ -71,35 +81,48 @@ void QtClausula::verificarSatisfacibilidad()
     thread_res->start();
 }
 
+void QtClausula::mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus)
+{
+    if (claus.esVacio())
+        ui->textoInfo->insertHtml("&Oslash;<br>");
+    for (ConjuntoClausulas<ClausComp>::const_iterator it = claus.begin(); it != claus.end(); ++it) {
+        ui->textoInfo->insertHtml(it->getString().c_str());
+        ui->textoInfo->insertHtml("<br>");
+    }
+}
+
 void QtClausula::mostrarInferencia(int i, const Inferencia& inf)
 {
     QString inf_id(inf.getId().c_str());
-    ui->textoInfo->insertPlainText(QString("%1) %2").arg(QString::number(i), inf_id));
+    ui->textoInfo->insertHtml(QString("%1) %2").arg(QString::number(i), inf_id));
     std::list<Clausula> padres;
     inf.getPadres(padres);
     if (padres.size() > 0) {
-        ui->textoInfo->insertPlainText("(");
+        ui->textoInfo->insertHtml("(");
         std::list<Clausula>::const_iterator it = padres.begin();
-        ui->textoInfo->insertPlainText(it->getString().c_str());
+        ui->textoInfo->insertHtml(it->getString().c_str());
         ++it;
         while (it != padres.end()) {
-            ui->textoInfo->insertPlainText(QString(", %1").arg(it->getString().c_str()));
+            ui->textoInfo->insertHtml(QString(", %1").arg(it->getString().c_str()));
             ++it;
         }
-        ui->textoInfo->insertPlainText(")");
+        ui->textoInfo->insertHtml(")");
     }
-    QString cl = inf.getClausula().getString().c_str();
-    ui->textoInfo->insertPlainText(QString(" = %1\n").arg(cl));
+    QString cl;
+    if (inf.getClausula().esVacia())
+        cl = "&perp;"; // _|_
+    else
+        cl = inf.getClausula().getString().c_str();
+    ui->textoInfo->insertHtml(QString(" = %1<br>").arg(cl));
 }
 
 void QtClausula::mostrarResultados()
 {
-    limpiarTexto();
     if (thread_res->esSatisfacible())
         ui->labelSatis->setText(QString("Satisfacible"));
     else
         ui->labelSatis->setText(QString("Insatisfacible"));
-    ui->textoInfo->insertPlainText("Pasos de resolucion:\n");
+    ui->textoInfo->insertHtml("<b>Pasos de resolucion<b><br>");
     Resolucion::t_prueba prueba = thread_res->getPrueba();
     int i = 1;
     for (Resolucion::t_prueba::const_iterator it = prueba.begin(); it != prueba.end(); ++it) {
@@ -145,9 +168,9 @@ void QtClausula::cargarArchivo(const QString& nombre)
         std::pair<Parser::t_error, std::string> E;
         parser.parseClausula(id, linea.toStdString(), error, E);
         if (error) {
+            eliminarClausulas();
             QMessageBox::warning(this, "Error", "Archivo corrupto");
             parser = Parser();
-            eliminarClausulas();
             return;
         }
         agregarClausula(parser.getClausula(id).getString());
@@ -182,6 +205,15 @@ void QtClausula::unificarLiterales()
 {
     DialogUmg diag;
     diag.exec();
+}
+
+void QtClausula::simplificarConjunto()
+{
+    ConjuntoClausulas<> conj;
+    parser.getClausulas(conj);
+    DialogSimplificacion diag(conj);
+    diag.exec();
+
 }
 
 QtClausula::~QtClausula()

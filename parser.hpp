@@ -2,9 +2,8 @@
 #define PARSER_HPP
 
 #include <map>
-#include <memory>
 #include "gramatica.hpp"
-#include "clausula.hpp"
+#include "clausulas.hpp"
 
 class Parser {
 public:
@@ -18,6 +17,8 @@ public:
      Clausula getClausula(int id) const;
 
      void getClausulas(std::list<Clausula>& l) const;
+
+     void getClausulas(ConjuntoClausulas<>& claus) const;
 
      static Literal* parseLiteral(const std::string& lit, bool& error,
 				  std::pair<t_error, std::string>& E);

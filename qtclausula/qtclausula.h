@@ -25,6 +25,7 @@ public slots:
     void abrirArchivo();
     void guardarClausulas();
     void unificarLiterales();
+    void simplificarConjunto();
 
 public:
     QtClausula(QWidget *parent = 0);
@@ -34,6 +35,7 @@ private:
     void mostrarInferencia(int i, const Inferencia& inf);
     void cargarArchivo(const QString& nombre);
     void agregarClausula(const std::string& cl);
+    void mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus);
 
 private:
     Ui::QtClausula *ui;

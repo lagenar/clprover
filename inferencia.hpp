@@ -14,8 +14,7 @@ public:
 	  return claus;
      }
      
-     virtual void getPadres(std::list<Clausula>& p) const {
-     }
+     virtual void getPadres(std::list<Clausula>& p) const = 0;
 protected:
      Clausula claus;
 };
@@ -24,10 +23,12 @@ class InferenciaHipotesis : public Inferencia {
 public:
      InferenciaHipotesis(const Clausula& cl) :
 	  Inferencia(cl) { }
-
+     
      std::string getId() const {
 	  return "Hipo";
      }    
+     
+     void getPadres(std::list<Clausula>& p) const { }
 };
 
 class InferenciaResolucion : public Inferencia {
@@ -39,7 +40,7 @@ public:
 	  return "Res";
      }
 
-     void getPadres(std::list<Clausula>& p) const {	 
+     void getPadres(std::list<Clausula>& p) const {
 	  p.push_back(res1);
 	  p.push_back(res2);
      }

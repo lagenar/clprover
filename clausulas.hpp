@@ -4,7 +4,20 @@
 #include <set>
 #include "clausula.hpp"
 
-template <typename Compare>
+class ClausComp {
+public:
+     bool operator()(const Clausula& c1, const Clausula& c2) const
+     {
+	  if (c1.cantLiterales() < c2.cantLiterales())
+	       return true;
+	  else if (c1.cantLiterales() > c2.cantLiterales())
+	       return false;
+	  else
+	       return c1.getString() < c2.getString();
+     }
+};
+
+template <typename Compare = ClausComp>
 class ConjuntoClausulas {
 public:
      typedef typename std::set<Clausula, Compare>::const_iterator const_iterator;

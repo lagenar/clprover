@@ -27,6 +27,11 @@
 #include "argumentos.hpp"
 #include "sustitucion.hpp"
 
+/**
+ * Esta clase representa un literal de lógica de primer orden,
+ * Basicamente es un predicado con signo. Caracterizado por tener
+ * identificador, signo y argumentos(éstos son términos).
+ */
 class Literal {
 public:
      typedef Argumentos::const_iterator const_iterator;
@@ -50,7 +55,14 @@ public:
      const_iterator begin() const;
 
      const_iterator end() const;
-
+     
+     /**
+      * Unifica con otro literal. Las sustituciones del unificador más general(umg),
+      * si existe, se insertan a s.      
+      * @param otro Literal con el que se unifica.
+      * @param s Sustitución en la que se inserta el resultado de la unificación.
+      * @returns true si existe el umg, false en caso contrario.
+      */
      bool unificar(const Literal& otro, Sustitucion& s) const;
      
      bool unificable(const Literal& otro) const;

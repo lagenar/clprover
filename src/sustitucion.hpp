@@ -25,14 +25,33 @@
 
 class Termino;
 
+/**
+ * Esta clase representa un sustitución de variables a términos.
+ */
 class Sustitucion {
 public:     
      const std::string getString() const;
-
+     
+     /**
+      * @param id Identificador de la variable.
+      * @returns Un puntero al término que sustituye a la variable
+      * con identificador id, si la variable no tiene sustitución
+      * retorna NULL
+      */
      const Termino* getSustitucion(const std::string& id) const;
 
+     /**
+      * Agrega una sustitución, si la variable ya tenía una sustitución asignada
+      * la sobreescribe.
+      * @param id Identificador de la variable.
+      * @param t Término sustituyente.
+      */
      void agregarSustitucion(const std::string& id, const Termino& t);
-         
+     
+     /**
+      * Composición con otra sustitución.
+      * @param s Sustitución con la cual componer.
+      */
      void componer(const Sustitucion& s);
 
      ~Sustitucion();

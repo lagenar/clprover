@@ -8,8 +8,9 @@
    CLOSED: [2009-12-22 mar 20:04]
    Se tiene que poder simplificar por literales puros, cláusulas tautológicas,
    y cláusulas equivalentes.
-** TODO En el texto de información poner las simplificaciones que se hacen.
-** TODO Pensar en como integrar fol.
+** DONE En el texto de información poner las simplificaciones que se hacen.
+   CLOSED: [2009-12-23 mié 12:15]
+** TODO Integrar fol.
 * Núcleo
 ** TODO Ver como resolver los conjuntos que no tienen predicados eliminables(ver ladr).
    Por ejemplo, el conjunto:

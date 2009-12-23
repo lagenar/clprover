@@ -172,9 +172,9 @@ namespace client
 	       using phoenix::at_c;
 	       using phoenix::push_back;
 
-	       var %= char_("A-Z") >> *char_("a-z");
+	       var %= char_("A-Z") >> *char_("a-zA-Z0-9");
 	       
-	       funId %= char_("a-z") >> *char_("a-z");
+	       funId %= char_("a-z") >> *char_("a-zA-Z0-9");
 	
 	       fun  = funId [at_c<0>(_val) = _1]
 		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
@@ -205,9 +205,9 @@ namespace client
 	       using phoenix::at_c;
 	       using phoenix::push_back;
 
-	       var %= char_("A-Z") >> *char_("a-z");
+	       var %= char_("A-Z") >> *char_("a-zA-Z0-9");
 
-	       funId %= char_("a-z") >> *char_("a-z");
+	       funId %= char_("a-z") >> *char_("a-zA-Z0-9");
 	
 	       fun  = funId [at_c<0>(_val) = _1]
 		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');

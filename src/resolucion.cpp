@@ -33,8 +33,7 @@ void Resolucion::resolverPredicadosEliminables(t_prueba& prueba, bool& resolvio_
 void Resolucion::eliminarPredicado(t_prueba& prueba, const std::string& id_pred, bool& resolvio_vacia)
 {
      ConjuntoClausulas<> simp;
-     for (ConjuntoClausulas<>::const_iterator it = claus.begin();
-	  it != claus.end(); ++it) {
+     for (ConjuntoClausulas<>::const_iterator it = claus.begin(); it != claus.end(); ++it) {
 	  if (it->contienePredicado(id_pred)) {
 	       ConjuntoClausulas<>::const_iterator it2 = it;
 	       ++it2;
@@ -78,7 +77,7 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
      resolverPredicadosEliminables(Prueba, resolvio_vacia);
      
      if (resolvio_vacia)
-	  return false;
+     	  return false;
 
      bool satisfacible = true;
      ConjClaus combinables = claus;

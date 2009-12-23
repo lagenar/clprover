@@ -127,8 +127,9 @@ void Clausula::agregarLiteral(const Literal& lit)
 bool Clausula::contienePredicado(const std::string& id_pred) const
 {
      const_iterator it = literales.begin();
-     while (it != literales.end() && id_pred < it->getId())
+     while (it != literales.end() && id_pred > it->getId()) {	  
 	  ++it;
+     }
      return it != literales.end() && it->getId() == id_pred;
 }
 

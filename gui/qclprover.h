@@ -44,6 +44,7 @@ public slots:
     void guardarClausulas();
     void unificarLiterales();
     void simplificarConjunto();
+    void cargarFormula();
 
 public:
     Qclprover(QWidget *parent = 0);

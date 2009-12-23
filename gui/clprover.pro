@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     threadresolucion.cpp \
     mensajeserror.cpp \
     dialogumg.cpp \
-    dialogsimplificacion.cpp
+    dialogsimplificacion.cpp \
+    dialogformula.cpp
 HEADERS += qclprover.h \
     ../src/termino.hpp \
     ../src/sustitucion.hpp \
@@ -30,8 +31,10 @@ HEADERS += qclprover.h \
     threadresolucion.h \
     mensajeserror.h \
     dialogumg.h \
-    dialogsimplificacion.h
+    dialogsimplificacion.h \
+    dialogformula.h
 FORMS += qclprover.ui \
     dialogumg.ui \
-    dialogsimplificacion.ui
+    dialogsimplificacion.ui \
+    dialogformula.ui
 INCLUDEPATH += ../src

@@ -163,9 +163,16 @@
     </property>
     <addaction name="actionUnificar_literales"/>
    </widget>
+   <widget class="QMenu" name="menuF_rmulas">
+    <property name="title">
+     <string>Fórmulas</string>
+    </property>
+    <addaction name="actionCargar_F_rmula"/>
+   </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuCl_usulas"/>
    <addaction name="menuLiterales"/>
+   <addaction name="menuF_rmulas"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -199,6 +206,11 @@
   <action name="actionUnificar_literales">
    <property name="text">
     <string>unificar literales</string>
+   </property>
+  </action>
+  <action name="actionCargar_F_rmula">
+   <property name="text">
+    <string>Cargar Fórmula</string>
    </property>
   </action>
  </widget>
@@ -397,6 +409,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCargar_F_rmula</sender>
+   <signal>triggered()</signal>
+   <receiver>Qclprover</receiver>
+   <slot>cargarFormula()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>agregarClausula()</slot>
@@ -409,5 +437,6 @@
   <slot>guardarClausulas()</slot>
   <slot>unificarLiterales()</slot>
   <slot>simplificarConjunto()</slot>
+  <slot>cargarFormula()</slot>
  </slots>
 </ui>

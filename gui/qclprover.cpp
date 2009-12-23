@@ -21,6 +21,7 @@
 #include "mensajeserror.h"
 #include "dialogumg.h"
 #include "dialogsimplificacion.h"
+#include "dialogformula.h"
 #include <QListWidget>
 #include <QMessageBox>
 #include <QFile>
@@ -232,6 +233,16 @@ void Qclprover::simplificarConjunto()
     DialogSimplificacion diag(conj);
     diag.exec();
 
+}
+
+void Qclprover::cargarFormula()
+{
+    DialogFormula diag;
+    diag.exec();
+    if (diag.cargoFormula()) {
+        eliminarClausulas();
+        cargarArchivo(diag.getNombreArchivoClausulas());
+    }
 }
 
 Qclprover::~Qclprover()

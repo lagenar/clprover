@@ -18,13 +18,13 @@
 
 #include "dialogformula.h"
 #include "ui_dialogformula.h"
+#include "mensajeserror.h"
 #include <QProcess>
 #include <QDir>
+#include <QFile>
 #include <QTemporaryFile>
 #include <QMessageBox>
 #include "parser.hpp"
-
-#include <cstdlib>
 
 DialogFormula::DialogFormula(QWidget *parent) :
     QDialog(parent),
@@ -66,15 +66,28 @@ void DialogFormula::cargarFormula()
 
     QString salida = QDir::tempPath() + "/salidafol.tmp";
     salida = QDir::toNativeSeparators(salida);
-
     QString comando = "./fol < " + entrada.fileName() + " > " + salida;
 #ifdef Q_WS_X11
-    int c = system(comando.toAscii());
+    int c = QProcess::execute("sh -c \"" + comando + "\"");
 #elif Q_WS_WIN
     int c = QProcess::execute("cmd /C \"" + comando + "\"");
 #endif
     if (c != 0) {
-        QMessageBox::warning(this, "Error", "La formula no esta bien definida");
+        std::pair<Parser::t_error, std::string> E;
+        if (c != error_sintactico) {
+            QFile s(salida);
+            s.open(QIODevice::ReadOnly | QIODevice::Text);
+            QString id = s.readLine();
+            s.close();
+            E.second = id.toStdString();
+            if (c == error_aridad)
+                E.first = Parser::Aridad;
+            else if (c == error_tipo)
+                E.first = Parser::TipoId;
+        } else
+            E.first = Parser::Sintactico;
+
+        QMessageBox::warning(this, "Error", getMensajeErrorParser(E));
     } else {
         cargo_formula = true;
         archivo = salida;

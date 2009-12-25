@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QTemporaryFile>
 #include <QMessageBox>
+#include <QApplication>
 #include "parser.hpp"
 
 DialogFormula::DialogFormula(QWidget *parent) :
@@ -66,10 +67,12 @@ void DialogFormula::cargarFormula()
 
     QString salida = QDir::tempPath() + "/salidafol.tmp";
     salida = QDir::toNativeSeparators(salida);
-    QString comando = "./fol < " + entrada.fileName() + " > " + salida;
+    QString path = QApplication::applicationDirPath();
 #ifdef Q_WS_X11
+    QString comando = path + "/fol < " + entrada.fileName() + " > " + salida;
     int c = QProcess::execute("sh -c \"" + comando + "\"");
-#elif Q_WS_WIN
+#else
+    QString comando = path + "\fol.exe < " + entrada.fileName() + " > " + salida;
     int c = QProcess::execute("cmd /C \"" + comando + "\"");
 #endif
     if (c != 0) {

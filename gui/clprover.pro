@@ -38,3 +38,7 @@ FORMS += qclprover.ui \
     dialogsimplificacion.ui \
     dialogformula.ui
 INCLUDEPATH += ../src
+
+win32 {
+    RC_FILE = clprover.rc
+}

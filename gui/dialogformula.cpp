@@ -72,8 +72,9 @@ void DialogFormula::cargarFormula()
     QString comando = path + "/fol < " + entrada.fileName() + " > " + salida;
     int c = QProcess::execute("sh -c \"" + comando + "\"");
 #else
-    QString comando = path + "\fol.exe < " + entrada.fileName() + " > " + salida;
-    int c = QProcess::execute("cmd /C \"" + comando + "\"");
+    QString comando = path + "/fol.exe";
+    int c = QProcess::execute("cmd /C \"" + comando + "\" < "
+                              + entrada.fileName() + " > " + salida);
 #endif
     if (c != 0) {
         std::pair<Parser::t_error, std::string> E;

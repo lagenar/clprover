@@ -32,7 +32,7 @@ public:
 	  return claus;
      }
      
-     virtual void getPadres(std::list<Clausula>& p) const = 0;
+     virtual void getPadres(std::list<Clausula>&) const = 0;
 protected:
      Clausula claus;
 };
@@ -46,7 +46,7 @@ public:
 	  return "Hipo";
      }    
      
-     void getPadres(std::list<Clausula>& p) const { }
+     void getPadres(std::list<Clausula>&) const { }
 };
 
 class InferenciaResolucion : public Inferencia {

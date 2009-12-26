@@ -143,8 +143,10 @@ namespace client
 	       Termino* arg;
 	       if (const std::string* s = boost::get<std::string>(&t))
 		    arg = construir_variable(*s);
-	       else if (const funcion* f = boost::get<funcion>(&t))
+	       else {
+		    const funcion* f = boost::get<funcion>(&t);
 		    arg = construir_funcion(*f, atributos);
+	       }
 	       res->agregarArgumento(*arg);
 	       delete arg;
 	  }

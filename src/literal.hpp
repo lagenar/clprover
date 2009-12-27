@@ -35,19 +35,25 @@
 class Literal {
 public:
      typedef Argumentos::const_iterator const_iterator;
-
+     
      Literal(const std::string& id, bool signo);
-
+     
      Literal(const std::string& id, const Argumentos& args, bool signo);
 
      bool getSigno() const;
-
+     
      const std::string& getId() const;
 
      const std::string getString() const;
      
      int aridad() const;
      
+     /**
+      * Sobrecarga del operador de igualdad, dos literales son
+      * iguales si tienen el mismo signo, mismo identificador y sus argumentos son
+      * iguales.
+      * @param otro literal a comparar.
+      */
      bool operator==(const Literal& otro) const;
      
      bool operator!=(const Literal& otro) const;
@@ -57,27 +63,59 @@ public:
      const_iterator end() const;
      
      /**
-      * Unifica con otro literal. Las sustituciones del unificador más general(umg),
-      * si existe, se insertan a s.      
-      * @param otro Literal con el que se unifica.
-      * @param s Sustitución en la que se inserta el resultado de la unificación.
+      * Unifica con otro literal. Las sustituciones del unificador más general(umg)
+      * (si existe) se insertan a s. 
+      * @param otro literal con el que se unifica.
+      * @param s sustitución en la que se inserta el resultado de la unificación.
       * @returns true si existe el umg, false en caso contrario.
       */
      bool unificar(const Literal& otro, Sustitucion& s) const;
      
+     /**
+      * @returns true si el literal es unificable con <EM>otro</EM>.
+      */
      bool unificable(const Literal& otro) const;
-
+     
+     /**
+      * Unifica con otro literal, pero a diferencia de <EM>unificar</EM>,
+      * unifica literales complementarios(mismo identificador y signo opuesto).
+      * El umg(si existe) se inserta a <EM>s</EM>.
+      * @param otro literal con el que se unifica.
+      * @param s sustitución en la que se inserta el resultado de unificación.
+      * @returns true si existe el umg, false en caso contrario.
+      */
      bool unificarComplementario(const Literal& otro, Sustitucion& s) const;
      
+     /**
+      * Aplica una sustitucion de variables a términos a los argumentos
+      * del literal.
+      * @param s sustitución a aplicar.
+      */
      void aplicarSustitucion(const Sustitucion& s);
 
      void agregarArgumento(const Termino& t);
-
-     void setSigno(bool s);
      
+     void setSigno(bool s);
+
+     /**
+      * Renombra las variables del literal.
+      * Para las variables que tienen un renombre definido en el mapa <EM>renombre</EM>,
+      * se usa ese valor. A las variables que no tienen un renombre definido se les
+      * asigna identificadores de la forma Xcomienzo, Xcomienzo+1, ..., Xcomienzo+n, y
+      * se insertan los renombres en el mapa.
+      * El valor de <EM>comienzo</EM> termina siendo comienzo + n + 1.
+      * @param renombre mapa de renombres de variables.
+      * @param comienzo número de comienzo del renombre.
+      */
      void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);
 
-     void renombrarVariables(int& comienzo);
+     /**
+      * Sobrecarga del método renombrarVariables que no aplica renombres externos,
+      * las variables quedan identificadas de la forma Xcomienzo, ..., Xcomienzo+n.
+      * El valor de <EM>comienzo</EM> termina siendo comienzo + n + 1.
+      * @param comienzo número de comienzo del renombre.
+      */
+     void renombrarVariables(int& comienzo);     
 private:
      Argumentos args;
      bool signo;

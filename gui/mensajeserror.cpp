@@ -17,16 +17,17 @@
 */
 
 #include "mensajeserror.h"
+#include <QObject>
 
 QString getMensajeErrorParser(const std::pair<Parser::t_error, std::string>& E)
 {
     QString msg;
     QString ident = E.second.c_str();
     if (E.first == Parser::Aridad)
-        msg = QString("El identificador '%1' es usado con diferentes aridades").arg(ident);
+        msg = QString(QObject::tr("El identificador '%1' es usado con diferentes aridades")).arg(ident);
     else if (E.first == Parser::TipoId)
-        msg = QString("El identificador '%1' es usado con diferentes tipos").arg(ident);
+        msg = QString(QObject::tr("El identificador '%1' es usado con diferentes tipos")).arg(ident);
     else
-        msg = "Error sintactico";
+        msg = QObject::trUtf8("Error sintáctico\nLa cadena ingresada no es una cláusula bien definida");
     return msg;
 }

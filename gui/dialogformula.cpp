@@ -91,7 +91,7 @@ void DialogFormula::cargarFormula()
         } else
             E.first = Parser::Sintactico;
 
-        QMessageBox::warning(this, "Error", getMensajeErrorParser(E));
+        QMessageBox::critical(this, trUtf8("Carga de fórmula"), getMensajeErrorParser(E));
     } else {
         cargo_formula = true;
         archivo = salida;

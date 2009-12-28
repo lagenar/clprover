@@ -43,3 +43,5 @@ INCLUDEPATH += ../src
 win32 {
     RC_FILE = clprover.rc
 }
+
+TRANSLATIONS = clprovertr_en.ts

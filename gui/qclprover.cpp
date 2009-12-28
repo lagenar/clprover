@@ -44,13 +44,13 @@ void Qclprover::agregarClausula(const std::string& cl)
 
 void Qclprover::agregarClausula()
 {
-    if (ui->lineaClausula->text().size() > 0) {
-        std::string cl = ui->lineaClausula->text().toStdString();
+    std::string cl = ui->lineaClausula->text().simplified().toStdString();
+    if (cl.size() > 0) {
         bool error;
         std::pair<Parser::t_error, std::string> E;
         parser.parseClausula(id, cl, error, E);
         if (error) {
-            QMessageBox::warning(this, "No se pudo agregar la clausula", getMensajeErrorParser(E));
+            QMessageBox::critical(this, trUtf8("Carga de cláusula"), getMensajeErrorParser(E));
         } else {
             agregarClausula(parser.getClausula(id).getString());
             ui->lineaClausula->clear();
@@ -85,10 +85,10 @@ void Qclprover::verificarSatisfacibilidad()
     parser.getClausulas(conj);
     bool simp;
     simp = conj.simplificarPorTautologicas();
-    simp = conj.simplificarPorEquivalentes() ? true : simp;
-    simp = conj.simplificarLiteralesPuros() ? true : simp;
+    simp = conj.simplificarPorEquivalentes() || simp;
+    simp = conj.simplificarLiteralesPuros() || simp;
     if (simp) {
-        ui->textoInfo->insertHtml("<b>Conjunto de clausulas simplificado</b><br>");
+        ui->textoInfo->insertHtml("<b>" + trUtf8("Conjunto de cláusulas simplificado") + "</b><br>");
         mostrarConjunto(conj);
     }
 
@@ -138,10 +138,10 @@ void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
 void Qclprover::mostrarResultados()
 {
     if (thread_res->esSatisfacible())
-        ui->labelSatis->setText(QString("Satisfacible"));
+        ui->labelSatis->setText(tr("Satisfacible"));
     else
-        ui->labelSatis->setText(QString("Insatisfacible"));
-    ui->textoInfo->insertHtml("<b>Pasos de resolucion<b><br>");
+        ui->labelSatis->setText(tr("Insatisfacible"));
+    ui->textoInfo->insertHtml("<b>" + trUtf8("Pasos de resolución") + "<b><br>");
     Resolucion::t_prueba prueba = thread_res->getPrueba();
     int i = 1;
     for (Resolucion::t_prueba::const_iterator it = prueba.begin(); it != prueba.end(); ++it) {
@@ -177,7 +177,9 @@ void Qclprover::cargarArchivo(const QString& nombre)
 {
     QFile file(nombre);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Error al abrir el archivo", "No se pudo abrir el archivo");
+        QMessageBox::critical(this, tr("Abrir archivo"),
+                              tr("No se pudo abrir el archivo \n"
+                                 "Verifique si tiene acceso de lectura al directorio"));
         return;
     }
     QTextStream in(&file);
@@ -188,7 +190,8 @@ void Qclprover::cargarArchivo(const QString& nombre)
         parser.parseClausula(id, linea.toStdString(), error, E);
         if (error) {
             eliminarClausulas();
-            QMessageBox::warning(this, "Error", "Archivo corrupto");
+            QMessageBox::critical(this, tr("Abrir archivo"),
+                                  tr("El archivo no tiene es formato correcto"));
             parser = Parser();
             return;
         }
@@ -198,18 +201,20 @@ void Qclprover::cargarArchivo(const QString& nombre)
 
 void Qclprover::abrirArchivo()
 {
-    QString nombre = QFileDialog::getOpenFileName(this, "Abrir Archivo");
+    QString nombre = QFileDialog::getOpenFileName(this, tr("Abrir Archivo"));
     if (!nombre.isNull())
         cargarArchivo(nombre);
 }
 
 void Qclprover::guardarClausulas()
 {
-    QString nombre = QFileDialog::getSaveFileName(this, "Guardar");
+    QString nombre = QFileDialog::getSaveFileName(this, tr("Guardar"));
     if (!nombre.isNull()) {
         QFile file(nombre);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::warning(this, "Error", "No se pudo crear el archivo para escritura");
+            QMessageBox::critical(this, tr("Guardar"),
+                                  tr("No se pudo crear el archivo"
+                                     "\nVerifique si tiene acceso de escritura al directorio"));
             return;
         }
         QTextStream out(&file);

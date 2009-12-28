@@ -14,11 +14,8 @@
    <string>clprover</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
-    <property name="spacing">
-     <number>20</number>
-    </property>
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -64,7 +61,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -90,7 +87,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Información</string>
+         <string>Información:</string>
         </property>
        </widget>
       </item>
@@ -149,6 +146,7 @@
     </property>
     <addaction name="actionAbrir"/>
     <addaction name="actionGuardar"/>
+    <addaction name="actionSalir"/>
    </widget>
    <widget class="QMenu" name="menuCl_usulas">
     <property name="title">
@@ -179,30 +177,56 @@
    <property name="text">
     <string>Abrir</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="actionGuardar">
    <property name="text">
     <string>Guardar</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
   </action>
   <action name="actionVerificar_Satisfacibilidad">
    <property name="text">
-    <string>Verificar Satisfacibilidad</string>
+    <string>Verificar satisfacibilidad</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionSimplificar_Conjunto">
    <property name="text">
-    <string>Simplificar Conjunto</string>
+    <string>Simplificar conjunto</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionUnificar_literales">
    <property name="text">
-    <string>unificar literales</string>
+    <string>Unificar literales</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionCargar_F_rmula">
    <property name="text">
-    <string>Cargar Fórmula</string>
+    <string>Cargar fórmula</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>
@@ -216,8 +240,8 @@
    <slot>agregarClausula()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>307</x>
-     <y>70</y>
+     <x>330</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>339</x>
@@ -232,8 +256,8 @@
    <slot>agregarClausula()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>202</x>
-     <y>71</y>
+     <x>213</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
      <x>246</x>
@@ -296,8 +320,8 @@
    <slot>detenerResolucion()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>579</x>
-     <y>65</y>
+     <x>673</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>342</x>
@@ -406,6 +430,22 @@
    <signal>triggered()</signal>
    <receiver>Qclprover</receiver>
    <slot>cargarFormula()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSalir</sender>
+   <signal>triggered()</signal>
+   <receiver>Qclprover</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

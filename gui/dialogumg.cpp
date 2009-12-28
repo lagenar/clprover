@@ -59,20 +59,24 @@ void DialogUmg::unificar()
     lit1 = Parser::parseLiteral(s_lit1, error1, E1);
     lit2 = Parser::parseLiteral(s_lit2, error2, E2);
     if (error1)
-        QMessageBox::warning(this, "Error en el literal 1", getMensajeErrorParser(E1));
+        QMessageBox::critical(this, trUtf8("Unificación de literales"),
+                              trUtf8("El primer literal no está bien definido\n"));
     else if (error2)
-        QMessageBox::warning(this, "Error en el literal 2", getMensajeErrorParser(E2));
+        QMessageBox::critical(this, trUtf8("Unificación de literales"),
+                              trUtf8("El segundo literal no está bien definido\n"));
     else {
         Sustitucion s;
         m_ui->textoUnificacion->clear();
         if (lit1->unificar(*lit2, s)) {
             lit1->aplicarSustitucion(s);
-            m_ui->textoUnificacion->insertHtml("<b>Resultado de la unificacion</b><br>");
+            m_ui->textoUnificacion->insertHtml("<b>" + trUtf8("Resultado de la unificación") +
+                                               "</b><br>");
             m_ui->textoUnificacion->insertHtml(lit1->getString().c_str());
-            m_ui->textoUnificacion->insertHtml("<br><b>umg</b><br>");
+            m_ui->textoUnificacion->insertHtml("<br><br><b>umg</b><br>");
             m_ui->textoUnificacion->insertHtml(s.getString().c_str());
         } else
-            m_ui->textoUnificacion->insertHtml("<b>Los literales no son unificables</b>");
+            m_ui->textoUnificacion->insertHtml("<b>" + trUtf8("Los literales no son unificables")
+                                               + "</b>");
     }
     delete lit1;
     delete lit2;

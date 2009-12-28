@@ -45,18 +45,18 @@ private:
      
      //para manejo de errores semánticos
      typedef std::map<std::string, std::set<int> > t_apar;
-     typedef std::map<std::string, std::pair<int, client::t_id> > t_attr;
+     typedef std::map<std::string, std::pair<int, gramatica::t_id> > t_attr;
      
      t_apar aparicionesId;
      t_attr atributosId;
 
-     typedef client::gramatica_clausula<std::string::const_iterator> gramatica_clausula;
-     typedef client::gramatica_literal<std::string::const_iterator> gramatica_literal;
+     typedef gramatica::gramatica_clausula<std::string::const_iterator> gramatica_clausula;
+     typedef gramatica::gramatica_literal<std::string::const_iterator> gramatica_literal;
 
      void verificarAtributos(bool& error,
-			     std::pair<t_error, std::string>& E, const client::t_attrs& at);
+			     std::pair<t_error, std::string>& E, const gramatica::t_attrs& at);
      
-     void agregarAtributos(int id, const client::t_attrs& atr_clausula);
+     void agregarAtributos(int id, const gramatica::t_attrs& atr_clausula);
 };
 
 #endif

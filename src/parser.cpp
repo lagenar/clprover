@@ -20,16 +20,16 @@
 #include <algorithm>
 
 void Parser::verificarAtributos(bool& error, std::pair<t_error, std::string>& E,
-				const client::t_attrs& atr_clausula)
+				const gramatica::t_attrs& atr_clausula)
 {
      error = false;
-     client::t_attrs::const_iterator it = atr_clausula.begin();
+     gramatica::t_attrs::const_iterator it = atr_clausula.begin();
      while (!error && it != atr_clausula.end()) {
 	  //errores internos de la clausula
 	  if (it->second.size() > 1) {
 	       error = true;
-	       client::t_attr::const_iterator it_atr = it->second.begin();
-	       client::t_attr::const_iterator sig = it_atr;
+	       gramatica::t_attr::const_iterator it_atr = it->second.begin();
+	       gramatica::t_attr::const_iterator sig = it_atr;
 	       ++sig;
 	       if (it_atr->first != sig->first)
 		    E = std::pair<t_error, std::string>(Aridad, it->first);
@@ -37,7 +37,7 @@ void Parser::verificarAtributos(bool& error, std::pair<t_error, std::string>& E,
 		    E = std::pair<t_error, std::string>(TipoId, it->first);
 	  } else {
 	       //errores con las otras clausulas
-	       std::pair<int, client::t_id> at = *(it->second.begin());
+	       std::pair<int, gramatica::t_id> at = *(it->second.begin());
 	       t_attr::const_iterator it_glob = atributosId.find(it->first);
 	       if (it_glob != atributosId.end()) {
 		    if (at != it_glob->second) {
@@ -53,9 +53,9 @@ void Parser::verificarAtributos(bool& error, std::pair<t_error, std::string>& E,
      }
 }
 
-void Parser::agregarAtributos(int id, const client::t_attrs& atr_clausula)
+void Parser::agregarAtributos(int id, const gramatica::t_attrs& atr_clausula)
 {
-     client::t_attrs::const_iterator it;
+     gramatica::t_attrs::const_iterator it;
      for (it = atr_clausula.begin(); it != atr_clausula.end(); ++it) {
 	  atributosId[it->first] = *(it->second.begin());
 	  t_apar::iterator it_a = aparicionesId.find(it->first);
@@ -90,7 +90,7 @@ void Parser::eliminarClausula(int id)
 void Parser::parseClausula(int id, const std::string& clausula,
 			   bool& error, std::pair<t_error, std::string>& E)
 {
-     std::vector<client::literal> C;
+     std::vector<gramatica::literal> C;
      gramatica_clausula g;
      using boost::spirit::ascii::space;
      std::string::const_iterator iter = clausula.begin();
@@ -98,8 +98,8 @@ void Parser::parseClausula(int id, const std::string& clausula,
      bool r = phrase_parse(iter, end, g, space, C);
      if (r && iter == end) {
 	  Clausula cl;
-	  client::t_attrs atr_claus;
-	  client::construir_clausula(C, cl, atr_claus);
+	  gramatica::t_attrs atr_claus;
+	  cl = gramatica::construir_clausula(C, atr_claus);
 	  verificarAtributos(error, E, atr_claus);
 	  if (!error) {
 	       agregarAtributos(id, atr_claus);
@@ -134,7 +134,7 @@ Literal* Parser::parseLiteral(const std::string& lit, bool& error,
 			      std::pair<t_error, std::string>& E)
 {
      error = false;
-     client::literal c_l;
+     gramatica::literal c_l;
      gramatica_literal g_lit;
      using boost::spirit::ascii::space;
      std::string::const_iterator iter = lit.begin();
@@ -142,15 +142,15 @@ Literal* Parser::parseLiteral(const std::string& lit, bool& error,
      bool r = phrase_parse(iter, end, g_lit, space, c_l);
      Literal* res = NULL;
      if (r && iter == end) {
-	  client::t_attrs atr_lit;
-	  res = client::construir_literal(c_l, atr_lit);
+	  gramatica::t_attrs atr_lit;
+	  res = gramatica::construir_literal(c_l, atr_lit);
 	  
-	  client::t_attrs::const_iterator it = atr_lit.begin();
+	  gramatica::t_attrs::const_iterator it = atr_lit.begin();
 	  while (!error && it != atr_lit.end()) {
 	       if (it->second.size() > 1) {
 		    error = true;
-		    client::t_attr::const_iterator it_atr = it->second.begin();
-		    client::t_attr::const_iterator sig = it_atr;
+		    gramatica::t_attr::const_iterator it_atr = it->second.begin();
+		    gramatica::t_attr::const_iterator sig = it_atr;
 		    ++sig;
 		    if (it_atr->first != sig->first)
 			 E = std::pair<t_error, std::string>(Aridad, it->first);

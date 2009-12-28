@@ -37,7 +37,7 @@
 #include "literal.hpp"
 #include "clausula.hpp"
 
-namespace client
+namespace gramatica
 {
      namespace fusion = boost::fusion;
      namespace phoenix = boost::phoenix;
@@ -63,105 +63,27 @@ namespace client
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
-     client::funcion,
+     gramatica::funcion,
      (std::string, nombre)
-     (std::vector<client::termino>, args)
+     (std::vector<gramatica::termino>, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-     client::literal,
+     gramatica::literal,
      (std::string, nombre)
-     (std::vector<client::termino>, args)
+     (std::vector<gramatica::termino>, args)
      (bool, signo)
 )
 
-namespace client
+namespace gramatica
 {
      typedef enum { Func, Pred } t_id;
-     class Cmp {
-     public:
-	  bool operator()(const std::pair<int, t_id>& p1, const std::pair<int, t_id>& p2)
-	  {
-		if (p1.first < p2.first)
-		     return true;
-		else if (p1.first == p2.first)
-		     return p1.second < p2.second;
-		else 
-		     return false;
-	  }
-     };
-
-     typedef std::set<std::pair<int, t_id>, Cmp> t_attr;
+     typedef std::set<std::pair<int, t_id> > t_attr;
      typedef std::map<std::string, t_attr> t_attrs;
      
-     inline Termino* construir_variable(const std::string& v)
-     {
-	  return new Variable(v);
-     }
-     
-     inline Termino* construir_funcion(const funcion& f, t_attrs& atributos)
-     {
-	  Funcion* res = new Funcion(f.nombre);
-	  t_attrs::iterator it = atributos.find(f.nombre);
-	  if (it != atributos.end())
-	       it->second.insert(std::pair<int, t_id>(f.args.size(), Func));
-	  else {
-	       t_attr at;
-	       at.insert(std::pair<int, t_id>(f.args.size(), Func));
-	       atributos[f.nombre] = at;
-	  }
+     Literal* construir_literal(const literal& lit, t_attrs& atributos);
 
-	  BOOST_FOREACH(termino const& t, f.args)
-	  {
-	       Termino* arg;
-	       if (const std::string* s = boost::get<std::string>(&t))
-		    arg = construir_variable(*s);
-	       else {
-		    const funcion* f = boost::get<funcion>(&t);
-		    arg = construir_funcion(*f, atributos);
-	       }
-	       res->agregarArgumento(*arg);
-	       delete arg;
-	  }
-	  return res;
-     }
-
-     inline Literal* construir_literal(const literal& lit, t_attrs& atributos)
-     {
-	  Literal* res = new Literal(lit.nombre, lit.signo);
-	  t_attrs::iterator it = atributos.find(lit.nombre);
-	  if (it != atributos.end())
-	       it->second.insert(std::pair<int, t_id>(lit.args.size(), Pred));
-	  else {
-	       t_attr at;
-	       at.insert(std::pair<int, t_id>(lit.args.size(), Pred));
-	       atributos[lit.nombre] = at;
-	  }
-	  	  
-	  BOOST_FOREACH(termino const& t, lit.args)
-	  {
-	       Termino* arg;
-	       if (const std::string* s = boost::get<std::string>(&t))
-		    arg = construir_variable(*s);
-	       else {
-		    const funcion* f = boost::get<funcion>(&t);
-		    arg = construir_funcion(*f, atributos);
-	       }
-	       res->agregarArgumento(*arg);
-	       delete arg;
-	  }
-	  return res;
-     }
-
-     inline void construir_clausula(const std::vector<literal>& lits, Clausula& claus, t_attrs& atributos)
-     {
-	  BOOST_FOREACH(literal const& lit, lits)
-	  {
-	       Literal* l = construir_literal(lit, atributos);
-	       claus.agregarLiteral(*l);
-	       delete l;
-	  }
-     }
+     Clausula construir_clausula(const std::vector<literal>& lits, t_attrs& atributos);
      
      template <typename Iterator>
      struct gramatica_literal : qi::grammar<Iterator, literal(), ascii::space_type>
@@ -173,27 +95,32 @@ namespace client
 	       using qi::eps;
 	       using phoenix::at_c;
 	       using phoenix::push_back;
-
-	       var %= char_("A-Z") >> *char_("a-zA-Z0-9");
 	       
-	       funId %= char_("a-z") >> *char_("a-zA-Z0-9");
-	
-	       fun  = funId [at_c<0>(_val) = _1]
-		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
+	       //Identificador de variables
+	       varId %= char_("A-Z") >> *char_("a-zA-Z0-9");
+	       //Identificador de funciones y predicados
+	       funPredId %= char_("a-z") >> *char_("a-zA-Z0-9");
 	       
-	       term %= (var | fun);
+	       fun  = funPredId           [at_c<0>(_val) = _1]
+		    >> -('('
+			 >> term[push_back(at_c<1>(_val), _1)] % ',' //argumentos
+			 >> ')');
+	       
+	       term %= (varId | fun);
 
-	       lit = eps [at_c<2>(_val) = true]
-		    >> -char_('~') [at_c<2>(_val) = false]
-		    >> funId [at_c<0>(_val) = _1]
-		    >> '(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')';
+	       lit = eps              [at_c<2>(_val) = true] //signo por defecto positivo
+		    >> -char_('~')    [at_c<2>(_val) = false]
+		    >> funPredId      [at_c<0>(_val) = _1]
+		    >> '('
+		    >> term[push_back(at_c<1>(_val), _1)] % ',' //argumentos
+		    >> ')';
 	
 	  }
 	  qi::rule<Iterator, literal(), ascii::space_type> lit;
 	  qi::rule<Iterator, termino(), ascii::space_type> term;
 	  qi::rule<Iterator, funcion(), ascii::space_type> fun;
-	  qi::rule<Iterator, std::string(), ascii::space_type> funId;
-	  qi::rule<Iterator, std::string(), ascii::space_type> var;
+	  qi::rule<Iterator, std::string(), ascii::space_type> funPredId;
+	  qi::rule<Iterator, std::string(), ascii::space_type> varId;
      };
 
      template <typename Iterator>
@@ -206,31 +133,13 @@ namespace client
 	       using qi::eps;
 	       using phoenix::at_c;
 	       using phoenix::push_back;
-
-	       var %= char_("A-Z") >> *char_("a-zA-Z0-9");
-
-	       funId %= char_("a-z") >> *char_("a-zA-Z0-9");
-	
-	       fun  = funId [at_c<0>(_val) = _1]
-		    >> -('(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')');
 	       
-	       term %= (var | fun);
-
-	       lit = eps [at_c<2>(_val) = true]
-		    >> -char_('~') [at_c<2>(_val) = false]
-		    >> funId [at_c<0>(_val) = _1]
-		    >> '(' >> term[push_back(at_c<1>(_val), _1)] % ',' >> ')';
-		    
-
+	       // una clausula es uno o más literales separados por '|'
 	       claus %= lit % '|';
 	       
 	  }
 	  qi::rule<Iterator, std::vector<literal>(), ascii::space_type> claus;
-	  qi::rule<Iterator, literal(), ascii::space_type> lit;
-	  qi::rule<Iterator, termino(), ascii::space_type> term;
-	  qi::rule<Iterator, funcion(), ascii::space_type> fun;
-	  qi::rule<Iterator, std::string(), ascii::space_type> funId;
-	  qi::rule<Iterator, std::string(), ascii::space_type> var;
+	  gramatica_literal<Iterator> lit;
      };
 }	       
 #endif

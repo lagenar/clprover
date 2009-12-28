@@ -24,7 +24,7 @@
 #include "literal.hpp"
 
 /**
- * Clase que define el orden parcial para un conjunto del literales.
+ * Clase que define el orden parcial para un conjunto de literales.
  * Utilizada en la clase Clausula para parametrizar el tipo set de la stl.
  */
 class LitComp 

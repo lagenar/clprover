@@ -12,6 +12,7 @@ SOURCES += main.cpp \
     ../src/literal.cpp \
     ../src/clausula.cpp \
     ../src/argumentos.cpp \
+    ../src/gramatica.cpp \
     threadresolucion.cpp \
     mensajeserror.cpp \
     dialogumg.cpp \

@@ -88,7 +88,7 @@ public:
      /**
       * @returns true si es tautológica, false en caso contrario.
       * Una cláusula es tautológica si contiene dos literales con
-      * igual identificador y argumentos pero de signos opuestos.
+      * igual identificador y argumentos pero de signo opuesto.
       */
      bool esTautologica() const;
      
@@ -163,7 +163,7 @@ public:
      Clausula renombrarVariables(int& comienzo) const;
      
      /**
-      * @returns un mapa con la cantidad de apariciones de cada símbolo de predicado.
+      * @returns un mapa con la cantidad de apariciones de cada identificador de predicado.
       */
      std::map<std::string, int> aparicionesPredicados() const;
 

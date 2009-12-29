@@ -21,17 +21,32 @@
 #include "clausula.hpp"
 #include <list>
 
+/**
+ * Clase abstracta que representa una regla de inferencia
+ * en la búsqueda por resolución.
+ * Es utilizada exclusivamente para proveer información al usuario
+ * sobre el procedimiento de resolución y su traza.
+ */
 class Inferencia {
 public:
      Inferencia(const Clausula& cl) :
 	  claus(cl) { }
-          
+     
+     /**
+      * @returns un identificador del tipo de inferencia.
+      */
      virtual std::string getId() const = 0;
      
+     /**
+      * @returns la clausula inferida
+      */
      const Clausula& getClausula() const {
 	  return claus;
      }
      
+     /**
+      * Inserta en la lista pasada los padres de la inferencia(premisas)
+      */
      virtual void getPadres(std::list<Clausula>&) const = 0;
 protected:
      Clausula claus;
@@ -43,10 +58,10 @@ public:
 	  Inferencia(cl) { }
      
      std::string getId() const {
-	  return "Hipo";
+	  return "Hipot";
      }    
      
-     void getPadres(std::list<Clausula>&) const { }
+     void getPadres(std::list<Clausula>& /*p*/) const { }
 };
 
 class InferenciaResolucion : public Inferencia {
@@ -72,7 +87,7 @@ public:
 	  Inferencia(cl), fact(fact){ }
 
      std::string getId() const {
-	  return "Fact";
+	  return "Factor";
      }
 
      void getPadres(std::list<Clausula>& p) const {

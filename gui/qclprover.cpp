@@ -42,10 +42,26 @@ void Qclprover::agregarClausula(const std::string& cl)
     id++;
 }
 
+bool todosAscii(const QString& s)
+{
+    for (QString::const_iterator it = s.begin(); it != s.end(); ++it)
+        if (it->unicode() > 127)
+            return false;
+    return true;
+}
+
 void Qclprover::agregarClausula()
 {
-    std::string cl = ui->lineaClausula->text().simplified().toStdString();
-    if (cl.size() > 0) {
+    QString simp = ui->lineaClausula->text().simplified();
+    std::string cl = simp.toStdString();
+    /*si la cadena tiene caracteres no-ascii
+      se rechaza porque no son aceptados por spirit*/
+    if (!todosAscii(simp)) {
+        std::pair<Parser::t_error, std::string> E;
+        E.first = Parser::Sintactico;
+        QMessageBox::critical(this, trUtf8("Carga de cláusula"), getMensajeErrorParser(E));
+    }
+    else if (cl.size() > 0) {
         bool error;
         std::pair<Parser::t_error, std::string> E;
         parser.parseClausula(id, cl, error, E);

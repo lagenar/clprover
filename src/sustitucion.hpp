@@ -36,7 +36,7 @@ public:
       * @param id Identificador de la variable.
       * @returns Un puntero al término que sustituye a la variable
       * con identificador id, si la variable no tiene sustitución
-      * retorna NULL
+      * retorna NULL.
       */
      const Termino* getSustitucion(const std::string& id) const;
 
@@ -50,7 +50,7 @@ public:
      
      /**
       * Composición con otra sustitución.
-      * @param s Sustitución con la cual componer.
+      * @param s Sustitución con la cual se compone.
       */
      void componer(const Sustitucion& s);
 

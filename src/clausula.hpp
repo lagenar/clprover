@@ -71,12 +71,14 @@ public:
      /**
       * @returns true si es una cláusula de Horn, false en caso contrario.
       * Una cláusula es de Horn si tiene como máximo un literal positivo.
-      * @param t si es de Horn aquí se guarda el tipo
+      * @param t Si la cláusula es de Horn aquí se guarda el tipo
+      * @see t_horn
       */     
      bool esDeHorn(t_horn& t) const;
 
      /**
       * @returns true si es una cláusula de Horn, false en caso contrario.
+      * @see esDeHorn(t_horn&)
       */
      bool esDeHorn() const;
 
@@ -111,32 +113,32 @@ public:
      bool contienePredicado(const std::string& id_pred) const;
      
      /**
-      * Genera e inserta todas las resolventes entre la cláusula y <EM>claus</EM> a la
-      * lista <EM>res</EM>.
-      * @param claus claúsula con la que se resuelve.
-      * @param res lista en donde se insertan las resolventes.
+      * Inserta todas las resolventes entre la cláusula y <EM>claus</EM> a la
+      * lista de cláusulas <EM>res</EM>.
+      * @param claus Claúsula con la que se resuelve.
+      * @param res Lista en donde se insertan las resolventes.
       */
      void resolventes(const Clausula& claus, std::list<Clausula>& res) const;
      
      /**
       * Calcula una resolvente entre la cláusula y <EM>claus</EM> usando literales
       * con identificador <EM>id_pred</EM>. La resolvente(si existe) se asigna a <EM>res</EM>.
-      * Nota: si una cláusula contiene más de un literal con identificador <EM>id_pred</EM>, no
+      * Si una cláusula contiene más de un literal con identificador <EM>id_pred</EM>, no
       * está definido cual se usa para la resolución.
       * @returns true si fue posible calcular la resolvente, false en caso contrario.
-      * @param claus cláusula con la que se resuelve.
-      * @param id_pred identificador del predicado a utilizar.
-      * @param res cláusula contenedora del resultado.
+      * @param claus Cláusula con la que se resuelve.
+      * @param id_pred Identificador del predicado a utilizar.
+      * @param res Cláusula contenedora del resultado.
       */
      bool resolventeUsandoPred(const Clausula& claus,
 			       const std::string& id_pred, Clausula& res) const;
      
      /**
       * Inserta los factores de la cláusula a la lista <EM>fact</EM>.
-      * Un factor de una cláusula se genera unificando dos literales(unificables) en ésta.
+      * Un factor de una cláusula se genera unificando dos literales en ésta.
       * Por ejemplo:
       * a(X) es un factor de la cláusula a(X) | a(Y).
-      * @param fact contenedor donde se insertan los factores.
+      * @param fact Contenedor en donde se insertan los factores.
       */
      void factores(std::list<Clausula>& fact) const;
 
@@ -151,22 +153,28 @@ public:
       * si se lo compara con la relación de equivalencia más general, es correcto pero incompleto,
       * es decir, si las cláusulas no son equivalentes retorna false, pero si son equivalentes puede
       * que retorne false también, dependiendo de si puede o no detectar la equivalencia.
+      * @param C Cláusula a comparar por equivalencia.
       * @see renombrarVariables
       */
      bool equivalente(const Clausula& C) const;
      
      /**
-      * renombra las variables de la forma Xcomienzo, Xcomienzo+1,..., Xcomienzo+n.
-      * El valor de <EM>comienzo</EM> termina siendo <EM>comienzo</EM> + n + 1.
-      * @param comienzo comienzo de la secuencia de renombre.
+      * Renombra las variables de la forma Xcomienzo, Xcomienzo+1,..., Xcomienzo+n.
+      * El valor final de <EM>comienzo</EM> es <EM>comienzo</EM> + n + 1.
+      * @param comienzo Comienzo de la secuencia de renombre.
       */
      Clausula renombrarVariables(int& comienzo) const;
      
      /**
-      * @returns un mapa con la cantidad de apariciones de cada identificador de predicado.
+      * @returns Un mapa con la cantidad de apariciones de cada identificador de predicado.
       */
      std::map<std::string, int> aparicionesPredicados() const;
 
+     /**
+      * Agrega un literal a la cláusula, si la cláusula ya contiene
+      * un literal igual, por propiedad de idempotencia no se agrega.
+      * @param lit Literal a agregar.
+      */
      void agregarLiteral(const Literal& lit);
 private:
      std::set<Literal, LitComp> literales;

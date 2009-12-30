@@ -22,6 +22,13 @@
 #include <set>
 #include "clausula.hpp"
 
+/**
+ * Clase que provee un orden parcial para el ordenamiento
+ * de cláusulas en la clase ConjuntoClausulas.
+ * Este orden parcial ordena las cláusulas por cantidad de literales.
+ * Dos cláusulas se consideran iguales sólo si las representaciones
+ * en forma de cadena son iguales.
+ */
 class ClausComp {
 public:
      bool operator()(const Clausula& c1, const Clausula& c2) const
@@ -35,6 +42,14 @@ public:
      }
 };
 
+/**
+ * Clase que representa un conjunto de clausulas. Provee métodos
+ * para agregar y eliminar cláusulas y para indagar sobre
+ * propiedades del conjunto.
+ * Esta clase puede parametrizarse con una clase que defina el orden
+ * parcial para la comparación de las cláusulas.
+ * La clase utilizada por defecto es ClausComp.
+ */
 template <typename Compare = ClausComp>
 class ConjuntoClausulas {
 public:
@@ -43,7 +58,7 @@ public:
      typedef typename std::set<Clausula, Compare>::size_type size_type;
 
      ConjuntoClausulas() { }
-
+     
      ConjuntoClausulas(const std::list<Clausula>& cls)
      {
 	  for (std::list<Clausula>::const_iterator it = cls.begin(); it != cls.end(); ++it)	   
@@ -51,9 +66,18 @@ public:
      }
      
      size_type cantidadClausulas() const { return clausulas.size(); }
-
+     
+     /**
+      * @returns true si no contiene cláusulas,
+      * false en caso contrario.
+      */
      bool esVacio() const { return clausulas.size() == 0; }
 
+     /**
+      * @returns true si cada una de las cláusulas del conjunto
+      * es de Horn, false en caso contrario.
+      * @see Clausula::esDeHorn
+      */
      bool esDeHorn() const 
      {
 	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it)
@@ -62,6 +86,13 @@ public:
 	  return true;
      }
      
+     /**
+      * @returns true si el conjunto es una lógica de
+      * programa. Un conjunto es una lógica de programa
+      * cuando todas sus cláusulas son de Horn, pero ninguna
+      * de ellas es una cláusula objetivo.
+      * @see Clausula::t_horn
+      */
      bool esLogicaPrograma() const
      {
 	  for (const_iterator it = clausulas.begin(); it != clausulas.end(); ++it) {
@@ -77,6 +108,12 @@ public:
 	  clausulas.insert(C);
      }
      
+     /**
+      * Elimina las cláusulas tautológicas del conjunto.
+      * @returns true si alguna cláusula fue eliminada,
+      * false en caso contrario.
+      * @see Clausula::esTautologica
+      */
      bool simplificarPorTautologicas()
      {
 	  bool simp = false;
@@ -91,6 +128,14 @@ public:
 	  return simp;
      }
 
+     /**
+      * Simplica el conjunto por cláusulas equivalentes.
+      * Si <EM>n</EM> > 1 cláusulas son equivalentes entre sí,
+      * se eliminan n-1 de éstas cláusulas.
+      * @returns true si se realizó alguna simplificación,
+      * false en caso contrario.
+      * @see Clausula::equivalente
+      */
      bool simplificarPorEquivalentes()
      {
 	  bool simp = false;
@@ -107,7 +152,16 @@ public:
 	  }
 	  return simp;
      }
-
+     
+     /**
+      * Simplifica el conjunto por literales
+      * puros. Un literal es puro en un conjunto,
+      * si no existe un literal complementario en
+      * el conjunto. En este caso, la cláusula que contiene
+      * al literal se elimina.
+      * @returns true si se eliminó alguna clausula, false
+      * en caso contrario.
+      */
      bool simplificarLiteralesPuros()
      {
 	  bool simp = false;
@@ -135,6 +189,11 @@ public:
 	  return simp;
      }
      
+     /**
+      * @returns true si la cláusula <EM>c</EM> está
+      * en el conjunto. La comparación por igualdad de las clausulas
+      * está determinada por la parametrización de la clase. 
+      */
      bool contieneClausula(const Clausula& c) const
      {
 	  const_iterator it = clausulas.find(c);
@@ -147,6 +206,11 @@ public:
 	       l.push_back(*it);
      }
      
+     /**
+      * @returns Un conjunto de identificadores de predicados eliminables
+      * del conjunto. Un predicado(literal) es eliminable en un conjunto
+      * si no aparece en más de una ocasión en cada una de las cláusulas.
+      */
      std::set<std::string> predicadosEliminables() const
      {
 	  std::map<std::string, bool> eliminable;

@@ -27,9 +27,9 @@
  * La clase parser es utilizada para analizar la sintaxis y semántica
  * de un conjunto de cláusulas en forma incremental. Se encarga de verificar
  * que las cláusulas estén bien definidas en términos de si mismas
- * (que este sintácticamente bien definida, y posibles errores semánticos
+ * (que esté sintácticamente bien definida, y posibles errores semánticos
  * en la misma cláusula) y en relación a las otras cláusulas anteriormente
- * ingresadas(por ejemplo que las aridades de los identificadores sean las
+ * ingresadas(por ejemplo, que las aridades de los identificadores sean las
  * mismas que en las otras cláusulas).
  * También provee soporte para eliminar cláusulas del conjunto analizado.
  * Los clientes de esta clase deben proveer identificadores(enteros) para cada cláusula
@@ -41,9 +41,9 @@ public:
       * Tipos de errores.
       */
      typedef enum {
-	  Sintactico, /**< la clausula no está bien definida sintácticamente*/
-	  Aridad, /**< un identificador es utilizado con diferentes aridades*/
-	  TipoId /**< un identificador es utilizado para más de un tipo
+	  Sintactico, /**< La clausula no está bien definida sintácticamente*/
+	  Aridad, /**< Un identificador es utilizado con diferentes aridades*/
+	  TipoId /**< Un identificador es utilizado para más de un tipo
 		    de estructura lógica(predicado y función)
 		    por ejemplo el literal p(p(X)) no es válido*/
      } t_error;
@@ -54,33 +54,34 @@ public:
       * de error al primer elemento del par <EM>E</EM> y si es un error
       * semántico el segundo elemento del par contiene el identificador
       * con error.
-      * Pre: no existe ninguna clausula con identificador <EM>id</EM>.
-      * @param id identificador asignado a la cláusula.
-      * @param clausula representación en forma de cadena de la cláusula.
+      * @pre No existe ninguna clausula con identificador <EM>id</EM>.
+      * @param id Identificador asignado a la cláusula.
+      * @param clausula Representación en forma de cadena de la cláusula.
+      * @see t_error
       */
      void parseClausula(int id, const std::string& clausula,
 			bool& error, std::pair<t_error, std::string>& E);
 
      /**
-      * Elimina una cláusula del conjunto.
-      * Pre: existe una cláusula con identificador <EM>id</EM>
-      * @param id identificador de la cláusula.
+      * Elimina una cláusula del conjunto analizado.
+      * @pre Existe una clausula con identificador <EM>id</EM>.
+      * @param id Identificador de la cláusula.
       */
      void eliminarClausula(int id);
      
      /**
-      * Pre: existe una cláusula con identificador <EM>id</EM>.
-      * @returns la claúsula con identificador <EM>id</EM>.
+      * @pre Existe una cláusula con identificador <EM>id</EM>.
+      * @returns La claúsula con identificador <EM>id</EM>.
       */
      Clausula getClausula(int id) const;
 
      /**
-      * Inserta todas las cláusulas analizadas a <EM>l</EM>.
+      * Inserta las cláusulas analizadas a <EM>l</EM>.
       */
      void getClausulas(std::list<Clausula>& l) const;
      
      /**
-      * Inserta todas las cláusulas analizadas a <EM>claus</EM>.
+      * Inserta las cláusulas analizadas a <EM>claus</EM>.
       */
      void getClausulas(ConjuntoClausulas<>& claus) const;
 
@@ -90,7 +91,7 @@ public:
       * El parámetro <EM>error</EM> se vuelve true si se detectó
       * un error sintáctico o semántico en el análisis. En este caso a
       * <EM>E</EM> se le asigna la información del error.
-      * @returns un puntero al literal creado si no hubo errores, NULL
+      * @returns Un puntero al literal creado si no hubo errores, NULL
       * en caso contrario. El cliente debe liberar el puntero.
       */
      static Literal* parseLiteral(const std::string& lit, bool& error,

@@ -32,4 +32,5 @@
 *** DONE documentar la clase Parser
     CLOSED: [2009-12-29 mar 11:47]
 *** TODO documentar la clase Resolucion
-*** TODO documentar la clase ConjuntoClausulas
+*** DONE documentar la clase ConjuntoClausulas
+    CLOSED: [2009-12-30 mié 13:36]

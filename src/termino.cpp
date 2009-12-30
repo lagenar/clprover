@@ -67,6 +67,9 @@ Termino* Variable::aplicarSustitucion(const Sustitucion& s) const
 
 bool Variable::unificar(Sustitucion& s, const Termino& otro) const
 {
+     /*si la variable actual ya tiene una sustitución
+       asignada se debe usar el término sustituyente
+       para la unificación*/
      const Termino* t = s.getSustitucion(id);
      if (t == NULL)
 	  t = this;

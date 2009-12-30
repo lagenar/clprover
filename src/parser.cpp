@@ -17,6 +17,7 @@
 */
 
 #include "parser.hpp"
+#include <cassert>
 #include <algorithm>
 
 void Parser::verificarAtributos(bool& error, std::pair<t_error, std::string>& E,
@@ -72,17 +73,16 @@ void Parser::agregarAtributos(int id, const gramatica::t_attrs& atr_clausula)
 void Parser::eliminarClausula(int id)
 {
      std::map<int, Clausula>::iterator claus = clausulas.find(id);
-     if (claus != clausulas.end()) {
-	  clausulas.erase(claus++);
-	  t_apar::iterator it_a;
-	  for (it_a = aparicionesId.begin(); it_a != aparicionesId.end(); ++it_a) {
-	       std::set<int> s = it_a->second;
-	       if (s.find(id) != s.end()) {
-		    s.erase(id);
-		    if (s.empty())
-			 atributosId.erase(it_a->first);
-		    it_a->second = s;
-	       }
+     assert(claus != clausulas.end());
+     clausulas.erase(claus++);
+     t_apar::iterator it_a;
+     for (it_a = aparicionesId.begin(); it_a != aparicionesId.end(); ++it_a) {
+	  std::set<int> s = it_a->second;
+	  if (s.find(id) != s.end()) {
+	       s.erase(id);
+	       if (s.empty())
+		    atributosId.erase(it_a->first);
+	       it_a->second = s;
 	  }
      }
 }
@@ -90,6 +90,7 @@ void Parser::eliminarClausula(int id)
 void Parser::parseClausula(int id, const std::string& clausula,
 			   bool& error, std::pair<t_error, std::string>& E)
 {
+     assert(clausulas.find(id) == clausulas.end());
      std::vector<gramatica::literal> C;
      gramatica_clausula g;
      using boost::spirit::ascii::space;
@@ -113,7 +114,9 @@ void Parser::parseClausula(int id, const std::string& clausula,
 
 Clausula Parser::getClausula(int id) const
 {
-     return clausulas.find(id)->second;
+     std::map<int, Clausula>::const_iterator i = clausulas.find(id);
+     assert(i != clausulas.end());
+     return i->second;
 }
 
 void Parser::getClausulas(std::list<Clausula>& l) const

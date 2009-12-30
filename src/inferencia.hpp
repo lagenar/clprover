@@ -33,12 +33,12 @@ public:
 	  claus(cl) { }
      
      /**
-      * @returns un identificador del tipo de inferencia.
+      * @returns Un identificador del tipo de inferencia.
       */
      virtual std::string getId() const = 0;
      
      /**
-      * @returns la clausula inferida
+      * @returns La clausula inferida
       */
      const Clausula& getClausula() const {
 	  return claus;

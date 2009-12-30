@@ -21,7 +21,6 @@
 
 #include <list>
 #include <map>
-#include <iostream>
 
 #include "termino.hpp"
 #include "sustitucion.hpp"
@@ -44,13 +43,13 @@ public:
      Argumentos(const Argumentos& Args);
 
      /**
-      * @returns cantidad de argumentos.
+      * @returns Cantidad de argumentos.
       */
      int aridad() const;
 
      /**
-      * @returns representación en forma de cadena de los argumentos.
-      * i.e. (a1, a2, ..., an)
+      * @returns Representación en forma de cadena de los argumentos.
+      * i.e. "(a1, a2, ..., an)"
       */
      const std::string getString() const;
 
@@ -61,7 +60,7 @@ public:
      /**
       * Sobrecarga del operador ==. Dos objetos de la clase Argumentos son
       * iguales si tienen la misma aridad y sus argumentos son iguales uno por uno.
-      * @param otro argumentos a comparar.
+      * @param otro Argumentos a comparar.
       * @returns true si son iguales, false en caso contrario.
       */
      bool operator==(const Argumentos& otro) const;
@@ -76,8 +75,8 @@ public:
       * Calcula el unificador más general con otro objeto de tipo Argumentos.
       * La sustitución s es el contexto de unificación. Las sustituciones del unificador
       * más general se agregan a s(si es que existe el umg).
-      * @param s contexto de unificación.
-      * @param otro argumentos con los que se unifica.
+      * @param s Contexto de unificación.
+      * @param otro Argumentos con los que se unifica.
       * @returns true si fue posible unificar, false en caso contrario.
       * @see Sustitucion
       */
@@ -99,11 +98,11 @@ public:
       * Renombra las variables de los argumentos.
       * Para las variables que tienen un renombre definido en el mapa <EM>renombre</EM>,
       * se usa ese valor. A las variables que no tienen un renombre definido se les
-      * asigna identificadores de la forma Xcomienzo, Xcomienzo+1, ..., Xcomienzo+n, y
+      * asigna identificadores de la forma Xcomienzo, Xcomienzo+1, ..., Xcomienzo+n y
       * se insertan los renombres en el mapa.
-      * El valor de <EM>comienzo</EM> termina siendo comienzo + n + 1.
+      * El valor final de <EM>comienzo</EM> es <EM>comienzo</EM> + n + 1.
       * @param renombre mapa de renombres de variables.
-      * @param comienzo número de comienzo del renombre.
+      * @param comienzo Número de comienzo del renombre.
       */
      void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);
 

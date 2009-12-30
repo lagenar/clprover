@@ -24,6 +24,10 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 
+/**
+ * Clase abstracta que representa una estrategia de
+ * resolución en lógica de primer orden.
+ */
 class Resolucion {
 public:
      typedef ConjuntoClausulas<> ConjClaus;

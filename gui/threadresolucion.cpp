@@ -19,13 +19,18 @@
 #include "threadresolucion.h"
 
 ThreadResolucion::ThreadResolucion(const ConjuntoClausulas<ClausComp>& claus, QObject* parent)
-        : QThread(parent), satisfacible(false), claus(claus), seguir_busqueda(true)
+        : QThread(parent), satisfacible(false), claus(claus), seguir_busqueda(true), tipo_res(General)
 {
 }
 
 Resolucion::t_prueba ThreadResolucion::getPrueba() const
 {
     return prueba;
+}
+
+ThreadResolucion::t_resolucion ThreadResolucion::getTipoResolucion() const
+{
+    return tipo_res;
 }
 
 bool ThreadResolucion::esSatisfacible() const
@@ -35,8 +40,15 @@ bool ThreadResolucion::esSatisfacible() const
 
 void ThreadResolucion::run()
 {
-    ResolucionGeneral res(claus);
-    satisfacible = res.esSatisfacible(prueba, seguir_busqueda);
+    if (claus.esDeHorn()) {
+        tipo_res = Unitaria;
+        ResolucionUnitaria res(claus);
+        satisfacible = res.esSatisfacible(prueba, seguir_busqueda);
+    } else {
+        tipo_res = General;
+        ResolucionGeneral res(claus);
+        satisfacible = res.esSatisfacible(prueba, seguir_busqueda);
+    }
 }
 
 void ThreadResolucion::terminar()

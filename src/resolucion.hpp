@@ -53,4 +53,15 @@ public:
      bool esSatisfacible(t_prueba& Prueba);
 };
 
+class ResolucionUnitaria : public Resolucion {
+public:
+     ResolucionUnitaria(const ConjClaus& claus) :
+	  Resolucion(claus) { }
+
+     bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda);
+
+     bool esSatisfacible(t_prueba& Prueba);
+};
+
 #endif
+

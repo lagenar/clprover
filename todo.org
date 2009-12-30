@@ -12,8 +12,10 @@
    CLOSED: [2009-12-23 mié 12:15]
 ** DONE Integrar fol.
    CLOSED: [2009-12-23 mié 15:51]
-** TODO dependiendo de propiedades del conjunto aplicar diferentes tipos de resolución
-** TODO corregir el bug de caracteres unicode [[http:://code.google.com/p/clprover/issues/detail?id=1]]
+** DONE dependiendo de propiedades del conjunto aplicar diferentes tipos de resolución
+   CLOSED: [2009-12-30 mié 10:22]
+** DONE corregir el bug de caracteres unicode [[http:://code.google.com/p/clprover/issues/detail?id=1]]
+   CLOSED: [2009-12-29 mar 12:30]
 * Núcleo
 ** TODO Ver como resolver los conjuntos que no tienen predicados eliminables(ver ladr).
    Por ejemplo, el conjunto:
@@ -22,7 +24,8 @@
    ~c(Y) | ~c(X) | ~d(Y) | ~d(X)
    
 ** TODO Ver como se puede implementar la simplificación por subsumción.
-** TODO implementar la clase de resolución unitaria
+** DONE implementar la clase de resolución unitaria
+   CLOSED: [2009-12-30 mié 10:22]
 ** Documentacion
 *** DONE documentar la clase Inferencia
     CLOSED: [2009-12-29 mar 11:07]

@@ -25,11 +25,15 @@
 class ThreadResolucion : public QThread
 {
 public:
+    typedef enum {General, Unitaria} t_resolucion;
+
     ThreadResolucion(const ConjuntoClausulas<>& claus, QObject* parent = 0);
 
     void run();
 
     Resolucion::t_prueba getPrueba() const;
+
+    t_resolucion getTipoResolucion() const;
 
     bool esSatisfacible() const;
 
@@ -40,6 +44,7 @@ private:
     ConjuntoClausulas<> claus;
     Resolucion::t_prueba prueba;
     bool seguir_busqueda;
+    t_resolucion tipo_res;
 };
 
 #endif // THREADRESOLUCION_H

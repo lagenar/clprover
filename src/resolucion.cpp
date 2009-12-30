@@ -122,3 +122,71 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
      }
      return satisfacible;
 }
+
+bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba)
+{
+     return Resolucion::esSatisfacible(Prueba);
+}
+
+bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda)
+{
+     using std::list;
+    
+     for (ConjClaus::const_iterator it = claus.begin(); it != claus.end(); ++it) {
+	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
+	  Prueba.push_back(p);
+     }
+     bool resolvio_vacia;
+     resolverPredicadosEliminables(Prueba, resolvio_vacia);
+     
+     if (resolvio_vacia)
+     	  return false;
+
+     bool satisfacible = true;
+     ConjClaus combinables = claus;
+     ConjClaus::iterator itComb = combinables.begin();
+     ConjClaus procesadas;
+     //basta con verificar para los primeros elementos
+     //porque las cláusulas estan ordenadas por cantidad de literales
+     bool hay_unitarias = combinables.begin()->esUnitaria() || combinables.end()->esUnitaria();
+     while (satisfacible && itComb != combinables.end() && hay_unitarias && seguir_busqueda) {
+	  ConjClaus::const_iterator itProc = procesadas.begin();
+	  if (combinables.contieneClausula(*itComb)) {
+	       list<Clausula> factores;
+	       itComb->factores(factores);
+	       for (list<Clausula>::const_iterator it = factores.begin(); it != factores.end(); ++it)
+		    if (!combinables.contieneClausula(*it)) {
+			 combinables.agregarClausula(*it);
+			 boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(*itComb, *it));
+			 Prueba.push_back(p);
+		    }    
+	       while (satisfacible && itProc != procesadas.end() && seguir_busqueda) {
+		    if (itComb->esUnitaria() || itProc->esUnitaria()) {
+			 list<Clausula> res;
+			 itComb->resolventes(*itProc, res);
+			 list<Clausula>::const_iterator itRes = res.begin();
+			 while (satisfacible && itRes != res.end()) {
+			      boost::shared_ptr<Inferencia> p(new InferenciaResolucion(*itComb, *itProc, *itRes));			
+			      if (itRes->esVacia()) {
+				   satisfacible = false;
+				   Prueba.push_back(p);
+			      }
+			      else if (!itRes->esTautologica() &&
+				       !procesadas.contieneClausula(*itRes) &&
+				       !combinables.contieneClausula(*itRes)) {
+				   combinables.agregarClausula(*itRes);
+				   Prueba.push_back(p);
+			      }
+			      ++itRes;
+			 }
+		    }
+		    ++itProc;
+	       }
+	  }
+	  procesadas.agregarClausula(*itComb);
+	  combinables.eliminar(itComb);
+	  itComb = combinables.begin();
+	  hay_unitarias = combinables.begin()->esUnitaria() || combinables.end()->esUnitaria();
+     }
+     return satisfacible;
+}

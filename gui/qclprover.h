@@ -54,7 +54,9 @@ private:
     void mostrarInferencia(int i, const Inferencia& inf);
     void cargarArchivo(const QString& nombre);
     void agregarClausula(const std::string& cl);
-    void mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus);
+    template<typename Iterator>
+    void mostrarConjunto(Iterator begin, Iterator end);
+    void mostrarSatisfacibilidad(bool satis);
 
 private:
     Ui::Qclprover *ui;

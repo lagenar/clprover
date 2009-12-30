@@ -97,30 +97,58 @@ void Qclprover::eliminarClausulas()
 void Qclprover::verificarSatisfacibilidad()
 {
     limpiarTexto();
-    ConjuntoClausulas<> conj;
-    parser.getClausulas(conj);
+    std::list<Clausula> l;
+    parser.getClausulas(l);
+    ui->textoInfo->insertHtml("<b>" + trUtf8("Conjunto original de cláusulas:") + "</b><br>");
+    mostrarConjunto(l.begin(), l.end());
+    ui->textoInfo->insertHtml("<br>");
+    ConjuntoClausulas<> conj(l);
     bool simp;
     simp = conj.simplificarPorTautologicas();
     simp = conj.simplificarPorEquivalentes() || simp;
     simp = conj.simplificarLiteralesPuros() || simp;
     if (simp) {
-        ui->textoInfo->insertHtml("<b>" + trUtf8("Conjunto de cláusulas simplificado") + "</b><br>");
-        mostrarConjunto(conj);
+        ui->textoInfo->insertHtml("<b>" + trUtf8("Conjunto de cláusulas simplificado:") + "</b><br>");
+        mostrarConjunto(conj.begin(), conj.end());
+        ui->textoInfo->insertHtml("<br>");
     }
 
-    thread_res = new ThreadResolucion(conj);
-    QObject::connect(thread_res, SIGNAL(finished()), this, SLOT(mostrarResultados()));
-    ui->botonVerificarSatis->setEnabled(false);
-    ui->botonDetener->setEnabled(true);
-    ui->actionVerificar_Satisfacibilidad->setEnabled(false);
-    thread_res->start();
+    if (conj.esVacio()) {
+        ui->textoInfo->insertHtml("<b>" + tr("Propiedad utilizada:") + "</b><br>");
+        ui->textoInfo->insertHtml(trUtf8("El conjunto vacio es satisfacible por definición"));
+        ui->textoInfo->insertHtml("<br><br>");
+        mostrarSatisfacibilidad(true);
+    }
+    else if (conj.esLogicaPrograma()) {
+        ui->textoInfo->insertHtml("<b>" + tr("Propiedad utilizada:") + "</b><br>");
+        ui->textoInfo->insertHtml("<b>" + trUtf8("El conjunto es una lógica de programa.\n"
+                                                 "Toda lógica de programa es satisfacible."));
+        ui->textoInfo->insertHtml("<br><br>");
+        mostrarSatisfacibilidad(true);
+    }
+    else {
+        thread_res = new ThreadResolucion(conj);
+        QObject::connect(thread_res, SIGNAL(finished()), this, SLOT(mostrarResultados()));
+        ui->botonVerificarSatis->setEnabled(false);
+        ui->botonDetener->setEnabled(true);
+        ui->actionVerificar_Satisfacibilidad->setEnabled(false);
+        thread_res->start();
+    }
 }
 
-void Qclprover::mostrarConjunto(const ConjuntoClausulas<ClausComp>& claus)
+void Qclprover::mostrarSatisfacibilidad(bool satis)
 {
-    if (claus.esVacio())
+    QString s = satis ? tr("Satisfacible") : tr("Insatisfacible");
+    ui->textoInfo->insertHtml("<b>" + tr("Satisfacibilidad: ") + "</b>" + s);
+    ui->labelSatis->setText(s);
+}
+
+template <typename Iterator>
+void Qclprover::mostrarConjunto(Iterator begin, Iterator end)
+{
+    if (begin == end)
         ui->textoInfo->insertHtml("&Oslash;<br>");
-    for (ConjuntoClausulas<ClausComp>::const_iterator it = claus.begin(); it != claus.end(); ++it) {
+    for (Iterator it = begin; it != end; ++it) {
         ui->textoInfo->insertHtml(it->getString().c_str());
         ui->textoInfo->insertHtml("<br>");
     }
@@ -153,17 +181,23 @@ void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
 
 void Qclprover::mostrarResultados()
 {
-    if (thread_res->esSatisfacible())
-        ui->labelSatis->setText(tr("Satisfacible"));
+    ui->textoInfo->insertHtml("<b>" + trUtf8("Método de resolución: ") + "</b>");
+    if (thread_res->getTipoResolucion() == ThreadResolucion::General)
+        ui->textoInfo->insertHtml(trUtf8("Resolución general"));
     else
-        ui->labelSatis->setText(tr("Insatisfacible"));
-    ui->textoInfo->insertHtml("<b>" + trUtf8("Pasos de resolución") + "<b><br>");
+        ui->textoInfo->insertHtml(trUtf8("Resolución unitaria"));
+    ui->textoInfo->insertHtml("<br><br><b>" + trUtf8("Pasos de resolución:") + "</b><br>");
     Resolucion::t_prueba prueba = thread_res->getPrueba();
     int i = 1;
     for (Resolucion::t_prueba::const_iterator it = prueba.begin(); it != prueba.end(); ++it) {
         mostrarInferencia(i, **it);
         ++i;
     }
+    ui->textoInfo->insertHtml("<br>");
+    if (thread_res->esSatisfacible())
+        mostrarSatisfacibilidad(true);
+    else
+        mostrarSatisfacibilidad(false);
     delete thread_res;
     thread_res = 0;
     ui->botonVerificarSatis->setEnabled(true);

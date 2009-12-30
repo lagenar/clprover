@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cargar clausulas desde una fórmula</string>
+   <string>Cargar cláusulas desde una fórmula</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

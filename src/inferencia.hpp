@@ -105,7 +105,7 @@ public:
 	  Inferencia(cl), fact(fact){ }
 
      t_inf getTipo() const {
-	  return Res;
+	  return Factor;
      }
 
      void getPadres(std::list<int>& p) const {

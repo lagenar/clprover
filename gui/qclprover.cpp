@@ -239,6 +239,7 @@ void Qclprover::cargarArchivo(const QString& nombre)
                                  "Verifique si tiene acceso de lectura al directorio"));
         return;
     }
+    eliminarClausulas();
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString linea = in.readLine();
@@ -302,7 +303,6 @@ void Qclprover::cargarFormula()
     DialogFormula diag;
     diag.exec();
     if (diag.cargoFormula()) {
-        eliminarClausulas();
         cargarArchivo(diag.getNombreArchivoClausulas());
     }
 }

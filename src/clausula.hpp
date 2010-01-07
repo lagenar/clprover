@@ -58,7 +58,8 @@ public:
       */
      typedef enum {REGLA, HECHO, OBJ} t_horn;
 
-     Clausula() : tautologica(false) { }
+     Clausula(int id_resolucion=0) :
+	  tautologica(false), id_resolucion(id_resolucion) { }
      
      int cantLiterales() const;
      
@@ -95,6 +96,8 @@ public:
      bool esTautologica() const;
      
      const std::string getString() const;
+
+     int getIdResolucion() const;
      
      const_iterator begin() const;
 
@@ -176,9 +179,12 @@ public:
       * @param lit Literal a agregar.
       */
      void agregarLiteral(const Literal& lit);
+
+     void setIdResolucion(int id);
 private:
      std::set<Literal, LitComp> literales;
      bool tautologica;
+     int id_resolucion;
      
      void agregarLitsResolvente(const Clausula& c, const const_iterator& lit,
 				const Sustitucion& s);

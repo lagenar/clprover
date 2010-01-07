@@ -21,7 +21,7 @@
 
 #include "clausulas.hpp"
 #include "inferencia.hpp"
-#include <list>
+#include <vector>
 #include <boost/shared_ptr.hpp>
 
 /**
@@ -31,20 +31,21 @@
 class Resolucion {
 public:
      typedef ConjuntoClausulas<> ConjClaus;
-     typedef std::list<boost::shared_ptr<Inferencia> > t_prueba;
+     typedef std::vector<boost::shared_ptr<Inferencia> > t_prueba;
 
      Resolucion(const ConjClaus& claus) :
-	  claus(claus) { }
+	  claus(claus), id_resolucion(0) { }
  
      virtual bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda) = 0;
 
      virtual bool esSatisfacible(t_prueba& Prueba);
 protected:
      ConjuntoClausulas<> claus;
+     int id_resolucion;
 
-     void resolverPredicadosEliminables(t_prueba& prueba, bool& resolvio_vacia);
+     void resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba, bool& resolvio_vacia);
 
-     void eliminarPredicado(t_prueba& prueba, const std::string& p, bool& resolvio_vacia);
+     void eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std::string& p, bool& resolvio_vacia);
 };
 
 class ResolucionGeneral : public Resolucion {

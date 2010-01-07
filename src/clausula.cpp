@@ -84,6 +84,11 @@ const std::string Clausula::getString() const
      return s;
 }
 
+int Clausula::getIdResolucion() const
+{
+     return id_resolucion;
+}
+
 Clausula::const_iterator Clausula::begin() const
 {
      return literales.begin();
@@ -122,6 +127,11 @@ void Clausula::agregarLiteral(const Literal& lit)
 	  tautologica = it != literales.end();
      }
      literales.insert(lit);
+}
+
+void Clausula::setIdResolucion(int id)
+{
+     id_resolucion = id;
 }
 
 bool Clausula::contienePredicado(const std::string& id_pred) const

@@ -47,7 +47,7 @@ public:
      /**
       * Inserta en la lista pasada los padres de la inferencia(premisas)
       */
-     virtual void getPadres(std::list<Clausula>&) const = 0;
+     virtual void getPadres(std::list<int>&) const = 0;
 protected:
      Clausula claus;
 };
@@ -61,40 +61,40 @@ public:
 	  return "Hipot";
      }    
      
-     void getPadres(std::list<Clausula>& /*p*/) const { }
+     void getPadres(std::list<int>& /*p*/) const { }
 };
 
 class InferenciaResolucion : public Inferencia {
 public:
-     InferenciaResolucion(Clausula res1, Clausula res2, const Clausula& cl) :
+     InferenciaResolucion(int res1, int res2, const Clausula& cl) :
 	  Inferencia(cl), res1(res1), res2(res2) { }
      
      std::string getId() const {
 	  return "Res";
      }
 
-     void getPadres(std::list<Clausula>& p) const {
+     void getPadres(std::list<int>& p) const {
 	  p.push_back(res1);
 	  p.push_back(res2);
      }
 private:
-     Clausula res1, res2;
+     int res1, res2;
 };
 
 class InferenciaFactorizacion : public Inferencia {
 public:
-     InferenciaFactorizacion(Clausula fact, const Clausula& cl) :
+     InferenciaFactorizacion(int fact, const Clausula& cl) :
 	  Inferencia(cl), fact(fact){ }
 
      std::string getId() const {
 	  return "Factor";
      }
 
-     void getPadres(std::list<Clausula>& p) const {
+     void getPadres(std::list<int>& p) const {
 	  p.push_back(fact);
      }
 private:
-     Clausula fact;
+     int fact;
 };
 
 #endif

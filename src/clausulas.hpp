@@ -59,10 +59,18 @@ public:
 
      ConjuntoClausulas() { }
      
-     ConjuntoClausulas(const std::list<Clausula>& cls)
+     template<typename Iterator>
+     ConjuntoClausulas(Iterator begin, Iterator end, bool numerar=false)
      {
-	  for (std::list<Clausula>::const_iterator it = cls.begin(); it != cls.end(); ++it)	   
-	       agregarClausula(*it);
+	  int id = 0;
+	  for (Iterator it = begin; it != end; ++it) {
+	       Clausula cl = *it;
+	       if (numerar) {
+		    cl.setIdResolucion(id);
+		    id++;
+	       }
+	       agregarClausula(cl);
+	  }
      }
      
      size_type cantidadClausulas() const { return clausulas.size(); }

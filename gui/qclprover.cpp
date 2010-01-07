@@ -102,7 +102,7 @@ void Qclprover::verificarSatisfacibilidad()
     ui->textoInfo->insertHtml("<b>" + trUtf8("Conjunto original de cláusulas:") + "</b><br>");
     mostrarConjunto(l.begin(), l.end());
     ui->textoInfo->insertHtml("<br>");
-    ConjuntoClausulas<> conj(l);
+    ConjuntoClausulas<> conj(l.begin(), l.end());
     bool simp;
     simp = conj.simplificarPorTautologicas();
     simp = conj.simplificarPorEquivalentes() || simp;
@@ -158,15 +158,15 @@ void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
 {
     QString inf_id(inf.getId().c_str());
     ui->textoInfo->insertHtml(QString("%1) %2").arg(QString::number(i), inf_id));
-    std::list<Clausula> padres;
+    std::list<int> padres;
     inf.getPadres(padres);
     if (padres.size() > 0) {
         ui->textoInfo->insertHtml("(");
-        std::list<Clausula>::const_iterator it = padres.begin();
-        ui->textoInfo->insertHtml(it->getString().c_str());
+        std::list<int>::const_iterator it = padres.begin();
+        ui->textoInfo->insertHtml(QString::number(*it + 1));
         ++it;
         while (it != padres.end()) {
-            ui->textoInfo->insertHtml(QString(", %1").arg(it->getString().c_str()));
+            ui->textoInfo->insertHtml(QString(", %1").arg(QString::number(*it + 1)));
             ++it;
         }
         ui->textoInfo->insertHtml(")");

@@ -22,6 +22,7 @@
 #include "clausulas.hpp"
 #include "inferencia.hpp"
 #include <vector>
+#include <set>
 #include <boost/shared_ptr.hpp>
 
 /**
@@ -46,6 +47,10 @@ protected:
      void resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba, bool& resolvio_vacia);
 
      void eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std::string& p, bool& resolvio_vacia);
+
+     void simplificarPrueba(t_prueba& prueba);
+
+     void agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas);
 };
 
 class ResolucionGeneral : public Resolucion {

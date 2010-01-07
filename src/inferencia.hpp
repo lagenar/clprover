@@ -20,6 +20,7 @@
 #define INFERENCIA_HPP
 #include "clausula.hpp"
 #include <list>
+#include <cassert>
 
 /**
  * Clase abstracta que representa una regla de inferencia
@@ -29,13 +30,15 @@
  */
 class Inferencia {
 public:
+     typedef enum {Hipot, Factor, Res} t_inf;
+
      Inferencia(const Clausula& cl) :
 	  claus(cl) { }
      
      /**
-      * @returns Un identificador del tipo de inferencia.
+      * @returns El tipo de inferencia
       */
-     virtual std::string getId() const = 0;
+     virtual t_inf getTipo() const = 0;
      
      /**
       * @returns La clausula inferida
@@ -48,6 +51,11 @@ public:
       * Inserta en la lista pasada los padres de la inferencia(premisas)
       */
      virtual void getPadres(std::list<int>&) const = 0;
+
+     /**
+      * Modifica los padres de la inferencia
+      */
+     virtual void setPadres(const std::list<int>&) = 0;
 protected:
      Clausula claus;
 };
@@ -56,12 +64,14 @@ class InferenciaHipotesis : public Inferencia {
 public:
      InferenciaHipotesis(const Clausula& cl) :
 	  Inferencia(cl) { }
-     
-     std::string getId() const {
-	  return "Hipot";
-     }    
+
+     t_inf getTipo() const {
+	  return Hipot;
+     }
      
      void getPadres(std::list<int>& /*p*/) const { }
+
+     void setPadres(const std::list<int>&) { }
 };
 
 class InferenciaResolucion : public Inferencia {
@@ -69,13 +79,21 @@ public:
      InferenciaResolucion(int res1, int res2, const Clausula& cl) :
 	  Inferencia(cl), res1(res1), res2(res2) { }
      
-     std::string getId() const {
-	  return "Res";
+     t_inf getTipo() const {
+	  return Res;
      }
 
      void getPadres(std::list<int>& p) const {
 	  p.push_back(res1);
 	  p.push_back(res2);
+     }
+
+     void setPadres(const std::list<int>& p) {
+	  assert(p.size() == 2);
+	  std::list<int>::const_iterator it = p.begin();
+	  res1 = *it;
+	  ++it;
+	  res2 = *it;
      }
 private:
      int res1, res2;
@@ -86,12 +104,18 @@ public:
      InferenciaFactorizacion(int fact, const Clausula& cl) :
 	  Inferencia(cl), fact(fact){ }
 
-     std::string getId() const {
-	  return "Factor";
+     t_inf getTipo() const {
+	  return Res;
      }
 
      void getPadres(std::list<int>& p) const {
 	  p.push_back(fact);
+     }
+     
+     void setPadres(const std::list<int>& p) {
+	  assert(p.size() == 1);
+	  std::list<int>::const_iterator it = p.begin();
+	  fact = *it;
      }
 private:
      int fact;

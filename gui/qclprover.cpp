@@ -156,8 +156,20 @@ void Qclprover::mostrarConjunto(Iterator begin, Iterator end)
 
 void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
 {
-    QString inf_id(inf.getId().c_str());
-    ui->textoInfo->insertHtml(QString("%1) %2").arg(QString::number(i), inf_id));
+    ui->textoInfo->insertHtml(QString("<b>%1)</b> ").arg(QString::number(i)));
+    QString cl;
+    if (inf.getClausula().esVacia())
+        cl = "&perp;"; // _|_
+    else
+        cl = inf.getClausula().getString().c_str();
+    ui->textoInfo->insertHtml(cl);
+    ui->textoInfo->insertPlainText("    [");
+    if (inf.getTipo() == Inferencia::Hipot)
+        ui->textoInfo->insertPlainText(trUtf8("Hipótesis"));
+    else if (inf.getTipo() == Inferencia::Res)
+        ui->textoInfo->insertPlainText(tr("Res"));
+    else
+        ui->textoInfo->insertPlainText(tr("Factor"));
     std::list<int> padres;
     inf.getPadres(padres);
     if (padres.size() > 0) {
@@ -171,12 +183,7 @@ void Qclprover::mostrarInferencia(int i, const Inferencia& inf)
         }
         ui->textoInfo->insertHtml(")");
     }
-    QString cl;
-    if (inf.getClausula().esVacia())
-        cl = "&perp;"; // _|_
-    else
-        cl = inf.getClausula().getString().c_str();
-    ui->textoInfo->insertHtml(QString(" = %1<br>").arg(cl));
+    ui->textoInfo->insertPlainText("]\n");
 }
 
 void Qclprover::mostrarResultados()

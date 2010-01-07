@@ -18,6 +18,7 @@
 
 #include "resolucion.hpp"
 #include <list>
+#include <map>
 
 void Resolucion::resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba, bool& resolvio_vacia)
 {
@@ -55,6 +56,41 @@ void Resolucion::eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std
 	       simp.agregarClausula(*it);
      }
      claus = simp;
+}
+
+void Resolucion::agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas)
+{
+     usadas.insert(prueba[id]->getClausula().getIdResolucion());
+     std::list<int> padres;
+     prueba[id]->getPadres(padres);
+     for (std::list<int>::const_iterator it = padres.begin(); it != padres.end(); ++it)
+	  agregarUsadas(prueba, *it, usadas);
+}
+
+void Resolucion::simplificarPrueba(t_prueba& Prueba)
+{
+     std::set<int> usadas;
+     t_prueba::const_iterator it_p = Prueba.begin();
+     while (it_p != Prueba.end() && (*it_p)->getTipo() == Inferencia::Hipot) {
+	  usadas.insert((*it_p)->getClausula().getIdResolucion());
+	  ++it_p;
+     }
+     agregarUsadas(Prueba, Prueba.size() - 1, usadas);
+     t_prueba simp;
+     std::map<int, int> nueva_id;
+     int id = 0;
+     for (std::set<int>::const_iterator it = usadas.begin(); it != usadas.end(); ++it) {
+	  nueva_id[*it] = id;
+	  ++id;
+	  boost::shared_ptr<Inferencia> p = Prueba[*it];
+	  std::list<int> padres;
+	  p->getPadres(padres);
+	  for (std::list<int>::iterator it_pad = padres.begin(); it_pad != padres.end(); ++it_pad)
+	       *it_pad = nueva_id[*it_pad];
+	  p->setPadres(padres);
+	  simp.push_back(p);
+     }
+     Prueba = simp;
 }
 
 bool Resolucion::esSatisfacible(t_prueba& Prueba)
@@ -127,6 +163,8 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
      	  combinables.eliminar(itComb);
      	  itComb = combinables.begin();
      }
+     if (!satisfacible)
+	  simplificarPrueba(Prueba);
      return satisfacible;
 }
 
@@ -201,5 +239,7 @@ bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_bus
 	  itComb = combinables.begin();
 	  hay_unitarias = combinables.begin()->esUnitaria() || procesadas.begin()->esUnitaria();
      }
+     if (!satisfacible)
+	  simplificarPrueba(Prueba);
      return satisfacible;
 }

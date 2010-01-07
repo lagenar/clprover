@@ -14,7 +14,14 @@ void mostrarConjunto(const ConjuntoClausulas<>& conj)
 
 void mostrarInferencia(int i, const Inferencia& inf)
 {
-     cout << i << ") " << inf.getId();
+     cout << i << ") " << inf.getClausula().getString();
+     cout << "     [";
+     if (inf.getTipo() == Inferencia::Hipot)
+	  cout << "Hipotesis";
+     else if (inf.getTipo() == Inferencia::Res)
+	  cout << "Res";
+     else
+	  cout << "Factor";
      list<int> padres;
      inf.getPadres(padres);
      if (padres.size() > 0) {
@@ -28,7 +35,7 @@ void mostrarInferencia(int i, const Inferencia& inf)
 	  }
 	  cout << ")";
      }
-     cout << " = " << inf.getClausula().getString() << endl;
+     cout << "]" << endl;
 }
 
 int main()

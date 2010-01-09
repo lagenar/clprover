@@ -119,6 +119,8 @@ public:
       */
      bool contienePredicado(const std::string& id_pred) const;
      
+     bool subsume(const Clausula& otra) const;
+
      /**
       * Inserta todas las resolventes entre la cláusula y <EM>claus</EM> a la
       * lista de cláusulas <EM>res</EM>.
@@ -192,6 +194,8 @@ private:
      
      void agregarLitsResolvente(const Clausula& c, const const_iterator& lit,
 				const Sustitucion& s);
+
+     bool subsume(Sustitucion& s, const_iterator lit1, const Clausula& otra) const;
 };
 
 #endif

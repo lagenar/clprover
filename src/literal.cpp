@@ -90,6 +90,13 @@ bool Literal::unificarComplementario(const Literal& otro, Sustitucion& s) const
      return args.unificar(s, otro.args);
 }
 
+bool Literal::unificarSubsuncion(const Literal& otro, Sustitucion& s) const
+{
+     if (otro.signo != signo || otro.id != id || otro.aridad() != aridad())
+	  return false;
+     return args.unificarSubsuncion(s, otro.args);
+}
+
 void Literal::aplicarSustitucion(const Sustitucion& s)
 {
      args.aplicarSustitucion(s);

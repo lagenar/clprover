@@ -91,6 +91,20 @@ bool Variable::unificar(Sustitucion& s, const Termino& otro) const
      return res;
 }
 
+bool Variable::unificarSubsuncion(Sustitucion& s, const Termino& otro) const
+{
+     bool unif;
+     Sustitucion s1;
+     const Termino* t = s.getSustitucion(id);
+     if (t == NULL) {
+	  s1.agregarSustitucion(id, otro);
+	  unif = true;
+     } else
+	  unif = (*t == otro);
+     s.componer(s1);
+     return unif;
+}
+
 Termino* Variable::clonar() const
 {
      return new Variable(*this);
@@ -146,6 +160,14 @@ bool Funcion::unificar(Sustitucion& s, const Termino& otro) const
 	  return args->unificar(s, *static_cast<const Funcion*>(&otro)->args);
      else 
 	  return false;
+}
+
+bool Funcion::unificarSubsuncion(Sustitucion& s, const Termino& otro) const
+{
+     if (otro.getTipo() == Var)
+	  return false;
+     return otro.getId() == id &&
+	  args->unificar(s, *static_cast<const Funcion*>(&otro)->args);
 }
 
 Termino* Funcion::aplicarSustitucion(const Sustitucion& s) const

@@ -82,6 +82,8 @@ public:
       */
      bool unificar(Sustitucion& s, const Argumentos& otro) const;
 
+     bool unificarSubsuncion(Sustitucion& s, const Argumentos& otro) const;
+
      /**
       * Agrega un término como argumento.
       * @param t término a agregar.

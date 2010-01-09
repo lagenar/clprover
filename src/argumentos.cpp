@@ -98,6 +98,23 @@ bool Argumentos::unificar(Sustitucion& s, const Argumentos& otro) const
      return unif;
 }
 
+bool Argumentos::unificarSubsuncion(Sustitucion& s, const Argumentos& otro) const
+{
+     if (args.size() != otro.args.size())
+	  return false;
+
+     const_iterator it = args.begin();
+     const_iterator it_otro = otro.args.begin();
+     bool unif = true;
+     //FIX: ver si es necesario hacer una copia de s
+     while (it != args.end() && unif) {
+	  unif = (*it)->unificarSubsuncion(s, **it_otro);
+	  ++it;
+	  ++it_otro;
+     }
+     return unif;
+}
+
 void Argumentos::agregarArgumento(const Termino& t)
 {
      args.push_back(t.clonar());

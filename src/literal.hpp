@@ -91,6 +91,8 @@ public:
       */
      bool unificarComplementario(const Literal& otro, Sustitucion& s) const;
      
+     bool unificarSubsuncion(const Literal& otro, Sustitucion& s) const;
+
      /**
       * Aplica una sustitucion de variables a términos a los argumentos
       * del literal.

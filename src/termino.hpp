@@ -99,6 +99,8 @@ public:
       */
      virtual bool unificar(Sustitucion& s, const Termino& otro) const = 0;
 
+     virtual bool unificarSubsuncion(Sustitucion& s, const Termino& otro) const = 0;
+
      /**
       * @returns Un puntero a un clon del término. El cliente debe liberarlo.
       */
@@ -139,6 +141,8 @@ public:
 
      bool unificar(Sustitucion& s, const Termino& otro) const;
 
+     bool unificarSubsuncion(Sustitucion& s, const Termino& otro) const;
+
      Termino* clonar() const;     
      
      void renombrarVariables(std::map<std::string,std::string>& renombre, int& comienzo);	  
@@ -165,8 +169,10 @@ public:
      bool contieneVariable(const std::string& id) const;
 
      Termino* aplicarSustitucion(const Sustitucion& s) const;
-
+     
      bool unificar(Sustitucion& s, const Termino& otro) const;
+
+     bool unificarSubsuncion(Sustitucion& s, const Termino& otro) const;
 
      Termino* clonar() const;
 

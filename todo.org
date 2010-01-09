@@ -23,7 +23,18 @@
    ~a(X) | ~a(Z) | c(X) | c(Z) | d(Y) | d(U)
    ~c(Y) | ~c(X) | ~d(Y) | ~d(X)
    
-** TODO Ver como se puede implementar la simplificación por subsumción.
+** TODO Implementar la simplificación por subsunción de cláusulas.
+En lógica proposicional, una cláusula C subsume a otra cláusula D si C implica
+lógicamente D. Esto ocurre cuando(sintácticamente) C es un subconjunto de D.
+En lógica de primer orden, la validez de la implicación entre cláusulas es
+indecidible (Schmidt-Schauss), por lo que se adopta una definición más simple:
+una cláusula de lógica de primer orden C subsume a otra cláusula D, notado con C <=ss D,
+si existe una sustitución S, tal que C.S es un subconjunto de D.
+Para implementar la prueba de subsunción se necesita un procedimiento simplificado de
+unificación de términos. En donde sólo se sustituyen las variables de uno de los términos,
+y las variables en los términos del par se consideran distintas incluso si
+sus identificadores son iguales. Esto último implica que no es necesario renombrar las variables
+antes de la unificación y que las sustituciones aparentemente triviales x->x son necesarias.
 ** DONE implementar la clase de resolución unitaria
    CLOSED: [2009-12-30 mié 10:22]
 ** Documentacion

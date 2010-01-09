@@ -54,10 +54,14 @@ public:
      typedef std::set<Literal, LitComp>::const_iterator const_iterator;
      typedef std::set<Literal, LitComp>::iterator iterator;
      /**
-      * tipos de clausulas de Horn
+      * tipos de clausulas de Horn.
       */
      typedef enum {REGLA, HECHO, OBJ} t_horn;
-
+     /**
+      * Constructor.
+      * @param id_resolucion Identificador de la cláusula,
+      * se utiliza en los algoritmos de resolución.
+      */
      Clausula(int id_resolucion=0) :
 	  tautologica(false), id_resolucion(id_resolucion) { }
      

@@ -112,8 +112,18 @@ void Resolucion::agregarFactores(t_prueba& prueba, const Clausula& comb,
 
 bool Resolucion::clausulaSimplificable(const Clausula& cl) const
 {
-     return cl.esTautologica() || combinables.contieneClausula(cl)
-	  || procesadas.contieneClausula(cl);
+     if (cl.esTautologica() || combinables.contieneClausula(cl)
+	 || procesadas.contieneClausula(cl))
+	  return true;
+
+     bool subsumida = false;
+     ConjClaus::const_iterator it = procesadas.begin();
+     while (!subsumida && it != procesadas.end()) {
+	  subsumida = it->subsume(cl);
+	  ++it;
+     }
+
+     return subsumida;
 }
 
 bool ResolucionGeneral::esSatisfacible(t_prueba& prueba)

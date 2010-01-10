@@ -17,13 +17,15 @@
 ** DONE corregir el bug de caracteres unicode [[http:://code.google.com/p/clprover/issues/detail?id=1]]
    CLOSED: [2009-12-29 mar 12:30]
 * Núcleo
-** TODO Ver como resolver los conjuntos que no tienen predicados eliminables(ver ladr).
+** DONE Ver como resolver los conjuntos que no tienen predicados eliminables(ver ladr).
+   CLOSED: [2010-01-10 dom 09:31]
    Por ejemplo, el conjunto:
    a(X) | a(Y)
    ~a(X) | ~a(Z) | c(X) | c(Z) | d(Y) | d(U)
    ~c(Y) | ~c(X) | ~d(Y) | ~d(X)
    
-** TODO Implementar la simplificación por subsunción de cláusulas.
+** DONE Implementar la simplificación por subsunción de cláusulas.
+   CLOSED: [2010-01-10 dom 09:31]
 En lógica proposicional, una cláusula C subsume a otra cláusula D si C implica
 lógicamente D. Esto ocurre cuando(sintácticamente) C es un subconjunto de D.
 En lógica de primer orden, la validez de la implicación entre cláusulas es
@@ -45,3 +47,4 @@ antes de la unificación y que las sustituciones aparentemente triviales x->x so
 *** TODO documentar la clase Resolucion
 *** DONE documentar la clase ConjuntoClausulas
     CLOSED: [2009-12-30 mié 13:36]
+*** TODO documentar los métodos de subsunción

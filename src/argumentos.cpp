@@ -106,7 +106,6 @@ bool Argumentos::unificarSubsuncion(Sustitucion& s, const Argumentos& otro) cons
      const_iterator it = args.begin();
      const_iterator it_otro = otro.args.begin();
      bool unif = true;
-     //FIX: ver si es necesario hacer una copia de s
      while (it != args.end() && unif) {
 	  unif = (*it)->unificarSubsuncion(s, **it_otro);
 	  ++it;

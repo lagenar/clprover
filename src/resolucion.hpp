@@ -39,18 +39,24 @@ public:
  
      virtual bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda) = 0;
 
-     virtual bool esSatisfacible(t_prueba& Prueba);
+     virtual bool esSatisfacible(t_prueba& Prueba) = 0;
 protected:
-     ConjuntoClausulas<> claus;
+     ConjClaus claus;
+     ConjClaus combinables;
+     ConjClaus procesadas;
      int id_resolucion;
 
      void resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba, bool& resolvio_vacia);
 
      void eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std::string& p, bool& resolvio_vacia);
 
-     void simplificarPrueba(t_prueba& prueba);
+     void simplificarPrueba(t_prueba& prueba) const;
 
-     void agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas);
+     void agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas) const;
+
+     void agregarFactores(t_prueba& prueba, const Clausula& comb, std::list<Clausula>& factores);
+
+     bool clausulaSimplificable(const Clausula& cl) const;
 };
 
 class ResolucionGeneral : public Resolucion {
@@ -58,9 +64,9 @@ public:
      ResolucionGeneral(const ConjClaus& claus) :
 	  Resolucion(claus) { }
 
-     bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda);
+     bool esSatisfacible(t_prueba& prueba, const bool& seguir_busqueda);
 
-     bool esSatisfacible(t_prueba& Prueba);
+     bool esSatisfacible(t_prueba& prueba);
 };
 
 class ResolucionUnitaria : public Resolucion {
@@ -68,9 +74,9 @@ public:
      ResolucionUnitaria(const ConjClaus& claus) :
 	  Resolucion(claus) { }
 
-     bool esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda);
+     bool esSatisfacible(t_prueba& prueba, const bool& seguir_busqueda);
 
-     bool esSatisfacible(t_prueba& Prueba);
+     bool esSatisfacible(t_prueba& prueba);
 };
 
 #endif

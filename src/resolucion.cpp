@@ -20,7 +20,8 @@
 #include <list>
 #include <map>
 
-void Resolucion::resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba, bool& resolvio_vacia)
+void Resolucion::resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueba,
+					       bool& resolvio_vacia)
 {
      resolvio_vacia = false;
      std::set<std::string> eliminables = claus.predicadosEliminables();
@@ -31,7 +32,8 @@ void Resolucion::resolverPredicadosEliminables(ConjClaus& claus, t_prueba& prueb
      }
 }
 
-void Resolucion::eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std::string& id_pred, bool& resolvio_vacia)
+void Resolucion::eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std::string& id_pred,
+				   bool& resolvio_vacia)
 {
      ConjuntoClausulas<> simp;
      for (ConjuntoClausulas<>::const_iterator it = claus.begin(); it != claus.end(); ++it) {
@@ -58,7 +60,7 @@ void Resolucion::eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std
      claus = simp;
 }
 
-void Resolucion::agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas)
+void Resolucion::agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas) const
 {
      usadas.insert(prueba[id]->getClausula().getIdResolucion());
      std::list<int> padres;
@@ -67,22 +69,24 @@ void Resolucion::agregarUsadas(const t_prueba& prueba, int id, std::set<int>& us
 	  agregarUsadas(prueba, *it, usadas);
 }
 
-void Resolucion::simplificarPrueba(t_prueba& Prueba)
+void Resolucion::simplificarPrueba(t_prueba& prueba) const
 {
      std::set<int> usadas;
-     t_prueba::const_iterator it_p = Prueba.begin();
-     while (it_p != Prueba.end() && (*it_p)->getTipo() == Inferencia::Hipot) {
+     t_prueba::const_iterator it_p = prueba.begin();
+     //todas las hipótesis se incluyen en la prueba aunque no sean
+     //usadas
+     while (it_p != prueba.end() && (*it_p)->getTipo() == Inferencia::Hipot) {
 	  usadas.insert((*it_p)->getClausula().getIdResolucion());
 	  ++it_p;
      }
-     agregarUsadas(Prueba, Prueba.size() - 1, usadas);
+     agregarUsadas(prueba, prueba.size() - 1, usadas);
      t_prueba simp;
      std::map<int, int> nueva_id;
      int id = 0;
      for (std::set<int>::const_iterator it = usadas.begin(); it != usadas.end(); ++it) {
 	  nueva_id[*it] = id;
 	  ++id;
-	  boost::shared_ptr<Inferencia> p = Prueba[*it];
+	  boost::shared_ptr<Inferencia> p = prueba[*it];
 	  std::list<int> padres;
 	  p->getPadres(padres);
 	  for (std::list<int>::iterator it_pad = padres.begin(); it_pad != padres.end(); ++it_pad)
@@ -90,51 +94,58 @@ void Resolucion::simplificarPrueba(t_prueba& Prueba)
 	  p->setPadres(padres);
 	  simp.push_back(p);
      }
-     Prueba = simp;
+     prueba = simp;
 }
 
-bool Resolucion::esSatisfacible(t_prueba& Prueba)
+void Resolucion::agregarFactores(t_prueba& prueba, const Clausula& comb,
+				 std::list<Clausula>& factores)
+{
+     for (std::list<Clausula>::iterator it = factores.begin(); it != factores.end(); ++it)
+	  if (!clausulaSimplificable(*it)) {
+	       it->setIdResolucion(id_resolucion);
+	       ++id_resolucion;
+	       combinables.agregarClausula(*it);
+	       boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(comb.getIdResolucion(), *it));
+	       prueba.push_back(p);
+	  }
+}
+
+bool Resolucion::clausulaSimplificable(const Clausula& cl) const
+{
+     return cl.esTautologica() || combinables.contieneClausula(cl)
+	  || procesadas.contieneClausula(cl);
+}
+
+bool ResolucionGeneral::esSatisfacible(t_prueba& prueba)
 {
      bool seguir = true;
-     return esSatisfacible(Prueba, seguir);
+     return esSatisfacible(prueba, seguir);
 }
 
-bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba)
-{
-     return Resolucion::esSatisfacible(Prueba);
-}
-
-bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda)
+bool ResolucionGeneral::esSatisfacible(t_prueba& prueba, const bool& seguir_busqueda)
 {
      using std::list;
      
-     ConjClaus combinables(claus.begin(), claus.end(), true);
+     combinables = ConjClaus(claus.begin(), claus.end(), true);
      id_resolucion += combinables.cantidadClausulas();
      for (ConjClaus::const_iterator it = combinables.begin(); it != combinables.end(); ++it) {
 	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
-	  Prueba.push_back(p);
+	  prueba.push_back(p);
      }
      bool resolvio_vacia;
-     resolverPredicadosEliminables(combinables, Prueba, resolvio_vacia);
+     resolverPredicadosEliminables(combinables, prueba, resolvio_vacia);
      
      if (resolvio_vacia)
      	  return false;
 
      bool satisfacible = true;     
      ConjClaus::iterator itComb = combinables.begin();
-     ConjClaus procesadas;
+     procesadas = ConjClaus();
 
      while (satisfacible && itComb != combinables.end() && seguir_busqueda) {
      	  list<Clausula> factores;
      	  itComb->factores(factores);
-     	  for (list<Clausula>::iterator it = factores.begin(); it != factores.end(); ++it)
-     	       if (!combinables.contieneClausula(*it)) {
-		    it->setIdResolucion(id_resolucion);
-		    ++id_resolucion;
-     		    combinables.agregarClausula(*it);
-     		    boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(itComb->getIdResolucion(), *it));
-     		    Prueba.push_back(p);
-     	       }
+	  agregarFactores(prueba, *itComb, factores);
      	  ConjClaus::const_iterator itProc = procesadas.begin();
      	  while (satisfacible && itProc != procesadas.end() && seguir_busqueda) {
      	       list<Clausula> res;
@@ -146,13 +157,11 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
 									     itProc->getIdResolucion(), *itRes));			
      		    if (itRes->esVacia()) {
      			 satisfacible = false;
-     			 Prueba.push_back(p);
+     			 prueba.push_back(p);
      		    }
-     		    else if (!itRes->esTautologica() &&
-     			     !procesadas.contieneClausula(*itRes) &&
-     			     !combinables.contieneClausula(*itRes)) {
+     		    else if (!clausulaSimplificable(*itRes)) {
      			 combinables.agregarClausula(*itRes);
-     			 Prueba.push_back(p);
+     			 prueba.push_back(p);
 			 ++id_resolucion;
      		    }
      		    ++itRes;
@@ -164,34 +173,35 @@ bool ResolucionGeneral::esSatisfacible(t_prueba& Prueba, const bool& seguir_busq
      	  itComb = combinables.begin();
      }
      if (!satisfacible)
-	  simplificarPrueba(Prueba);
+	  simplificarPrueba(prueba);
      return satisfacible;
 }
 
-bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba)
+bool ResolucionUnitaria::esSatisfacible(t_prueba& prueba)
 {
-     return Resolucion::esSatisfacible(Prueba);
+     bool seguir = true;
+     return esSatisfacible(prueba, seguir);
 }
 
-bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_busqueda)
+bool ResolucionUnitaria::esSatisfacible(t_prueba& prueba, const bool& seguir_busqueda)
 {
      using std::list;
      
-     ConjClaus combinables(claus.begin(), claus.end(), true);
+     combinables = ConjClaus(claus.begin(), claus.end(), true);
      id_resolucion += combinables.cantidadClausulas();
      for (ConjClaus::const_iterator it = combinables.begin(); it != combinables.end(); ++it) {
 	  boost::shared_ptr<Inferencia> p(new InferenciaHipotesis(*it));
-	  Prueba.push_back(p);
+	  prueba.push_back(p);
      }
      bool resolvio_vacia;
-     resolverPredicadosEliminables(combinables, Prueba, resolvio_vacia);
+     resolverPredicadosEliminables(combinables, prueba, resolvio_vacia);
      
      if (resolvio_vacia)
      	  return false;
 
      bool satisfacible = true;     
      ConjClaus::iterator itComb = combinables.begin();
-     ConjClaus procesadas;
+     procesadas = ConjClaus();
 
      //basta con verificar para los primeros elementos
      //porque las cláusulas estan ordenadas por cantidad de literales
@@ -200,14 +210,7 @@ bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_bus
 	    && hay_unitarias && seguir_busqueda) {	  
 	  list<Clausula> factores;
 	  itComb->factores(factores);
-	  for (list<Clausula>::iterator it = factores.begin(); it != factores.end(); ++it)
-	       if (!combinables.contieneClausula(*it)) {
-		    it->setIdResolucion(id_resolucion);
-		    ++id_resolucion;
-     		    combinables.agregarClausula(*it);
-     		    boost::shared_ptr<Inferencia> p(new InferenciaFactorizacion(itComb->getIdResolucion(), *it));
-     		    Prueba.push_back(p);
-     	       }
+	  agregarFactores(prueba, *itComb, factores);
 	  ConjClaus::const_iterator itProc = procesadas.begin();
 	  while (satisfacible && itProc != procesadas.end() && seguir_busqueda) {
 	       if (itComb->esUnitaria() || itProc->esUnitaria()) {
@@ -220,13 +223,11 @@ bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_bus
 										  itProc->getIdResolucion(), *itRes));			
 			 if (itRes->esVacia()) {
 			      satisfacible = false;
-			      Prueba.push_back(p);
+			      prueba.push_back(p);
 			 }
-			 else if (!itRes->esTautologica() &&
-				  !procesadas.contieneClausula(*itRes) &&
-				  !combinables.contieneClausula(*itRes)) {
+			 else if (!clausulaSimplificable(*itRes)) {
 			      combinables.agregarClausula(*itRes);
-			      Prueba.push_back(p);
+			      prueba.push_back(p);
 			      ++id_resolucion;
 			 }
 			 ++itRes;
@@ -240,6 +241,6 @@ bool ResolucionUnitaria::esSatisfacible(t_prueba& Prueba, const bool& seguir_bus
 	  hay_unitarias = combinables.begin()->esUnitaria() || procesadas.begin()->esUnitaria();
      }
      if (!satisfacible)
-	  simplificarPrueba(Prueba);
+	  simplificarPrueba(prueba);
      return satisfacible;
 }

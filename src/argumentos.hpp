@@ -82,6 +82,13 @@ public:
       */
      bool unificar(Sustitucion& s, const Argumentos& otro) const;
 
+     /**
+      * Unifica con otro término para el cálculo de la subsunción. Es más restrictivo que
+      * la unificación general, sólo las variables de éstos argumentos pueden sustituirse.
+      * @param s Contexto de unificación.
+      * @param otro Término con el que se unifica.
+      * @returns true si la unificación fue posible, false en caso contrario.
+      */
      bool unificarSubsuncion(Sustitucion& s, const Argumentos& otro) const;
 
      /**

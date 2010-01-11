@@ -119,6 +119,14 @@ public:
       */
      bool contienePredicado(const std::string& id_pred) const;
      
+     /**
+      * @returns true si la cláusula subsume a <EM>otra</EM>, false en caso
+      * contrario.
+      * Sean C y D cláusulas, C subsume a D si existe una sustitución <EM>s</EM> tal que
+      * todos los literales de C.<EM>s<EM> se encuentran en D.
+      * Si C subsume a D, entonces D es consecuencia lógica de D pero la recíproca no es
+      * válida.
+      */
      bool subsume(const Clausula& otra) const;
 
      /**

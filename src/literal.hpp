@@ -91,6 +91,13 @@ public:
       */
      bool unificarComplementario(const Literal& otro, Sustitucion& s) const;
      
+     /**
+      * Unifica con otro término para el cálculo de la subsunción. Es más restrictivo que
+      * la unificación general, sólo las variables de éste literal pueden sustituirse.
+      * @param s Contexto de unificación.
+      * @param otro Término con el que se unifica.
+      * @returns true si la unificación fue posible, false en caso contrario.
+      */
      bool unificarSubsuncion(const Literal& otro, Sustitucion& s) const;
 
      /**

@@ -79,7 +79,7 @@ bool Variable::unificar(Sustitucion& s, const Termino& otro) const
 
      const Termino* otro_sust = otro.aplicarSustitucion(s);
      bool res = false;
-     if (otro_sust->contieneVariable(id))
+     if (otro_sust->contieneVariable(t->getId()))
 	  res = otro_sust->getTipo() == Var;
      else {
 	  Sustitucion s1;

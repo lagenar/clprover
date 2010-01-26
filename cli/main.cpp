@@ -27,10 +27,10 @@ void mostrarInferencia(int i, const Inferencia& inf)
      if (padres.size() > 0) {
 	  cout << "(";
 	  list<int>::const_iterator it = padres.begin();
-	  cout << *it;
+	  cout << *it + 1;
 	  ++it;
 	  while (it != padres.end()) {
-	       cout << ", " << *it;
+	       cout << ", " << *it + 1;
 	       ++it;
 	  }
 	  cout << ")";
@@ -57,15 +57,28 @@ int main()
      parser.getClausulas(Conj);
      cout << "Conjunto original de clausulas: " << endl;
      mostrarConjunto(Conj);
+     bool simp = Conj.simplificarPorTautologicas();
+     simp = Conj.simplificarPorEquivalentes() || simp;
+     simp = Conj.simplificarLiteralesPuros() || simp;
+     if (simp) {
+	  cout << endl << "Conjunto Simplificado:";
+	  mostrarConjunto(Conj);
+     }
      Resolucion::t_prueba prueba;
-     ResolucionGeneral res(Conj);
-     bool s = res.esSatisfacible(prueba);
+     bool s;
+     if (Conj.esDeHorn()) {
+	  ResolucionUnitaria res(Conj);
+	  s = res.esSatisfacible(prueba);
+     } else {
+	  ResolucionGeneral res(Conj);
+	  s = res.esSatisfacible(prueba);
+     }
      if (s)
-	  cout << "El conjunto es satisfacible" << endl;
+	  cout << "El Conjunto es satisfacible" << endl;
      else {
-	  cout << "El conjunto es insatisfacible" << endl;
+	  cout << "El Conjunto es insatisfacible" << endl;
 	  cout << endl << "Pasos de resolucion" << endl;
-	  int i = 0;
+	  int i = 1;
 	  for (Resolucion::t_prueba::const_iterator it = prueba.begin(); it != prueba.end(); ++it) {
 	       mostrarInferencia(i, **it);
 	       ++i;

@@ -29,7 +29,7 @@ a saber:
 \begin{itemize}
 \item La refactorización de las clases básicas(Término, Literal, Cláusula, etc). Se agregaron relaciones
 de herencia y se cambiaron de lugar métodos.
-\item Se cambió la gramática de las clausulas permitiendo identificadores de más de una carater. Se creó una clase
+\item Se cambió la gramática de las clausulas permitiendo identificadores de más de una caracter. Se creó una clase
 que provee la adición y eliminación de clausulas y el manejo de errores sintácticos y semánticos.
 \item Se creó una clase abstracta que sirve de base para las diferentes estratégias de resolución.
 \item Los procedimientos de resolución corren en un hilo de ejecución diferente, lo que permite al usuario detener la resolución sin tener que
@@ -39,7 +39,7 @@ salir del programa.
 \item Se implementó una simplificación por subsunción de cláusulas.
 \item Se implementó una simplificación de la traza de resolución que elimina las inferencias que no fueron
 usadas para derivar la cláusula vacía y se agregó un indexamiento de cláusulas. Esto hace que las pruebas sean
-más cortas y legibles por el usuario.
+más cortas y legibles.
 \item Se integró Clausula con un programa para transformar fórmulas a la forma clausular, lo que permite al usuario
 determinar la satisfacibilidad de fórmulas arbitrarias.
 \item Se separó completamente la interfaz gráfica de los algoritmos y clases fundamentales, de esta forma

@@ -60,30 +60,34 @@ void Resolucion::eliminarPredicado(ConjClaus& claus, t_prueba& prueba, const std
      claus = simp;
 }
 
-void Resolucion::agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas) const
+void Resolucion::agregarInferenciasUsadas(const t_prueba& prueba, int id,
+					  std::set<int>& inferencias_usadas) const
 {
-     usadas.insert(prueba[id]->getClausula().getIdResolucion());
+     inferencias_usadas.insert(prueba[id]->getClausula().getIdResolucion());
      std::list<int> padres;
      prueba[id]->getPadres(padres);
      for (std::list<int>::const_iterator it = padres.begin(); it != padres.end(); ++it)
-	  agregarUsadas(prueba, *it, usadas);
+	  agregarInferenciasUsadas(prueba, *it, inferencias_usadas);
 }
 
 void Resolucion::simplificarPrueba(t_prueba& prueba) const
 {
-     std::set<int> usadas;
+     std::set<int> inferencias_usadas;
      t_prueba::const_iterator it_p = prueba.begin();
      //todas las hipótesis se incluyen en la prueba aunque no sean
      //usadas
      while (it_p != prueba.end() && (*it_p)->getTipo() == Inferencia::Hipot) {
-	  usadas.insert((*it_p)->getClausula().getIdResolucion());
+	  inferencias_usadas.insert((*it_p)->getClausula().getIdResolucion());
 	  ++it_p;
      }
-     agregarUsadas(prueba, prueba.size() - 1, usadas);
+     agregarInferenciasUsadas(prueba, prueba.size() - 1, inferencias_usadas);
      t_prueba simp;
+     //se asigna un nuevo identificador a cada cláusula
+     //usada para que queden numeradas secuencialmente.
      std::map<int, int> nueva_id;
      int id = 0;
-     for (std::set<int>::const_iterator it = usadas.begin(); it != usadas.end(); ++it) {
+     for (std::set<int>::const_iterator it = inferencias_usadas.begin();
+	  it != inferencias_usadas.end(); ++it) {
 	  nueva_id[*it] = id;
 	  ++id;
 	  boost::shared_ptr<Inferencia> p = prueba[*it];

@@ -52,7 +52,7 @@ protected:
 
      void simplificarPrueba(t_prueba& prueba) const;
 
-     void agregarUsadas(const t_prueba& prueba, int id, std::set<int>& usadas) const;
+     void agregarInferenciasUsadas(const t_prueba& prueba, int id, std::set<int>& inferencias_usadas) const;
 
      void agregarFactores(t_prueba& prueba, const Clausula& comb, std::list<Clausula>& factores);
 

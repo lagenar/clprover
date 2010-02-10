@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{url}
+\usepackage{graphicx}
 \usepackage{listings} %Para poner código fuente
 \title{Trabajo final de análisis y diseño de algoritmos I}
 \author{Lucas Moauro}
@@ -51,13 +52,28 @@ pueden usarse sin mayores dependencias en otros proyectos.
 %a los términos(variables y funciones), literales, y cláusulas. Después hay que describir
 %las clases utilizadas para representarlos, sin hacer incapié en como están implementados
 %los algoritmos, sólo la interfaz externa. También Sustitución y Argumentos.
-En esta sección se describen las estructuras básicas de lógica de primer orden que
-son usadas en el programa. Primero se introducen a partir de su definición en lógica y
-luego se plantea la correspondencia a los tipos de datos abstractos y a su implementación
-a través de las clases de c++ describiendo los métodos más importantes de cada clase. Por último, se dan a conocer las estructuras utilizadas para la representación interna de las clases.
-\subsection{Términos: Variables y Funciones}
-
-\section{Análisis sintáctico de cláusulas}
+En esta sección se describen las estructuras básicas de lógica de primer orden que sirven de base para lós métodos de resolución.
+Primero se introducen a partir de su definición en lógica y luego se plantea la correspondencia a los tipos de datos abstractos
+y a su implementación a través de las clases de c++ describiendo los métodos más importantes de cada clase. 
+Por último, se dan a conocer las estructuras utilizadas para la representación interna de las clases.
+\subsection{Términos: Variables y Funciones} %también la clase argumentos
+En lógica de primer orden, el conjunto de términos es definido inductivamente \cite{ApuntesLogica}:
+\begin{enumerate}
+\item Una \emph{variable} es un término.
+\item Si $t_1,t_2,...,t_n$ son términos y $f$ es un símbolo de \emph{función}, entonces $f(t_1,t_2,...,t_n)$
+  es un término.\footnote{Las constantes son funciones de aridad 0.}
+\end{enumerate}
+Las variables se caracterizan por tener un identificador y las funciones un identificador y argumentos. La existencia de
+dos tipos de términos, sugiere la utilización de un  TDA \emph{Termino} del cual se derivan los TDAs \emph{Variable} y 
+\emph{Funcion}.
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{imagenes/classTermino}
+\end{center}
+\subsection{Sustitución}
+\subsection{Literal}
+\subsection{Cláusula}
+\section{Análisis sintáctico de cláusulas} %gramática y parser.
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

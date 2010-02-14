@@ -1,0 +1,28 @@
+* Introducción
+** DONE Uso de la STL(complejidad temporal en la STL)
+   CLOSED: [2010-02-14 dom 19:26]
+** TODO Contenido de cada sección
+* Estructuras básicas
+** DONE Términos: Funcion, Variable y Argumentos
+   CLOSED: [2010-02-14 dom 18:52]
+** TODO Sustitución
+** TODO Literal
+** TODO Cláusula
+* Gramática y parser
+** TODO gramática en BNF
+** TODO clase parser
+* Estructuras de resolución
+** TODO ConjuntoClausulas
+** TODO Inferencia
+** TODO Resolucion
+* Métodos de resolución
+** TODO Resolución general
+** TODO Resolución unitaria
+* TODO Concurrencia
+* Optimizaciones a los métodos de resolución
+** TODO Simplificación por literales eliminables		:complejidad:
+** TODO Simplificación por subsunción				:complejidad:
+** TODO Simplificación de la traza				:complejidad:
+* TODO Interfaz gráfica
+* TODO Integración con FOL
+* TODO Conclusión

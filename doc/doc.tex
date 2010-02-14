@@ -7,6 +7,7 @@
 \usepackage{listings} %Para poner código fuente
 \title{Trabajo final de análisis y diseño de algoritmos I}
 \author{Lucas Moauro}
+\date{}
 \begin{document}
 \maketitle
 \newpage
@@ -28,11 +29,12 @@ computación II} dictada en el segundo año de la carrera.
 La motivación del trabajo fue agregar optimizaciones y funcionalidades al programa,
 a saber:
 \begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
 \item La refactorización de las clases básicas(Término, Literal, Cláusula, etc). Se agregaron relaciones
 de herencia y se cambiaron de lugar métodos.
-\item Se cambió la gramática de las clausulas permitiendo identificadores de más de una caracter. Se creó una clase
+\item Se cambió la gramática de las cláusulas permitiendo identificadores de más de un caracter. Se creó una clase
 que provee la adición y eliminación de clausulas y el manejo de errores sintácticos y semánticos.
-\item Se creó una clase abstracta que sirve de base para las diferentes estratégias de resolución.
+\item Se creó una clase abstracta que sirve de base para las diferentes estrategias de resolución.
 \item Los procedimientos de resolución corren en un hilo de ejecución diferente, lo que permite al usuario detener la resolución sin tener que
 salir del programa.
 \item Se agregó una regla de inferencia(factorización) que es necesaria para la completitud de los métodos de resolución.
@@ -46,15 +48,18 @@ determinar la satisfacibilidad de fórmulas arbitrarias.
 \item Se separó completamente la interfaz gráfica de los algoritmos y clases fundamentales, de esta forma
 pueden usarse sin mayores dependencias en otros proyectos.
 \end{itemize}
+En este proyecto se usaron extensivamente los contenedores provistos por la STL(listas, mapas, conjuntos, etc). Además
+de la especificación formal de cada contenedor, la STL especifica la complejidad temporal asintótica de los métodos de
+inserción, eliminación, etc.\cite{sgi}
 
 \section{Estructuras básicas de lógica de primer orden}
 %En esta sección tengo que explicar desde el punto de vista de lógica de primer orden
 %a los términos(variables y funciones), literales, y cláusulas. Después hay que describir
 %las clases utilizadas para representarlos, sin hacer incapié en como están implementados
 %los algoritmos, sólo la interfaz externa. También Sustitución y Argumentos.
-En esta sección se describen las estructuras básicas de lógica de primer orden que sirven de base para lós métodos de resolución.
+En esta sección se describen las estructuras básicas de lógica de primer orden que sirven de base para los métodos de resolución.
 Primero se introducen a partir de su definición en lógica y luego se plantea la correspondencia a los tipos de datos abstractos
-y a su implementación a través de las clases de c++ describiendo los métodos más importantes de cada clase. 
+y a su implementación a través de las clases de C++ describiendo los métodos más importantes de cada clase. 
 Por último, se dan a conocer las estructuras utilizadas para la representación interna de las clases.
 \subsection{Términos: Variables y Funciones} %también la clase argumentos
 En lógica de primer orden, el conjunto de términos es definido inductivamente \cite{ApuntesLogica}:
@@ -70,6 +75,34 @@ dos tipos de términos, sugiere la utilización de un  TDA \emph{Termino} del cu
 \leavevmode
 \includegraphics[height=2cm]{imagenes/classTermino}
 \end{center}
+
+En la clase abstracta Termino se declaran métodos a ser implementados en sus clases derivadas
+\footnote{La documentación detallada de cada método se encuentra en el manual de referencia de clases.}.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item const std::string \& getId () const
+\item t getTipo () const
+\item virtual const std::string getString () const =0
+\item virtual bool operator== (const Termino \&otro) const =0
+\item virtual bool contieneVariable (const std::string \&id) const =0
+\item virtual Termino $\ast$ aplicarSustitucion (const Sustitucion \&s) const =0
+\item virtual bool unificar (Sustitucion \&s, const Termino \&otro) const =0
+\item virtual bool unificarSubsuncion (Sustitucion \&s, const Termino \&otro) const =0
+\item virtual void renombrarVariables (std::map< std::string, std::string > \&renombre, int \&comienzo)=0
+\end{itemize}
+La clase Funcion, además de implementar los métodos virtuales de la clase Termino,
+provee métodos específicos a las funciones de lógica de primer orden, como el acceso a la aridad
+de la función y la adición de argumentos.
+
+Existe otra estructura lógica que posee términos como argumentos, el Literal. Por este motivo, es conveniente
+encapsular el concepto de argumentos en una clase que provea funcionalidad para ambas clases. La clase \emph{Argumentos}
+cumple este objetivo.
+
+Para la representación interna de los argumentos en la clase Argumentos se optó por
+usar una lista de punteros a objetos de la clase Termino. De esta forma, la inserción de términos
+tiene complejidad constante y la utilización de punteros permite que los argumentos sean objetos polimórficos.
+
+Para representar los identificadores de las variables y funciones se usa la clase \emph{string} de la STL.
 \subsection{Sustitución}
 \subsection{Literal}
 \subsection{Cláusula}

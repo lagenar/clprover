@@ -44,7 +44,8 @@ antes de la unificación y que las sustituciones aparentemente triviales x->x so
     CLOSED: [2009-12-29 mar 11:07]
 *** DONE documentar la clase Parser
     CLOSED: [2009-12-29 mar 11:47]
-*** TODO documentar la clase Resolucion
+*** DONE documentar la clase Resolucion
+    CLOSED: [2010-02-14 dom 19:40]
 *** DONE documentar la clase ConjuntoClausulas
     CLOSED: [2009-12-30 mié 13:36]
 *** DONE documentar los métodos de subsunción

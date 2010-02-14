@@ -45,8 +45,8 @@ public:
       * @returns false si el conjunto de cláusulas pasado en el constructor es
       * insatisfacible. Si el conjunto es satisfacible, puede que el método retorne true
       * o que no retorne. La ejecución de este método puede detenerse desde otro hilo
-      * de ejecución utilizando el parámetro por referencia <emph>seguir_busqueda</emph>.
-      * Si <emph>seguir_busqueda</emph> es inicialmente false, o se lo setea a false desde
+      * de ejecución utilizando el parámetro por referencia <EM>seguir_busqueda</EM>.
+      * Si <EM>seguir_busqueda</EM> es inicialmente false, o se lo setea a false desde
       * otro hilo a través de una referencia externa mientras esSatisfacible se ejecuta,
       * se detiene la ejecución y retorna true.
       * @param Prueba Aquí se insertan las reglas de inferencia usadas.

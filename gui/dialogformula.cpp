@@ -90,8 +90,10 @@ void DialogFormula::cargarFormula()
                 E.first = Parser::TipoId;
         } else
             E.first = Parser::Sintactico;
-
-        QMessageBox::critical(this, trUtf8("Carga de fórmula"), getMensajeErrorParser(E));
+        QString msg_error = E.first == Parser::Sintactico ?
+                            trUtf8("Error sintáctico\nLa cadena ingresada no es una fórmula bien definida") :
+                            getMensajeErrorParser(E);
+        QMessageBox::critical(this, trUtf8("Carga de fórmula"), msg_error);
     } else {
         cargo_formula = true;
         archivo = salida;

@@ -249,7 +249,7 @@ void Qclprover::cargarArchivo(const QString& nombre)
         if (error) {
             eliminarClausulas();
             QMessageBox::critical(this, tr("Abrir archivo"),
-                                  tr("El archivo no tiene es formato correcto"));
+                                  tr("El archivo no tiene el formato correcto"));
             parser = Parser();
             return;
         }

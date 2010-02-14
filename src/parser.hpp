@@ -41,7 +41,7 @@ public:
       * Tipos de errores.
       */
      typedef enum {
-	  Sintactico, /**< La clausula no está bien definida sintácticamente*/
+	  Sintactico, /**< La cláusula no está bien definida sintácticamente*/
 	  Aridad, /**< Un identificador es utilizado con diferentes aridades*/
 	  TipoId /**< Un identificador es utilizado para más de un tipo
 		    de estructura lógica(predicado y función)
@@ -54,7 +54,7 @@ public:
       * de error al primer elemento del par <EM>E</EM> y si es un error
       * semántico el segundo elemento del par contiene el identificador
       * con error.
-      * @pre No existe ninguna clausula con identificador <EM>id</EM>.
+      * @pre No existe ninguna cláusula con identificador <EM>id</EM>.
       * @param id Identificador asignado a la cláusula.
       * @param clausula Representación en forma de cadena de la cláusula.
       * @see t_error
@@ -64,7 +64,7 @@ public:
 
      /**
       * Elimina una cláusula del conjunto analizado.
-      * @pre Existe una clausula con identificador <EM>id</EM>.
+      * @pre Existe una cláusula con identificador <EM>id</EM>.
       * @param id Identificador de la cláusula.
       */
      void eliminarClausula(int id);

@@ -25,4 +25,5 @@
 ** TODO Simplificación de la traza				:complejidad:
 * TODO Interfaz gráfica
 * TODO Integración con FOL
+* TODO Uso de Valgrind
 * TODO Conclusión

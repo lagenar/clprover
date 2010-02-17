@@ -12,15 +12,17 @@
 ** DONE Cláusula
    CLOSED: [2010-02-17 mié 08:41]
 * Gramática y parser
-** TODO gramática en BNF
+** DONE gramática en BNF
+   CLOSED: [2010-02-17 mié 11:03]
 ** TODO clase parser
+* TODO Factorización
 * Estructuras de resolución
 ** TODO ConjuntoClausulas
 ** TODO Inferencia
 ** TODO Resolucion
 * Métodos de resolución
 ** TODO Resolución general
-** TODO Resolución unitaria
+** TODO Resolución unitaria					      :fácil:
 * TODO Concurrencia						      :fácil:
 * Optimizaciones a los métodos de resolución
 ** TODO Simplificación por literales eliminables		:complejidad:

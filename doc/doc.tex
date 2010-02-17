@@ -206,6 +206,29 @@ un set es necesario definir un orden parcial para los literales, este orden est�
 El hecho de que los literales se encuentren ordenados permite hacer que varios métodos de la clase sean más eficientes,
 ya que al conocer esta propiedad no deben iterar sobre todo el conjunto de literales.
 \section{Análisis sintáctico de cláusulas} %gramática y parser.
+Para interpretar la entrada de cláusulas es necesario definir una sintaxis concreta para las estructuras
+lógicas y de esta forma poder transformar una cadena ingresada a una clase con sus respectivos atributos.
+La refactorización de la gramática se hizo por ciertas limitaciones en la gramática de Clausula. También
+se creo una clase, \emph{Parser} que encapsula métodos para analizar un conjunto de cláusulas.
+\subsection{Gramática}
+La principal limitación en la gramática de Clausula es que los identificadores de variables, funciones y literales
+están compuestos por un símbolo alfabético, lo que impide que el usuario pueda asignar nombres más significativos. Además,
+en problemas no triviales, con una mayor cantidad de identificadores puede que no pueda representarse el problema
+usando esa gramática. En la nueva gramática los identificadores pueden contener más de un caracter.
+
+En Clausula es necesario definir que identificadores son símbolos de constantes porque el conjunto
+de símbolos posibles para asignar a las variables es igual al de las constantes. Esto se resulve haciendo
+que el conjunto de identificadores para las constantes sea diferente al de las variables; los
+identificadores de variables empiezan con una letra mayúscula y los identificadores de literales, funciones y constantes
+empiezan con minúscula.
+
+A continuación se define la nueva gramática en formato \emph{BNF}.
+%gramática
+\lstinputlisting{gramatica.bnf}
+En cuanto a la implementación, se cambió el uso de \emph{Bison} por el de la biblioteca \emph{Spirit}\cite{spirit}.
+El principal motivo es que provee una mejor integración con el lenguaje C++ y la gramática puede usarse como una biblioteca
+sin la necesidad de invocar a un programa externo para el análisis sintáctico\footnote{Esto también es posible con Bison pero es más complejo.}.
+\subsection{Parser}
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

@@ -61,6 +61,10 @@ En esta sección se describen las estructuras básicas de lógica de primer orde
 Primero se introducen a partir de su definición en lógica y luego se plantea la correspondencia a los tipos de datos abstractos
 y a su implementación a través de las clases de C++ describiendo los métodos más importantes de cada clase. 
 Por último, se dan a conocer las estructuras utilizadas para la representación interna de las clases.
+
+Los principales cambios con respecto a las estructuras de \emph{Clausula} son las relaciones de herencia
+en las clases que representan términos, la representación interna y la inclusión de métodos que en Clausula
+se encontraban en una clase monolítica llamada \emph{CAlgoritmos}.
 \subsection{Términos: Variables y Funciones} %también la clase argumentos
 En lógica de primer orden, el conjunto de términos es definido inductivamente \cite{ApuntesLogica}:
 \begin{enumerate}
@@ -164,6 +168,43 @@ si dos literales son complementarios.
 Como se ha mencionado anteriormente, la estructura interna de los argumentos de la clase
 \emph{Literal} está representada por un objeto de la clase \emph{Argumentos}.
 \subsection{Cláusula}
+Una cláusula es una disyunción de literales. Es la estructura lógica sobre la cual se basan
+las estrategias de resolución. La clase \emph{Clausula} implementa esta estructura. Provee operaciones
+para la consulta e inserción de literales y para aplicar las dos reglas de inferencia fundamentales en
+el cálculo de resolución: el cálculo de resolventes entre dos cláusulas y la factorización de una cláusula.
+Un detalle importante es que la clase permite asignar un entero como identificador a una cláusula creada. Los
+identificadores son usados para indexar las cláusulas y aplicar simplificaciones a la traza de resolución.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item Clausula (int id\_resolucion=0)
+\item int cantLiterales () const
+\item bool esUnitaria () const
+\item bool esDeHorn (t\_horn \&t) const
+\item bool esDeHorn () const
+\item bool esVacia () const
+\item bool esTautologica () const
+\item const std::string getString () const
+\item int getIdResolucion () const
+\item const\_iterator begin () const
+\item const\_iterator end () const
+\item bool contieneComplementario (const Literal \&lit) const
+\item bool contienePredicado (const std::string \&id\_pred) const
+\item bool subsume (const Clausula \&otra) const
+\item void resolventes (const Clausula \&claus, std::list< Clausula > \&res) const
+\item bool resolventeUsandoPred (const Clausula \&claus, const std::string \&id\_pred, Clausula \&res) const
+\item void factores (std::list< Clausula > \&fact) const
+\item bool equivalente (const Clausula \&C) const
+\item Clausula renombrarVariables (int \&comienzo) const
+\item std::map< std::string, int > aparicionesPredicados () const
+\item void agregarLiteral (const Literal \&lit)
+\item void setIdResolucion (int id)
+\end{itemize}
+Para la representación interna de los literales se utiliza un set de la STL. La disyunción puede interpretarse como
+un conjunto de literales teniendo en cuenta la propiedad de idempotencia, esta indica que una cláusula que contiene
+$n$ iguales es equivalente a una cláusula obtenida de eliminar $n-1$ de los $n$ literales iguales. Para poder usar
+un set es necesario definir un orden parcial para los literales, este orden está definido en la clase \emph{LitComp}.
+El hecho de que los literales se encuentren ordenados permite hacer que varios métodos de la clase sean más eficientes,
+ya que al conocer esta propiedad no deben iterar sobre todo el conjunto de literales.
 \section{Análisis sintáctico de cláusulas} %gramática y parser.
 \bibliographystyle{plain}
 \bibliography{doc}

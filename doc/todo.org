@@ -9,7 +9,8 @@
    CLOSED: [2010-02-15 lun 21:22]
 ** DONE Literal
    CLOSED: [2010-02-16 mar 22:21]
-** TODO Cláusula
+** DONE Cláusula
+   CLOSED: [2010-02-17 mié 08:41]
 * Gramática y parser
 ** TODO gramática en BNF
 ** TODO clase parser

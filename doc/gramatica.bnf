@@ -1,0 +1,23 @@
+<clausula>  ::= <literal> 
+              | <literal> "|" clausula
+
+<literal>   ::= "~" <atomica> 
+                  | <atomica>
+
+<atomica>   ::= <funPredId> 
+              | <funPredId> "(" <args> ")"
+
+<args>      ::= <termino> 
+              | <termino> "," <args>
+
+<termino>   ::= <varId> | <funcion>
+
+<funcion>   ::= <funPredId> 
+              | <funPredId> "(" <args> ")"
+
+<varId>     ::= ["A"-"Z"] <subId>
+
+<funPredId> ::= ["a"-"z"] <subId>
+
+<subId>     ::= ["a"-"z" "A"-"Z" "0"-"9"] 
+              | ["a"-"z" "A"-"Z" "0"-"9"] <subid>

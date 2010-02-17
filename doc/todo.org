@@ -2,6 +2,7 @@
 ** DONE Uso de la STL(complejidad temporal en la STL)
    CLOSED: [2010-02-14 dom 19:26]
 ** TODO Contenido de cada sección				      :fácil:
+   SCHEDULED: <2010-02-21 dom>
 * Estructuras básicas
 ** DONE Términos: Funcion, Variable y Argumentos
    CLOSED: [2010-02-14 dom 18:52]
@@ -14,21 +15,36 @@
 * Gramática y parser
 ** DONE gramática en BNF
    CLOSED: [2010-02-17 mié 11:03]
-** TODO clase parser
+** DONE clase parser
+   SCHEDULED: <2010-02-17 mié> CLOSED: [2010-02-17 mié 14:41]
 * TODO Factorización						:complejidad:
+  SCHEDULED: <2010-02-18 jue>
 * Estructuras de resolución
 ** TODO ConjuntoClausulas
+   SCHEDULED: <2010-02-18 jue>
 ** TODO Inferencia
+   SCHEDULED: <2010-02-18 jue>
 ** TODO Resolucion
+   SCHEDULED: <2010-02-18 jue>
 * Métodos de resolución
 ** TODO Resolución general
+   SCHEDULED: <2010-02-19 vie>
 ** TODO Resolución unitaria					      :fácil:
+   SCHEDULED: <2010-02-19 vie>
 * TODO Concurrencia						      :fácil:
+  SCHEDULED: <2010-02-21 dom>
 * Optimizaciones a los métodos de resolución
 ** TODO Simplificación por literales eliminables		:complejidad:
+   SCHEDULED: <2010-02-20 sáb>
 ** TODO Simplificación por subsunción				:complejidad:
+   SCHEDULED: <2010-02-20 sáb>
 ** TODO Simplificación de la traza				:complejidad:
+   SCHEDULED: <2010-02-20 sáb>
 * TODO Interfaz gráfica						      :fácil:
+  SCHEDULED: <2010-02-21 dom>
 * TODO Integración con FOL					      :fácil:
+  SCHEDULED: <2010-02-21 dom>
 * TODO Uso de Valgrind						      :fácil:
+  SCHEDULED: <2010-02-21 dom>
 * TODO Conclusión						      :fácil:
+  SCHEDULED: <2010-02-21 dom>

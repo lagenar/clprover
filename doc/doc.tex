@@ -229,6 +229,29 @@ En cuanto a la implementación, se cambió el uso de \emph{Bison} por el de la b
 El principal motivo es que provee una mejor integración con el lenguaje C++ y la gramática puede usarse como una biblioteca
 sin la necesidad de invocar a un programa externo para el análisis sintáctico\footnote{Esto también es posible con Bison pero es más complejo.}.
 \subsection{Parser}
+La gramática definida en \emph{Spirit} detecta los posibles errores sintácticos en la definición
+de una cláusula pero no los errores semánticos. Existen dos posibles errores semánticos:
+\begin{enumerate}
+\item Un identificador de función o predicado es usado con diferentes aridades. Por ejemplo, $a(X) \lor a(X,Y)$ no
+es una cláusula bien definida.
+\item Un identificador es usado para identificar a una función y a un predicado. Por ejemplo $a(a(X))$ no es válida.
+\end{enumerate}
+Estos errores semánticos pueden ser errores dentro de una misma cláusula o puede que sean producto de una
+inconsistencia entre dos o más cláusulas. La clase \emph{Parser} es la encargada de analizar incrementalmente
+un conjunto de cláusulas, verificando la validez del conjunto cada vez que se agrega o elimina una cláusula.
+Esta clase es usada como modelo de datos en la interfaz gráfica que acepta cadenas ingresadas por el usuario.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item void parseClausula (int id, const std::string \&clausula, bool \&error, std::pair< t\_error, std::string >\&E)
+\item void eliminarClausula (int id)
+\item Clausula getClausula (int id) const
+\item void getClausulas (std::list< Clausula > \&l) const
+\item void getClausulas (ConjuntoClausulas<> \&claus) const
+\end{itemize}
+En la representación interna de las cláusulas se usa un mapa de enteros a cláusulas, los enteros
+son identificadores provistos por el cliente de la clase para después poder consultar una cláusula
+del conjunto o eliminarla. También se utilizan mapas de tipo y aridad para la verificación semántica
+de las cláusulas.
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

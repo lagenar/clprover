@@ -15,7 +15,7 @@
 ** DONE gramática en BNF
    CLOSED: [2010-02-17 mié 11:03]
 ** TODO clase parser
-* TODO Factorización
+* TODO Factorización						:complejidad:
 * Estructuras de resolución
 ** TODO ConjuntoClausulas
 ** TODO Inferencia

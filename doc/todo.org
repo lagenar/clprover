@@ -1,12 +1,14 @@
 * Introducción
 ** DONE Uso de la STL(complejidad temporal en la STL)
    CLOSED: [2010-02-14 dom 19:26]
-** TODO Contenido de cada sección
+** TODO Contenido de cada sección				      :fácil:
 * Estructuras básicas
 ** DONE Términos: Funcion, Variable y Argumentos
    CLOSED: [2010-02-14 dom 18:52]
-** TODO Sustitución
-** TODO Literal
+** DONE Sustitución
+   CLOSED: [2010-02-15 lun 21:22]
+** DONE Literal
+   CLOSED: [2010-02-16 mar 22:21]
 ** TODO Cláusula
 * Gramática y parser
 ** TODO gramática en BNF
@@ -18,12 +20,12 @@
 * Métodos de resolución
 ** TODO Resolución general
 ** TODO Resolución unitaria
-* TODO Concurrencia
+* TODO Concurrencia						      :fácil:
 * Optimizaciones a los métodos de resolución
 ** TODO Simplificación por literales eliminables		:complejidad:
 ** TODO Simplificación por subsunción				:complejidad:
 ** TODO Simplificación de la traza				:complejidad:
-* TODO Interfaz gráfica
-* TODO Integración con FOL
-* TODO Uso de Valgrind
-* TODO Conclusión
+* TODO Interfaz gráfica						      :fácil:
+* TODO Integración con FOL					      :fácil:
+* TODO Uso de Valgrind						      :fácil:
+* TODO Conclusión						      :fácil:

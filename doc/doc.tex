@@ -97,14 +97,72 @@ de la función y la adición de argumentos.
 Existe otra estructura lógica que posee términos como argumentos, el Literal. Por este motivo, es conveniente
 encapsular el concepto de argumentos en una clase que provea funcionalidad para ambas clases. La clase \emph{Argumentos}
 cumple este objetivo.
-
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item Argumentos (const Argumentos \&Args)
+\item int aridad () const
+\item const std::string getString () const
+\item const\_iterator begin () const
+\item const\_iterator end () const
+\item bool operator== (const Argumentos \&otro) const
+\item bool contieneVariable (const std::string \&id) const
+\item bool unificar (Sustitucion \&s, const Argumentos \&otro) const
+\item bool unificarSubsuncion (Sustitucion \&s, const Argumentos \&otro) const
+\item void agregarArgumento (const Termino \&t)
+\item void aplicarSustitucion (const Sustitucion \&s)
+\item void renombrarVariables (std::map< std::string, std::string > \&renombre, int \&comienzo)
+\end{itemize}
 Para la representación interna de los argumentos en la clase Argumentos se optó por
 usar una lista de punteros a objetos de la clase Termino. De esta forma, la inserción de términos
 tiene complejidad constante y la utilización de punteros permite que los argumentos sean objetos polimórficos.
 
 Para representar los identificadores de las variables y funciones se usa la clase \emph{string} de la STL.
 \subsection{Sustitución}
+Una sustitución es una asignación de variables a términos. Estas son utilizadas en la implementación de los
+algoritmos de unificación y en el renombre de variables para estandarizar estructuras lógicas.
+El TDA debe proveer funciones para la consulta, asignación y composición de sustituciones.
+La clase \emph{Sustitucion} implementa el TDA.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item const Termino $\ast$ getSustitucion (const std::string \&id) const
+\item void agregarSustitucion (const std::string \&id, const Termino \&t)
+\item void componer (const Sustitucion \&s)
+\end{itemize}
+La estructura interna de la clase esta compuesta por un mapa de la STL en el cual los
+índices son identificadores de variables y los valores son punteros a términos. El mapa
+provee acceso aleatorio a las sustituciones garantizando una complejidad temporal de 
+$O(\log n)$, siendo $n$ la cantidad de sustituciones en el mapa.
 \subsection{Literal}
+En lógica de primer orden un literal es una fórmula atómica o la negación de una.
+Esta caracterizado por tener un signo, identificador y argumentos. Los argumentos
+de un literal son términos.
+La clase \emph{Literal} provee métodos para el acceso y modificación de un literal. También
+implementa métodos que son usados en el cálculo de resolventes, por ejemplo un método que determina
+si dos literales son complementarios.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item Literal (const std::string \&id, bool signo)
+\item Literal (const std::string \&id, const Argumentos \&args, bool signo)
+\item bool getSigno () const
+\item const std::string \& getId () const
+\item const std::string getString () const
+\item int aridad () const
+\item bool operator== (const Literal \&otro) const
+\item bool operator!= (const Literal \&otro) const
+\item const\_iterator begin () const
+\item const\_iterator end () const
+\item bool unificar (const Literal \&otro, Sustitucion \&s) const
+\item bool unificable (const Literal \&otro) const
+\item bool unificarComplementario (const Literal \&otro, Sustitucion \&s) const
+\item bool unificarSubsuncion (const Literal \&otro, Sustitucion \&s) const
+\item void aplicarSustitucion (const Sustitucion \&s)
+\item void agregarArgumento (const Termino \&t)
+\item void setSigno (bool s)
+\item void renombrarVariables (std::map< std::string, std::string > \&renombre, int \&comienzo)
+\item void renombrarVariables (int \&comienzo)
+\end{itemize}
+Como se ha mencionado anteriormente, la estructura interna de los argumentos de la clase
+\emph{Literal} está representada por un objeto de la clase \emph{Argumentos}.
 \subsection{Cláusula}
 \section{Análisis sintáctico de cláusulas} %gramática y parser.
 \bibliographystyle{plain}

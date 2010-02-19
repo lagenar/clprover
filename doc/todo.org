@@ -20,8 +20,8 @@
 * DONE Factorización						:complejidad:
   SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 08:15]
 * Estructuras de resolución
-** TODO ConjuntoClausulas
-   SCHEDULED: <2010-02-18 jue>
+** DONE ConjuntoClausulas
+   SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 10:22]
 ** TODO Inferencia
    SCHEDULED: <2010-02-18 jue>
 ** TODO Resolucion

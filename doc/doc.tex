@@ -284,14 +284,44 @@ derivarse la cláusula vacía en el ejemplo anterior.
 \item $Res(3,4) \equiv \bot$
 \end{enumerate}
 El algoritmo de factorización está implementado en la clase Clausula, en el método
-Clausula::factores, este inserta todos los factores de la cláusula a una lista pasada
+Clausula::factores, este inserta los factores de la cláusula a una lista pasada
 por referencia.
 \lstinputlisting[caption=Factores, frame=single, numbers=left,language=C++,basicstyle=\tiny]{factores.cpp}
 La complejidad del algoritmo es determinada por los ciclos anidados en las lineas 3, 6 y 10. Estos iteran
 sobre los literales de la cláusula, por lo que la complejidad es de $O(n^3)$, siendo $n$ la cantidad de
-literales de la cláusula.
+literales de la cláusula.%FIX
 \section{Estructuras de resolución}
+En esta sección se presentan las clases usadas para la determinación de la satisfacibilidad
+de cláusulas.
 \subsection{ConjuntoClausulas}
+La clase \emph{ConjuntoClausulas} representa un conjunto de cláusulas. Provee métodos
+para la simplificación y la determinación de propiedades del conjunto.
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item template<typename Iterator > ConjuntoClausulas (Iterator begin, Iterator end, bool numerar=false)
+\item size\_type cantidadClausulas () const
+\item bool esVacio () const
+\item bool esDeHorn () const
+\item bool esLogicaPrograma () const
+\item void agregarClausula (const Clausula \&C)
+\item bool simplificarPorTautologicas ()
+\item bool simplificarPorEquivalentes ()
+\item bool simplificarLiteralesPuros ()
+\item bool contieneClausula (const Clausula \&c) const
+\item void getClausulas (std::list< Clausula > \&l) const
+\item std::set< std::string > predicadosEliminables () const
+\item const\_iterator begin () const
+\item const\_iterator end () const
+\item iterator begin ()
+\item iterator end ()
+\item void eliminar (iterator c)
+\end{itemize}
+Para representar el conjunto de cláusulas, se usa un set de la STL.
+
+En las estrategías de resolución es útil poder definir mas de un orden parcial para el ordenamiento de
+las cláusulas. Por este motivo la clase \emph{ConjuntoClausulas} fue implementada con un template que
+permite parametrizar el orden parcial a utilizar. El orden que se utiliza por defecto ordena las cláusulas
+en por cantidad de literales en forma creciente.
 \subsection{Inferencia}
 \subsection{Resolucion}
 \bibliographystyle{plain}

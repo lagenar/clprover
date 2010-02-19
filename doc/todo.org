@@ -17,8 +17,8 @@
    CLOSED: [2010-02-17 mié 11:03]
 ** DONE clase parser
    SCHEDULED: <2010-02-17 mié> CLOSED: [2010-02-17 mié 14:41]
-* TODO Factorización						:complejidad:
-  SCHEDULED: <2010-02-18 jue>
+* DONE Factorización						:complejidad:
+  SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 08:15]
 * Estructuras de resolución
 ** TODO ConjuntoClausulas
    SCHEDULED: <2010-02-18 jue>

@@ -5,6 +5,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{listings} %Para poner código fuente
+%\usepackage{caption}
 \title{Trabajo final de análisis y diseño de algoritmos I}
 \author{Lucas Moauro}
 \date{}
@@ -77,7 +78,7 @@ dos tipos de términos, sugiere la utilización de un  TDA \emph{Termino} del cu
 \emph{Funcion}.
 \begin{center}
 \leavevmode
-\includegraphics[height=2cm]{imagenes/classTermino}
+\includegraphics[height=2cm]{imagenes/classTermino.eps}
 \end{center}
 
 En la clase abstracta Termino se declaran métodos a ser implementados en sus clases derivadas
@@ -224,7 +225,7 @@ empiezan con minúscula.
 
 A continuación se define la nueva gramática en formato \emph{BNF}.
 %gramática
-\lstinputlisting{gramatica.bnf}
+\lstinputlisting[basicstyle=\small,caption=Gramática, frame=single]{gramatica.bnf}
 En cuanto a la implementación, se cambió el uso de \emph{Bison} por el de la biblioteca \emph{Spirit}\cite{spirit}.
 El principal motivo es que provee una mejor integración con el lenguaje C++ y la gramática puede usarse como una biblioteca
 sin la necesidad de invocar a un programa externo para el análisis sintáctico\footnote{Esto también es posible con Bison pero es más complejo.}.
@@ -252,6 +253,47 @@ En la representación interna de las cláusulas se usa un mapa de enteros a clá
 son identificadores provistos por el cliente de la clase para después poder consultar una cláusula
 del conjunto o eliminarla. También se utilizan mapas de tipo y aridad para la verificación semántica
 de las cláusulas.
+\section{Factorización de cláusulas}
+La regla de inferencia de factorización\cite{PracticalLogic} es necesaria para que los métodos de
+resolución sean refutacionalmente completos. En Clausula esta regla no esta presente por lo que
+para ciertos conjuntos de cláusulas insatisfacibles no consigue derivar la cláusula vacía.
+
+A modo de ejemplo puede considerarse el siguiente conjunto de cláusulas:
+\begin{enumerate}
+\item $s(X,X)\lor s(b,X)$
+\item $\lnot s(Y,Y)\lor \lnot s(b,Y)$
+\end{enumerate}
+Este conjunto puede probarse insatisfacible usando modelos de Herbrand pero no es posible
+derivar la cláusula vacía usando sólo la regla de la resolvente como se muestra a continuación.
+\begin{enumerate}
+\item $s(X,X)\lor s(b,X)$
+\item $\lnot s(Y,Y)\lor \lnot s(b,Y)$
+\item $Res(1,2) \equiv s(b,X) \lor \lnot s(b,X) \equiv T$ usando la sustitución \{Y/X\} y los
+literales $s(X,X)$ y $\lnot s(Y,Y)$ como complementarios.
+\item $Res(1,2) \equiv s(X,X) \lor \lnot s(Y,Y) \equiv T$ usando la sustitución \{Y/X\} y los
+literales $s(b,X)$ y $\lnot s(b,Y)$ como complementarios.
+\end{enumerate}
+La regla de factorización consiste en unificar dos literales en una cláusula y crear una nueva
+cláusula aplicando la sustitución que unifica a esos dos literales. Utilizando esta regla puede
+derivarse la cláusula vacía en el ejemplo anterior.
+\begin{enumerate}
+\item $s(X,X)\lor s(b,X)$
+\item $\lnot s(Y,Y)\lor \lnot s(b,Y)$
+\item $Factor(1) \equiv s(b,b)$ \{X/b\}
+\item $Factor(2) \equiv \lnot s(b,b)$ \{Y/b\}
+\item $Res(3,4) \equiv \bot$
+\end{enumerate}
+El algoritmo de factorización está implementado en la clase Clausula, en el método
+Clausula::factores, este inserta todos los factores de la cláusula a una lista pasada
+por referencia.
+\lstinputlisting[caption=Factores, frame=single, numbers=left,language=C++,basicstyle=\tiny]{factores.cpp}
+La complejidad del algoritmo es determinada por los ciclos anidados en las lineas 3, 6 y 10. Estos iteran
+sobre los literales de la cláusula, por lo que la complejidad es de $O(n^3)$, siendo $n$ la cantidad de
+literales de la cláusula.
+\section{Estructuras de resolución}
+\subsection{ConjuntoClausulas}
+\subsection{Inferencia}
+\subsection{Resolucion}
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

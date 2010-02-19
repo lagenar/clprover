@@ -22,8 +22,8 @@
 * Estructuras de resolución
 ** DONE ConjuntoClausulas
    SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 10:22]
-** TODO Inferencia
-   SCHEDULED: <2010-02-18 jue>
+** DONE Inferencia
+   SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 19:41]
 ** TODO Resolucion
    SCHEDULED: <2010-02-18 jue>
 * Métodos de resolución

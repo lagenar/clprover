@@ -3,9 +3,26 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{url}
+%\usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{listings} %Para poner código fuente
-%\usepackage{caption}
+\usepackage{ifpdf}
+\ifpdf
+\usepackage[pdftex,
+            pagebackref=true,
+            colorlinks=true,
+            linkcolor=blue,
+            unicode
+           ]{hyperref}
+\else
+\usepackage[ps2pdf,
+            pagebackref=true,
+            colorlinks=true,
+            linkcolor=blue,
+            unicode
+           ]{hyperref}
+\usepackage{pspicture}
+\fi
 \title{Trabajo final de análisis y diseño de algoritmos I}
 \author{Lucas Moauro}
 \date{}
@@ -78,9 +95,8 @@ dos tipos de términos, sugiere la utilización de un  TDA \emph{Termino} del cu
 \emph{Funcion}.
 \begin{center}
 \leavevmode
-\includegraphics[height=2cm]{imagenes/classTermino.eps}
+\includegraphics[height=2cm]{imagenes/classTermino}
 \end{center}
-
 En la clase abstracta Termino se declaran métodos a ser implementados en sus clases derivadas
 \footnote{La documentación detallada de cada método se encuentra en el manual de referencia de clases.}.
 \begin{itemize}
@@ -318,11 +334,34 @@ para la simplificación y la determinación de propiedades del conjunto.
 \end{itemize}
 Para representar el conjunto de cláusulas, se usa un set de la STL.
 
-En las estrategías de resolución es útil poder definir mas de un orden parcial para el ordenamiento de
+En las estrategias de resolución es útil poder definir mas de un orden parcial para el ordenamiento de
 las cláusulas. Por este motivo la clase \emph{ConjuntoClausulas} fue implementada con un template que
 permite parametrizar el orden parcial a utilizar. El orden que se utiliza por defecto ordena las cláusulas
 en por cantidad de literales en forma creciente.
 \subsection{Inferencia}
+La traza de resolución es la secuencia de reglas de inferencia aplicadas para derivar la cláusula
+vacía. Esta información debe ser provista al usuario con fines didácticos. 
+
+La clase abstracta \emph{Inferencia} representa la aplicación de una regla de inferencia. Entre sus atributos se encuentran
+las cláusulas que se usaron en la aplicación de la regla(\emph{padres}) y la cláusula obtenido. A partir de
+la clase inferencia se derivan tres clases: \emph{InferenciaHipotesis}\footnote{Las hipótesis no son teóricamente
+inferencias, se cuentan como inferencias en este caso para lograr una mayor generalización.}, \emph{InferenciaResolucion} e
+\emph{InferenciaFactorizacion}.
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{imagenes/classInferencia}
+\end{center}
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item Inferencia (const Clausula \&cl)
+\item virtual t\_inf getTipo () const =0
+\item const Clausula \& getClausula () const
+\item virtual void getPadres (std::list< int > \&) const =0
+\item virtual void setPadres (const std::list< int > \&)=0
+\end{itemize}
+Un detalle importante en la representación interna es que se usan los identificadores(enteros) de los padres
+y no las cláusulas. De esta forma puede armarse el árbol de derivación de una inferencia, que es
+necesario para la simplificación de la traza.
 \subsection{Resolucion}
 \bibliographystyle{plain}
 \bibliography{doc}

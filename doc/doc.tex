@@ -362,7 +362,37 @@ inferencias, se cuentan como inferencias en este caso para lograr una mayor gene
 Un detalle importante en la representación interna es que se usan los identificadores(enteros) de los padres
 y no las cláusulas. De esta forma puede armarse el árbol de derivación de una inferencia, que es
 necesario para la simplificación de la traza.
-\subsection{Resolucion}
+\subsection{Resolución}
+En la verificación de satisfacibilidad de fórmulas existen diferentes estrategias de resolución que pueden
+aplicarse según las propiedades del conjunto de cláusulas a analizar. Las dos implementadas en este
+trabajo son las estrategias de resolución general y resolución unitaria. La existencia de otras estrategias
+(por ejemplo, resolución linear) además de estas dos, hace conveniente la generalización de una estrategia de
+resolución, para dar una interfaz común y definir métodos comunes a todas.
+
+La clase abstracta \emph{Resolucion} representa una estrategia de resolución; está provista de métodos a 
+implementar por las clases derivadas para determinar la satisfacibilidad de un conjunto de cláusulas. 
+Además implementa métodos protegidos de simplificación que son utilizados por las clases derivadas \emph{ResolucionGeneral}
+y \emph{ResolucionUnitaria}.
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{imagenes/classResolucion}
+\end{center}
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item Resolucion (const ConjClaus \&claus)
+\item virtual bool esSatisfacible (t\_prueba \&Prueba, const bool \&seguir\_busqueda)=0
+\item virtual bool esSatisfacible (t\_prueba \&Prueba)=0
+\end{itemize}
+El tipo \emph{t\_prueba}, definido dentro de la clase Resolucion, se usa para contener la traza de
+resolución. Este es un vector de punteros a objetos de la clase Inferencia, se usa un vector porque
+es necesario acceder aleatoriamente a las inferencias para construir el árbol de resolución.
+\section{Métodos de resolución}
+\subsection{Resolución general}
+\subsection{Resolución unitaria}
+\section{Simplificaciones}
+\subsection{Simplificación por literales eliminables}
+\subsection{Simplificación por subsunción}
+\subsection{Simplificación de la traza}
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

@@ -24,8 +24,8 @@
    SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 10:22]
 ** DONE Inferencia
    SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-19 vie 19:41]
-** TODO Resolucion
-   SCHEDULED: <2010-02-18 jue>
+** DONE Resolucion
+   SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-20 sáb 13:35]
 * Métodos de resolución
 ** TODO Resolución general
    SCHEDULED: <2010-02-19 vie>

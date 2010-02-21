@@ -387,8 +387,75 @@ El tipo \emph{t\_prueba}, definido dentro de la clase Resolucion, se usa para co
 resolución. Este es un vector de punteros a objetos de la clase Inferencia, se usa un vector porque
 es necesario acceder aleatoriamente a las inferencias para construir el árbol de resolución.
 \section{Métodos de resolución}
+En esta sección se describen las estrategias de resolución en términos generales. La implementación
+de las estrategias están basadas en el ciclo \emph{DISCOUNT}\cite{Schultz} que es utilizado
+en otros deductores.
+
+La determinación de la satisfacibilidad de un conjunto de cláusulas es indecidible en general(es decidible 
+para cláusulas insatisfacibles), por lo que para ciertas entradas los
+procedimientos de resolución no retornaran.
 \subsection{Resolución general}
+En esta estrategia se intenta derivar la cláusula vacía, mediante un proceso de búsqueda
+que genera nuevas cláusulas a partir de las hipótesis. El \emph{estado} de la prueba esta
+determinado por el conjunto de cláusulas formado por las hipótesis y las cláusulas obtenidas de la aplicación de 
+reglas de inferencia. El proceso es exitoso si se logra derivar la cláusula
+vacía(verificando la insatisfacibilidad del conjunto), o si a través de simplificaciones se verifica la satisfacibilidad del conjunto.
+
+La principal dificultad en la implementación de la búsqueda reside en que el estado de prueba crece
+muy rápidamente a medida que aumenta la cantidad de inferencias realizadas. Por este motivo es importante
+implementar simplificaciones que sean capaces de reducir la redundancia de las inferencias generadas.
+
+Para que el método implementado sea completo, eventualmente deben considerarse todas las combinaciones
+de cláusulas no redundantes para la aplicación de reglas de inferencia. Para evitar repeticiones en
+la combinación de cláusulas el estado de la prueba se divide en dos subconjuntos: el conjunto $P$ de
+cláusulas \emph{procesadas} y el conjunto $C$ de cláusulas combinables. Se mantiene la invariante de que
+todas las inferencias necesarias entre cláusulas de $P$ ya han sido generadas.
+
+En términos generales, el algoritmo consiste en tomar una cláusula de $C$, realizar todas las inferencias
+entre esta cláusula y las de $P$(añadiendo las cláusulas deducidas a $C$) e insertarla en $P$. Este proceso
+es repetido hasta que se deriva la cláusula vacía(determinando la insatisfacibilidad del conjunto) o hasta
+que $C$ no contiene más cláusulas(determinando la satisfacibilidad del conjunto).
+
+A continuación se muestra el pseudocódigo del método de resolución general.
+\begin{lstlisting}[caption=esSatisfacible, frame=single, numbers=left, basicstyle=\tiny]
+U = { }
+C = ConjHipotesis // el conjunto inicial de combinables son las hipotesis
+C = resolverPredicadosEliminables(C) //simplificacion por literales eliminables
+if (C.contieneVacia())
+    return false
+satisfacible = true
+while (satisfacible && C != { }) {
+    combinable = C.begin()
+    fact = factores(combinable)
+    C = agregarFactores(fact, C)
+    procesada = P.begin()
+    while (satisfacible && procesada != P.end()) {
+        res = resolventes(combinable, procesada)
+        C = C + {res}
+        if (res.contieneVacia())
+            satisfacible = false
+        ++procesada
+    }
+    C = C - {combinable}
+    P = P + {combinable}
+    ++combinable
+}
+
+return satisfacible
+\end{lstlisting}
 \subsection{Resolución unitaria}
+La estrategia de resolución unitaria, es más restrictiva que la de resolución general. Es completa
+para conjuntos de cláusulas de \emph{Horn}. Una cláusula es de Horn si tiene como máximo un literal
+positivo.
+
+La resolución unitaria agrega la restricción de que para cada regla de la resolvente aplicada debe
+intervenir una cláusula unitaria(cláusula que tiene un sólo literal). Esta estrategia es completa
+para cláusulas de Horn.
+
+Para la implementación de la resolución unitaria es necesario la verificación de la
+existencia de cláusulas unitarias en $P \cup C$. Esta tarea resulta eficiente considerando
+que los conjuntos que forman el estado de la prueba se encuentran ordenados crecientemente por
+la cantidad de literales.
 \section{Simplificaciones}
 \subsection{Simplificación por literales eliminables}
 \subsection{Simplificación por subsunción}

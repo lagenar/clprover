@@ -27,10 +27,10 @@
 ** DONE Resolucion
    SCHEDULED: <2010-02-18 jue> CLOSED: [2010-02-20 sáb 13:35]
 * Métodos de resolución
-** TODO Resolución general
-   SCHEDULED: <2010-02-19 vie>
-** TODO Resolución unitaria					      :fácil:
-   SCHEDULED: <2010-02-19 vie>
+** DONE Resolución general
+   SCHEDULED: <2010-02-19 vie> CLOSED: [2010-02-20 sáb 18:56]
+** DONE Resolución unitaria					      :fácil:
+   SCHEDULED: <2010-02-19 vie> CLOSED: [2010-02-21 dom 10:56]
 * TODO Concurrencia						      :fácil:
   SCHEDULED: <2010-02-21 dom>
 * Optimizaciones a los métodos de resolución

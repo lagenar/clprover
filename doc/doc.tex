@@ -449,15 +449,100 @@ para conjuntos de cláusulas de \emph{Horn}. Una cláusula es de Horn si tiene c
 positivo.
 
 La resolución unitaria agrega la restricción de que para cada regla de la resolvente aplicada debe
-intervenir una cláusula unitaria(cláusula que tiene un sólo literal). Esta estrategia es completa
-para cláusulas de Horn.
+intervenir una cláusula unitaria(cláusula que tiene un sólo literal).
 
 Para la implementación de la resolución unitaria es necesario la verificación de la
 existencia de cláusulas unitarias en $P \cup C$. Esta tarea resulta eficiente considerando
 que los conjuntos que forman el estado de la prueba se encuentran ordenados crecientemente por
 la cantidad de literales.
 \section{Simplificaciones}
-\subsection{Simplificación por literales eliminables}
+Clausula aplica simplificaciones al conjunto inicial de cláusulas que reducen la cantidad
+de inferencias a considerar. El problema surge cuando un conjunto inicial de cláusulas satisfacibles
+pasa todas las simplificaciones, sin reducirse hasta el conjunto vacío(por definición, satisfacible). En
+este caso las simplificaciones implementadas en los métodos de resolución no son suficientemente efectivas
+para evitar que el espacio de búsqueda crezca indefinidamente.
+
+Se implementaron tres algoritmos de simplificación que extienden la cantidad de conjuntos iniciales que
+pueden resolverse y reducen la cantidad de reglas de inferencia a aplicar para determinar la satisfacibilidad
+de un conjunto.
+\subsection{Simplificación por predicados eliminables}
+La simplificación por predicados eliminables\cite{Gelperin} consiste en eliminar por completo predicados del conjunto
+inicial resolviendo entre cláusulas que contienen dichos predicados. Un predicado es \emph{eliminable} en un
+conjunto de cláusulas si no aparece en más de una ocasión en una misma cláusula. Por ejemplo, en el conjunto
+de cláusulas $\{p(X,X) \lor q(Y), q(X) \lor \lnot p(X,X) \lor \lnot p(X,Y)\}$, $q$ es eliminable y $p$ no lo es.
+
+Sea $I$ el conjunto inicial de cláusulas y $p$ un predicado eliminable en $I$. El conjunto simplificado $S$
+se define por:
+
+ $S = \{c \in I : (p \notin c)\} \cup \{resolvente(c_1,c_2,p) : c_1,c_2  \in I, p\in c_1, p\in c_2\}$
+
+es decir, está formado por todas las cláusulas de $I$ que no contienen a $p$ y todas las resolventes
+entre dos cláusulas que contienen $p$ usando ese mismo predicado para la resolución. Como $p$ no aparece en más de una ocasión en una cláusula,
+el conjunto $S$ no contiene ninguna cláusula que lo contenga. El teorema de la distribución\cite{Gelperin} afirma que $I$ es 
+satisfacible si y sólo si $S$ lo es. Esta simplificación se aplica hasta que halla mas predicados eliminables.
+
+A modo de ejemplo, puede considerarse el conjunto inicial de cláusulas 
+
+\begin{center} 
+$I = \{a(X),\lnot a(X) \lor c(X) \lor d(Y), \lnot c(Y) \lor \lnot d(Y)\}$\footnote{Clausula no lo resuelve.}.
+\end{center}
+
+Usando el predicado eliminable ``a'' se obtiene
+
+\begin{center}
+$S_1 = \{c(X) \lor d(Y), \lnot c(Y) \lor \lnot d(Y)\}$
+\end{center}
+luego, usando ``c''
+\begin{center}
+$S_2 = \{d(X) \lor \lnot d(Y)\}$
+\end{center}
+El conjunto simplificado puede determinarse satisfacible, ya que no es posible aplicar mas
+reglas de inferencia.
+
+La implementación de esta simplificación está implementada en la clase \emph{Resolucion} en los métodos
+\emph{eliminarPredicado} y \emph{resolverPredicadosEliminables}.
+
+A continuación se presenta el pseudocódigo del método \emph{eliminarPredicado}:
+\begin{lstlisting}[caption=eliminarPredicado, frame=single, numbers=left, basicstyle=\tiny]
+eliminarPredicado(I, p) {
+    S = { }
+    for (lit in I) {
+        if (lit.contienePredicado(p)) {
+            lit2 = lit
+            lit2++
+            while (lit2 != I.end()) {
+                res = resolvente(lit, lit2, p)
+                if (res)
+                    S = S + {res}
+                lit2++
+            }
+        } else
+            S = S + {lit}
+    }
+    return S
+}
+\end{lstlisting}
+En el peor de los casos se debe resolver entre todo par de cláusulas, por lo que la complejidad
+temporal del algoritmo es de $O(k^2)$ siendo $k$ la cantidad de cláusulas del conjunto $I$.
+
+En el método \emph{resolverPredicadosEliminables} se eliminan predicados eliminables hasta que no 
+quede ninguno:
+\begin{lstlisting}[caption=resolverPredicadosEliminables, frame=single, numbers=left, basicstyle=\tiny]
+resolverPredicadosEliminables(I) {
+    S = I
+    eliminables = I.predicadosEliminables() //retorna los predicados eliminables O(n),
+                                            //n clausulas
+    while (eliminables != { }) {
+        p = eliminables.begin()
+        S = eliminarPredicado(S, p)
+        eliminables = I.predicadosEliminables()
+    }
+    return S
+}
+\end{lstlisting}
+El peor de los casos ocurre cuando se todos los predicados terminan siendo eliminables. Sea $c$ la cantidad
+de predicados en el conjunto $I$ y $n$ la cantidad de cláusulas, la complejidad temporal del algoritmo es de
+$O(c*n^2)$.
 \subsection{Simplificación por subsunción}
 \subsection{Simplificación de la traza}
 \bibliographystyle{plain}

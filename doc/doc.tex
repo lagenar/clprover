@@ -592,6 +592,23 @@ El algoritmo intenta unificar literales de $C_1$ con literales de $C_2$, en cons
 de los literales de $C_1$ a los de $C_2$. La cantidad de soluciones que existen en $C_1 \times C_2$ es $m^n$(puede que las funciones no sean inyectivas).
 Entonces, la complejidad temporal del algoritmo de subsunción es de $O(m^n)$.
 \subsection{Simplificación de la traza}
+La traza de resolución es la secuencia de inferencias utilizadas para derivar la cláusula vacía. Es representada
+mediante un vector de punteros a objetos de la clase inferencia. Los índices de los padres de cada inferencia
+se corresponden a la posición que ocupan en el vector. En la derivación de la cláusula vacía es posible
+que se hayan aplicado reglas de inferencia que no fueron útiles en la derivación. La simplificación de la traza
+elimina las cláusulas derivadas innecesarias luego del proceso de resolución(sólo se realiza cuando el conjunto es insatisfacible);
+su objetivo es presentar al usuario una traza con una menor cantidad de reglas aplicadas.
+
+La relación entre las cláusulas del estado de prueba puede representarse mediante un grafo $G(V,E)$ donde $V$
+es el conjunto de cláusulas y $E = \{(v_1,v_2) : v_1\;es\;padre\;de\;v_2\}$. La simplificación consiste en hacer
+una búsqueda en profundidad comenzando por el vértice que representa la cláusula vacía, los vértices que no son
+alcanzados en esta búsqueda pueden eliminarse de la traza de resolución.
+
+El algoritmo de simplificación está implementado en el método \emph{simplificarPrueba} de la clase \emph{Resolucion}.
+\lstinputlisting[caption=subsume, frame=single, numbers=left,language=C++,basicstyle=\tiny]{simplificaciontraza.cpp}
+El método \emph{agregarInferenciasUsadas} visita cada arista en el peor de los casos por lo que su complejidad es de $O(\left|E\right|)$.
+La complejidad del método \emph{simplificarPrueba} queda determinada por la llamada a \emph{agregarInferenciasUsadas} y el ciclo en la línea
+27 que asigna nuevos identificadores a los vértices, en consecuencia la complejidad temporal del algoritmo es de $O(\left|V\right|+\left|E\right|)$.
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

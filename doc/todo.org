@@ -38,8 +38,8 @@
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 08:56]
 ** DONE Simplificación por subsunción				:complejidad:
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 12:20]
-** TODO Simplificación de la traza				:complejidad:
-   SCHEDULED: <2010-02-20 sáb>
+** DONE Simplificación de la traza				:complejidad:
+   SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 17:53]
 * TODO Interfaz gráfica						      :fácil:
   SCHEDULED: <2010-02-21 dom>
 * TODO Integración con FOL					      :fácil:

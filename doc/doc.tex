@@ -479,7 +479,7 @@ se define por:
 es decir, está formado por todas las cláusulas de $I$ que no contienen a $p$ y todas las resolventes
 entre dos cláusulas que contienen $p$ usando ese mismo predicado para la resolución. Como $p$ no aparece en más de una ocasión en una cláusula,
 el conjunto $S$ no contiene ninguna cláusula que lo contenga. El teorema de la distribución\cite{Gelperin} afirma que $I$ es 
-satisfacible si y sólo si $S$ lo es. Esta simplificación se aplica hasta que halla mas predicados eliminables.
+satisfacible si y sólo si $S$ lo es. Esta simplificación se aplica hasta que no queden mas predicados eliminables.
 
 A modo de ejemplo, puede considerarse el conjunto inicial de cláusulas 
 
@@ -544,6 +544,38 @@ El peor de los casos ocurre cuando se todos los predicados terminan siendo elimi
 de predicados en el conjunto $I$ y $n$ la cantidad de cláusulas, la complejidad temporal del algoritmo es de
 $O(c*n^2)$.
 \subsection{Simplificación por subsunción}
+En lógica proposicional, una cláusula $C$ subsume a otra cláusula $D$ si $C$ implica lógicamente
+$D$. Esto ocurre cuando(sintácticamente) $C\subseteq D$.
+
+En lógica de primer orden, la validez de la implicación entre cláusulas es indecidible\cite{PracticalLogic},
+por lo que se adopta una definición mas simple: una cláusula de lógica de primer orden $C$ subsume a otra
+cláusula $D$, si existe una sustitución $s$, tal que $C.s\subseteq D$. Si $C$ subsume a $D$, 
+entonces $C$ implica lógicamente $D$ pero la reciproca no es válida.
+
+Por ejemplo, sea $C=\{a(Y)\}$\footnote{Se usa la notación de conjuntos para las cláusulas.} y $D=\{a(X),c(Y)\}$, 
+tomando $s=\{Y/X\}$, $C$ subsume a $D$ porque $C.s=\{a(X)\}\subseteq D$.
+
+En la simplificación por subsunción si una cláusula $C$ subsume a otra cláusula $D$ se considera
+que $C$ es más general que $D$. De este modo, cuando se deriva una cláusula nueva,
+si alguna cláusula presente en el estado de búsqueda la subsume, la cláusula derivada
+puede descartarse.
+
+Esta simplificación hace más efectiva la búsqueda, eliminando cláusulas que son redundantes y
+permite resolver conjuntos satisfacibles que no contienen literales eliminables. Por ejemplo el
+conjunto
+\begin{center}
+$\{a(X) \lor  a(Y),\lnot a(X) \lor  \lnot a(Z) \lor  c(X) \lor  c(Z) \lor  d(U) \lor  d(Y),
+\lnot c(X) \lor  \lnot c(Y) \lor  \lnot d(X) \lor  \lnot d(Y)\}$
+\end{center}
+es determinado satisfacible gracias a la simplificación por subsunción.
+
+Para implementar la prueba de subsunción es necesario un procedimiento simplificado
+de unificación de términos. En donde sólo se sustituyen las variables de uno de los términos,
+y las variables del del par se consideran distintas incluso si sus identificadores son iguales.
+Esto último implica que no es necesario renombrar las variables antes de la unificación y que las sustituciones
+aparentemente triviales $x \rightarrow x$ deben ser incluidas.
+
+
 \subsection{Simplificación de la traza}
 \bibliographystyle{plain}
 \bibliography{doc}

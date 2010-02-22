@@ -575,7 +575,23 @@ y las variables del del par se consideran distintas incluso si sus identificador
 Esto último implica que no es necesario renombrar las variables antes de la unificación y que las sustituciones
 aparentemente triviales $x \rightarrow x$ deben ser incluidas.
 
+El problema de la subsunción es NP-completo. En la implementación se usa \emph{backtracking}
+intentando unificar dos literales en cada estado, hasta que no queden literales por unificar.
+Si bien no es posible realizar podas durante la ejecución del backtracking, se implementó
+una verificación antes de su ejecución.
+La verificación se basa en la propiedad de que si $C$ subsume a $D$ entonces todos los predicados(identificadores)
+de $C$ se encuentran en $D$. La complejidad temporal de esta verificación es polinomial.
 
+A continuación se presenta el código de los dos métodos en la clase \emph{Clausula} que implementan
+el algoritmo de subsunción.
+\lstinputlisting[caption=subsume, frame=single, numbers=left,language=C++,basicstyle=\tiny]{subsume.cpp}
+
+Es posible determinar la complejidad temporal del algoritmo, calculando el tamaño del espacio de búsqueda.
+Sea $C_1 = \{l_{11}...l_{1n}\}$ y $C_2 = \{l_{21}...l_{2n}\}$ las cláusulas de entrada con $n$ y $m$ literales respectivamente. 
+El algoritmo intenta unificar literales de $C_1$ con literales de $C_2$, en consecuencia, una solución es un 
+subconjunto del conjunto $C_1\times C_2$. Se sigue que una solución es un elemento del conjunto potencia $P(C_1\times C_2)$. 
+El tamaño del espacio de búsqueda queda determinado por $\left|P(C_1\times C_2)\right|=2^{\left|C_1\times C_2\right|}=2^{nm}$. Por lo que
+la complejidad temporal del algoritmo es de $O(2^{mn})$.
 \subsection{Simplificación de la traza}
 \bibliographystyle{plain}
 \bibliography{doc}

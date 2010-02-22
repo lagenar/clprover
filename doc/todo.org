@@ -36,8 +36,8 @@
 * Optimizaciones a los métodos de resolución
 ** DONE Simplificación por literales eliminables		:complejidad:
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 08:56]
-** TODO Simplificación por subsunción				:complejidad:
-   SCHEDULED: <2010-02-20 sáb>
+** DONE Simplificación por subsunción				:complejidad:
+   SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 12:20]
 ** TODO Simplificación de la traza				:complejidad:
    SCHEDULED: <2010-02-20 sáb>
 * TODO Interfaz gráfica						      :fácil:

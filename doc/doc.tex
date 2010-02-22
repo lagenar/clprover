@@ -588,10 +588,9 @@ el algoritmo de subsunción.
 
 Es posible determinar la complejidad temporal del algoritmo, calculando el tamaño del espacio de búsqueda.
 Sea $C_1 = \{l_{11}...l_{1n}\}$ y $C_2 = \{l_{21}...l_{2n}\}$ las cláusulas de entrada con $n$ y $m$ literales respectivamente. 
-El algoritmo intenta unificar literales de $C_1$ con literales de $C_2$, en consecuencia, una solución es un 
-subconjunto del conjunto $C_1\times C_2$. Se sigue que una solución es un elemento del conjunto potencia $P(C_1\times C_2)$. 
-El tamaño del espacio de búsqueda queda determinado por $\left|P(C_1\times C_2)\right|=2^{\left|C_1\times C_2\right|}=2^{nm}$. Por lo que
-la complejidad temporal del algoritmo es de $O(2^{mn})$.
+El algoritmo intenta unificar literales de $C_1$ con literales de $C_2$, en consecuencia, una solución es una función
+de los literales de $C_1$ a los de $C_2$. La cantidad de soluciones que existen en $C_1 \times C_2$ es $m^n$(puede que las funciones no sean inyectivas).
+Entonces, la complejidad temporal del algoritmo de subsunción es de $O(m^n)$.
 \subsection{Simplificación de la traza}
 \bibliographystyle{plain}
 \bibliography{doc}

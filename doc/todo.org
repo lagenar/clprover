@@ -1,8 +1,6 @@
 * Introducción
 ** DONE Uso de la STL(complejidad temporal en la STL)
    CLOSED: [2010-02-14 dom 19:26]
-** TODO Contenido de cada sección				      :fácil:
-   SCHEDULED: <2010-02-21 dom>
 * Estructuras básicas
 ** DONE Términos: Funcion, Variable y Argumentos
    CLOSED: [2010-02-14 dom 18:52]
@@ -31,8 +29,8 @@
    SCHEDULED: <2010-02-19 vie> CLOSED: [2010-02-20 sáb 18:56]
 ** DONE Resolución unitaria					      :fácil:
    SCHEDULED: <2010-02-19 vie> CLOSED: [2010-02-21 dom 10:56]
-* TODO Concurrencia						      :fácil:
-  SCHEDULED: <2010-02-21 dom>
+* DONE Concurrencia						      :fácil:
+  SCHEDULED: <2010-02-21 dom> CLOSED: [2010-02-23 mar 10:34]
 * Optimizaciones a los métodos de resolución
 ** DONE Simplificación por literales eliminables		:complejidad:
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 08:56]
@@ -40,11 +38,9 @@
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 12:20]
 ** DONE Simplificación de la traza				:complejidad:
    SCHEDULED: <2010-02-20 sáb> CLOSED: [2010-02-22 lun 17:53]
-* TODO Interfaz gráfica						      :fácil:
-  SCHEDULED: <2010-02-21 dom>
-* TODO Integración con FOL					      :fácil:
-  SCHEDULED: <2010-02-21 dom>
-* TODO Uso de Valgrind						      :fácil:
-  SCHEDULED: <2010-02-21 dom>
-* TODO Conclusión						      :fácil:
-  SCHEDULED: <2010-02-21 dom>
+* DONE Interfaz gráfica						      :fácil:
+  SCHEDULED: <2010-02-21 dom> CLOSED: [2010-02-23 mar 10:11]
+* DONE Integración con FOL					      :fácil:
+  SCHEDULED: <2010-02-21 dom> CLOSED: [2010-02-23 mar 10:58]
+* DONE Uso de Valgrind						      :fácil:
+  SCHEDULED: <2010-02-21 dom> CLOSED: [2010-02-23 mar 10:58]

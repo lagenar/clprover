@@ -9,17 +9,15 @@
 \usepackage{ifpdf}
 \ifpdf
 \usepackage[pdftex,
-            pagebackref=true,
+            unicode,
             colorlinks=true,
             linkcolor=blue,
-            unicode
            ]{hyperref}
 \else
 \usepackage[ps2pdf,
-            pagebackref=true,
+            unicode
             colorlinks=true,
             linkcolor=blue,
-            unicode
            ]{hyperref}
 \usepackage{pspicture}
 \fi
@@ -82,7 +80,7 @@ Por último, se dan a conocer las estructuras utilizadas para la representación
 
 Los principales cambios con respecto a las estructuras de \emph{Clausula} son las relaciones de herencia
 en las clases que representan términos, la representación interna y la inclusión de métodos que en Clausula
-se encontraban en una clase monolítica llamada \emph{CAlgoritmos}.
+se encontraban en una clase llamada \emph{CAlgoritmos}.
 \subsection{Términos: Variables y Funciones} %también la clase argumentos
 En lógica de primer orden, el conjunto de términos es definido inductivamente \cite{ApuntesLogica}:
 \begin{enumerate}
@@ -217,20 +215,20 @@ identificadores son usados para indexar las cláusulas y aplicar simplificacione
 \item void setIdResolucion (int id)
 \end{itemize}
 Para la representación interna de los literales se utiliza un set de la STL. La disyunción puede interpretarse como
-un conjunto de literales teniendo en cuenta la propiedad de idempotencia, esta indica que una cláusula que contiene
-$n$ iguales es equivalente a una cláusula obtenida de eliminar $n-1$ de los $n$ literales iguales. Para poder usar
+un conjunto de literales teniendo en cuenta la propiedad de idempotencia; esta indica que una cláusula que contiene
+$n$ literales iguales es equivalente a una cláusula obtenida de eliminar $n-1$ de los $n$ literales iguales. Para poder usar
 un set es necesario definir un orden parcial para los literales, este orden está definido en la clase \emph{LitComp}.
 El hecho de que los literales se encuentren ordenados permite hacer que varios métodos de la clase sean más eficientes,
-ya que al conocer esta propiedad no deben iterar sobre todo el conjunto de literales.
+ya que al conocer esta propiedad no deben iterar sobre todo el conjunto.
 \section{Análisis sintáctico de cláusulas} %gramática y parser.
 Para interpretar la entrada de cláusulas es necesario definir una sintaxis concreta para las estructuras
 lógicas y de esta forma poder transformar una cadena ingresada a una clase con sus respectivos atributos.
 La refactorización de la gramática se hizo por ciertas limitaciones en la gramática de Clausula. También
-se creo una clase, \emph{Parser} que encapsula métodos para analizar un conjunto de cláusulas.
+se creo una clase, \emph{Parser}, que encapsula métodos para analizar un conjunto de cláusulas.
 \subsection{Gramática}
 La principal limitación en la gramática de Clausula es que los identificadores de variables, funciones y literales
 están compuestos por un símbolo alfabético, lo que impide que el usuario pueda asignar nombres más significativos. Además,
-en problemas no triviales, con una mayor cantidad de identificadores puede que no pueda representarse el problema
+en problemas no triviales, con una mayor cantidad de identificadores es posible que no pueda representarse el problema
 usando esa gramática. En la nueva gramática los identificadores pueden contener más de un caracter.
 
 En Clausula es necesario definir que identificadores son símbolos de constantes porque el conjunto
@@ -247,15 +245,15 @@ El principal motivo es que provee una mejor integración con el lenguaje C++ y l
 sin la necesidad de invocar a un programa externo para el análisis sintáctico\footnote{Esto también es posible con Bison pero es más complejo.}.
 \subsection{Parser}
 La gramática definida en \emph{Spirit} detecta los posibles errores sintácticos en la definición
-de una cláusula pero no los errores semánticos. Existen dos posibles errores semánticos:
+de una cláusula pero no los semánticos. Existen dos posibles errores semánticos:
 \begin{enumerate}
 \item Un identificador de función o predicado es usado con diferentes aridades. Por ejemplo, $a(X) \lor a(X,Y)$ no
 es una cláusula bien definida.
 \item Un identificador es usado para identificar a una función y a un predicado. Por ejemplo $a(a(X))$ no es válida.
 \end{enumerate}
-Estos errores semánticos pueden ser errores dentro de una misma cláusula o puede que sean producto de una
+Estos errores semánticos pueden ser ocurrir dentro de una misma cláusula o puede que sean producto de una
 inconsistencia entre dos o más cláusulas. La clase \emph{Parser} es la encargada de analizar incrementalmente
-un conjunto de cláusulas, verificando la validez del conjunto cada vez que se agrega o elimina una cláusula.
+un conjunto de cláusulas, verificando la validez del mismo cada vez que se agrega o elimina una cláusula.
 Esta clase es usada como modelo de datos en la interfaz gráfica que acepta cadenas ingresadas por el usuario.
 \begin{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
@@ -271,7 +269,7 @@ del conjunto o eliminarla. También se utilizan mapas de tipo y aridad para la v
 de las cláusulas.
 \section{Factorización de cláusulas}
 La regla de inferencia de factorización\cite{PracticalLogic} es necesaria para que los métodos de
-resolución sean refutacionalmente completos. En Clausula esta regla no esta presente por lo que
+resolución sean refutacionalmente completos. En Clausula esta regla no está presente por lo que
 para ciertos conjuntos de cláusulas insatisfacibles no consigue derivar la cláusula vacía.
 
 A modo de ejemplo puede considerarse el siguiente conjunto de cláusulas:
@@ -360,7 +358,7 @@ inferencias, se cuentan como inferencias en este caso para lograr una mayor gene
 \item virtual void setPadres (const std::list< int > \&)=0
 \end{itemize}
 Un detalle importante en la representación interna es que se usan los identificadores(enteros) de los padres
-y no las cláusulas. De esta forma puede armarse el árbol de derivación de una inferencia, que es
+y no las cláusulas. De esta forma puede construirse el grafo de derivación de una inferencia, que es
 necesario para la simplificación de la traza.
 \subsection{Resolución}
 En la verificación de satisfacibilidad de fórmulas existen diferentes estrategias de resolución que pueden
@@ -385,7 +383,7 @@ y \emph{ResolucionUnitaria}.
 \end{itemize}
 El tipo \emph{t\_prueba}, definido dentro de la clase Resolucion, se usa para contener la traza de
 resolución. Este es un vector de punteros a objetos de la clase Inferencia, se usa un vector porque
-es necesario acceder aleatoriamente a las inferencias para construir el árbol de resolución.
+es necesario acceder aleatoriamente a las inferencias para construir el grafo de resolución.
 \section{Métodos de resolución}
 En esta sección se describen las estrategias de resolución en términos generales. La implementación
 de las estrategias están basadas en el ciclo \emph{DISCOUNT}\cite{Schultz} que es utilizado
@@ -548,7 +546,7 @@ En lógica proposicional, una cláusula $C$ subsume a otra cláusula $D$ si $C$ 
 $D$. Esto ocurre cuando(sintácticamente) $C\subseteq D$.
 
 En lógica de primer orden, la validez de la implicación entre cláusulas es indecidible\cite{PracticalLogic},
-por lo que se adopta una definición mas simple: una cláusula de lógica de primer orden $C$ subsume a otra
+por lo que se adopta una definición mas restrictiva: una cláusula de lógica de primer orden $C$ subsume a otra
 cláusula $D$, si existe una sustitución $s$, tal que $C.s\subseteq D$. Si $C$ subsume a $D$, 
 entonces $C$ implica lógicamente $D$ pero la reciproca no es válida.
 
@@ -609,6 +607,40 @@ El algoritmo de simplificación está implementado en el método \emph{simplific
 El método \emph{agregarInferenciasUsadas} visita cada arista en el peor de los casos por lo que su complejidad es de $O(\left|E\right|)$.
 La complejidad del método \emph{simplificarPrueba} queda determinada por la llamada a \emph{agregarInferenciasUsadas} y el ciclo en la línea
 27 que asigna nuevos identificadores a los vértices, en consecuencia la complejidad temporal del algoritmo es de $O(\left|V\right|+\left|E\right|)$.
+\section{Detalles de implementación}
+En esta sección se mencionan algunos cambios que se hicieron a Clausula
+que no están relacionados con el diseño de las clases.
+\subsection{Interfaz gráfica}
+La interfaz gráfica utiliza la biblioteca de interfaces de usuario multiplataforma \emph{Qt}.
+En general, se conservó el diseño de Clausula. El espacio de definición de constantes no fue
+conservado porque no es necesario en la nueva gramática.
+
+Se separó completamente la biblioteca que contiene las clases de lógica de la interfaz gráfica,
+por lo que las clases fundamentales pueden utilizarse sin la dependencia de \emph{Qt}. A modo
+de ejemplo se realizó un programa para la línea de comandos que lee cláusulas de la entrada
+estándar y determina si el conjunto es satisfacible.
+\subsection{Concurrencia en los métodos de resolución}
+Es posible que para algunos conjuntos no sea posible determinar su satisfacibilidad y el programa
+se tilde. Por esta razón los métodos de resolución se corren en un hilo de ejecución diferente(Qt provee manejo de hilos a través de
+la clase \emph{Qthread}) y se permite al usuario detener el proceso de resolución sin tener que salir
+del programa. 
+
+La principal dificultad en la implementación es que no es posible detener al hilo sin tener algún tipo de sincronización
+con los métodos de resolución(detener el hilo con las operaciones provistas por el sistema operativo puede afectar el estado del programa
+y no es portable). Por esta razón, los métodos de resolución reciben una variable booleana como referencia constante que sirve para sincronizar
+la continuidad de la ejecución.
+\subsection{Integración con FOL}
+\emph{FOL}\cite{fol} es un programa que transforma fórmulas de lógica de primer orden a la forma clausular. Es decir,
+a partir de una fórmula obtiene un conjunto de cláusulas que es satisfacible si y sólo si la fórmula es satisfacible.
+Fol fue integrado a la interfaz gráfica haciendo más directa la resolución de ejercicios que puedan presentarse y permitiendo
+verificar si una fórmula es lógicamente válida usando la propiedad que indica que una fórmula es válida si su negada
+es insatisfacible.
+\subsection{Uso de Valgrind y Git}
+Dos herramientas útiles para el desarrollo del proyecto fueron \emph{Valgrind} y \emph{Git}. Valgrind es un programa
+que permite detectar \emph{memory leaks} en y accesos a memoria erróneos en aplicaciones, sirvió para verificar
+con diferentes casos de prueba que la memoria es liberada correctamente.
+
+Git es un sistema de control de versiones que permite guardar y revisar los cambios realizados al proyecto.
 \bibliographystyle{plain}
 \bibliography{doc}
 \end{document}

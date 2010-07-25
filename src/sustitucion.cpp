@@ -67,6 +67,9 @@ const Termino* Sustitucion::getSustitucion(const std::string& id) const
 
 void Sustitucion::agregarSustitucion(const std::string& id, const Termino& t)
 {
+     t_sust::iterator it = susts.find(id);
+     if (it != susts.end())
+	  delete it->second;
      susts[id] = t.clonar();
 }
 

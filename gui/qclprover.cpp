@@ -115,7 +115,7 @@ void Qclprover::verificarSatisfacibilidad()
 
     if (conj.esVacio()) {
         ui->textoInfo->insertHtml("<b>" + tr("Propiedad utilizada:") + "</b><br>");
-        ui->textoInfo->insertHtml(trUtf8("El conjunto vacio es satisfacible por definición"));
+        ui->textoInfo->insertHtml(trUtf8("El conjunto vacío es satisfacible por definición"));
         ui->textoInfo->insertHtml("<br><br>");
         mostrarSatisfacibilidad(true);
     }

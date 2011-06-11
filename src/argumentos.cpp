@@ -90,7 +90,7 @@ bool Argumentos::unificar(Sustitucion& s, const Argumentos& otro) const
      const_iterator it = args.begin();
      const_iterator it_otro = otro.args.begin();
      bool unif = true;
-     while (it != args.end() && unif) {
+     while (it != args.end() && it_otro != otro.args.end() && unif) {
 	  unif = (*it)->unificar(s, **it_otro);	  
 	  ++it;
 	  ++it_otro;
